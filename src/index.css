@@ -100,11 +100,24 @@ body {
   background: var(--black-card);
   border: 1px solid var(--black-border);
   border-radius: 12px;
-  color: var(--white);
+  color: var(--white) !important;
   transition: border-color 0.2s ease;
 }
-.input-dark::placeholder { color: var(--white-dim); }
+.input-dark::placeholder { color: var(--white-dim); opacity: 1; }
 .input-dark:focus { outline: none; border-color: var(--gold-dark); }
+
+/* Global fix: all inputs/selects/textareas show white text on dark bg */
+input, select, textarea {
+  color: var(--white);
+}
+input::placeholder, textarea::placeholder {
+  color: var(--white-dim);
+  opacity: 1;
+}
+select option {
+  background: var(--black-card);
+  color: var(--white);
+}
 
 /* ── Tag ── */
 .tag {
