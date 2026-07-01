@@ -4,32 +4,38 @@ import { useAuth } from '../hooks/useAuth'
 export default function Navbar() {
   const { user } = useAuth()
   const location = useLocation()
+  const onSell = location.pathname === '/sell'
 
   return (
-    <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-stone-200/80">
-      <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-stone-900 flex items-center justify-center">
-            <span className="text-white text-xs font-bold">N</span>
-          </div>
-          <span className="font-semibold text-stone-900 tracking-tight">NamMarketHub</span>
+    <nav className="glass-nav sticky top-0 z-50">
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 1.5rem', height: 56, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+
+        {/* Logo */}
+        <Link to="/" style={{ display: 'flex', alignItems: 'center' }}>
+          <img src="/logo.svg" alt="NamMarketHub" style={{ height: 36 }} />
         </Link>
 
-        <div className="flex items-center gap-3">
+        {/* Right side */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
           {/* Live indicator */}
-          <div className="hidden sm:flex items-center gap-1.5 text-xs text-stone-400">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 pulse-dot inline-block" />
-            Live
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: 'var(--gold)', fontFamily: 'ui-monospace, monospace', letterSpacing: '0.08em' }}>
+            <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--gold)', display: 'inline-block' }} className="pulse-dot" />
+            LIVE
           </div>
 
           <Link
             to="/sell"
-            className={
-              'text-sm px-4 py-1.5 rounded-full transition-colors ' +
-              (location.pathname === '/sell'
-                ? 'bg-stone-900 text-white'
-                : 'border border-stone-200 text-stone-700 hover:border-stone-300')
-            }
+            style={{
+              fontSize: 13,
+              fontWeight: 600,
+              padding: '7px 18px',
+              borderRadius: 99,
+              textDecoration: 'none',
+              transition: 'all 0.2s ease',
+              ...(onSell
+                ? { background: 'linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%)', color: 'var(--black)' }
+                : { border: '1px solid var(--gold-dark)', color: 'var(--gold)' })
+            }}
           >
             {user ? 'My Shop' : 'List your shop'}
           </Link>

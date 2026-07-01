@@ -16,7 +16,7 @@ export default function Sell() {
     return (
       <>
         <Navbar />
-        <div className="max-w-md mx-auto px-4 py-16 text-center text-sm text-stone-400">Loading…</div>
+        <div style={{ maxWidth: 480, margin: '80px auto', textAlign: 'center', color: 'var(--white-dim)', fontSize: 14 }}>Loading…</div>
       </>
     )
   }
@@ -25,10 +25,10 @@ export default function Sell() {
     return (
       <>
         <Navbar />
-        <div className="max-w-md mx-auto px-4 py-10">
-          <div className="text-center mb-8">
-            <h1 className="text-2xl font-semibold text-stone-900 mb-1">List your shop</h1>
-            <p className="text-sm text-stone-500">Reach buyers across Namibia</p>
+        <div style={{ maxWidth: 440, margin: '0 auto', padding: '60px 24px' }} className="page-enter">
+          <div style={{ textAlign: 'center', marginBottom: 36 }}>
+            <h1 className="gold-shimmer" style={{ fontSize: 28, fontWeight: 700, marginBottom: 8 }}>List your shop</h1>
+            <p style={{ color: 'var(--white-dim)', fontSize: 14 }}>Reach buyers across Namibia on NamMarketHub</p>
           </div>
           <AuthForm />
         </div>
@@ -40,7 +40,7 @@ export default function Sell() {
     return (
       <>
         <Navbar />
-        <div className="max-w-md mx-auto px-4 py-10">
+        <div style={{ maxWidth: 440, margin: '0 auto', padding: '60px 24px' }} className="page-enter">
           <ShopForm userId={user.id} onCreated={refetch} />
         </div>
       </>
@@ -52,25 +52,26 @@ export default function Sell() {
   return (
     <>
       <Navbar />
-      <div className="max-w-3xl mx-auto px-4 py-6">
+      <div style={{ maxWidth: 860, margin: '0 auto', padding: '32px 24px' }} className="page-enter">
         {/* Shop header */}
-        <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
-          <div className="flex items-center gap-3">
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg ${type.color}`}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 32, flexWrap: 'wrap', gap: 16 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+            <div style={{ width: 48, height: 48, borderRadius: 14, background: 'linear-gradient(135deg, var(--gold-dark), #1A1500)', border: '1px solid rgba(201,168,76,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>
               {type.emoji}
             </div>
             <div>
-              <h1 className="text-lg font-semibold text-stone-900">{shop.name}</h1>
-              <p className="text-xs text-stone-400">{shop.location} · {type.label}</p>
+              <h1 style={{ fontSize: 20, fontWeight: 700, color: 'var(--white)', marginBottom: 2 }}>{shop.name}</h1>
+              <p style={{ fontSize: 12, color: 'var(--white-dim)', fontFamily: 'ui-monospace, monospace' }}>{shop.location} · {type.label}</p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <Link to="/" className="text-sm text-stone-500 hover:text-stone-700 transition-colors">
+          <div style={{ display: 'flex', gap: 10 }}>
+            <Link to="/" style={{ fontSize: 13, color: 'var(--white-dim)', textDecoration: 'none', padding: '7px 16px', border: '1px solid var(--black-border)', borderRadius: 99, transition: 'border-color 0.2s' }}>
               ← Marketplace
             </Link>
             <button
               onClick={() => supabase.auth.signOut()}
-              className="text-sm border border-stone-200 rounded-full px-4 py-1.5 hover:border-stone-300 transition-colors"
+              className="btn-outline"
+              style={{ fontSize: 13, padding: '7px 16px' }}
             >
               Log out
             </button>

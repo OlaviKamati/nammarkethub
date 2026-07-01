@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { supabase } from '../lib/supabase'
 
 export default function AuthForm() {
-  const [mode, setMode] = useState('signup') // 'signup' | 'login'
+  const [mode, setMode] = useState('signup')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [submitting, setSubmitting] = useState(false)
@@ -12,81 +12,41 @@ export default function AuthForm() {
     e.preventDefault()
     setSubmitting(true)
     setError(null)
-
-    const { error } =
-      mode === 'signup'
-        ? await supabase.auth.signUp({ email, password })
-        : await supabase.auth.signInWithPassword({ email, password })
-
+    const { error } = mode === 'signup'
+      ? await supabase.auth.signUp({ email, password })
+      : await supabase.auth.signInWithPassword({ email, password })
     setSubmitting(false)
-
-    if (error) {
-      setError(error.message)
-    }
-    // On success, useAuth's onAuthStateChange listener picks up the
-    // new session automatically — no manual redirect needed here.
+    if (error) setError(error.message)
   }
 
   return (
-    <div className="max-w-sm mx-auto">
-      <div className="flex gap-1 mb-5 bg-stone-100 rounded-full p-1">
-        <button
-          onClick={() => setMode('signup')}
-          className={
-            'flex-1 text-sm py-1.5 rounded-full transition-colors ' +
-            (mode === 'signup' ? 'bg-white shadow-sm font-medium' : 'text-stone-500')
-          }
-        >
-          Create account
-        </button>
-        <button
-          onClick={() => setMode('login')}
-          className={
-            'flex-1 text-sm py-1.5 rounded-full transition-colors ' +
-            (mode === 'login' ? 'bg-white shadow-sm font-medium' : 'text-stone-500')
-          }
-        >
-          Log in
-        </button>
+    <div>
+      {/* Toggle */}
+      <div style={{ display: 'flex', gap: 4, background: 'var(--black-card)', borderRadius: 12, padding: 4, marginBottom: 24, border: '1px solid var(--black-border)' }}>
+        {['signup', 'login'].map((m) => (
+          <button key={m} onClick={() => setMode(m)}
+            style={{ flex: 1, fontSize: 13, fontWeight: 600, padding: '8px', borderRadius: 8, border: 'none', cursor: 'pointer', transition: 'all 0.2s',
+              background: mode === m ? 'linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%)' : 'transparent',
+              color: mode === m ? 'var(--black)' : 'var(--white-dim)' }}>
+            {m === 'signup' ? 'Create account' : 'Log in'}
+          </button>
+        ))}
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-3">
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
         <div>
-          <label className="text-xs text-stone-500 block mb-1">Email</label>
-          <input
-            type="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm"
-            placeholder="you@example.com"
-          />
+          <label style={{ fontSize: 11, color: 'var(--white-dim)', display: 'block', marginBottom: 6 }}>Email</label>
+          <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
+            className="input-dark" style={{ width: '100%', padding: '11px 14px', fontSize: 14 }} placeholder="you@example.com" />
         </div>
         <div>
-          <label className="text-xs text-stone-500 block mb-1">Password</label>
-          <input
-            type="password"
-            required
-            minLength={6}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm"
-            placeholder="At least 6 characters"
-          />
+          <label style={{ fontSize: 11, color: 'var(--white-dim)', display: 'block', marginBottom: 6 }}>Password</label>
+          <input type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)}
+            className="input-dark" style={{ width: '100%', padding: '11px 14px', fontSize: 14 }} placeholder="At least 6 characters" />
         </div>
-
-        {error && <div className="text-xs text-red-600">{error}</div>}
-
-        <button
-          type="submit"
-          disabled={submitting}
-          className="w-full bg-teal-900 text-teal-50 rounded-lg py-2 text-sm font-medium disabled:opacity-50"
-        >
-          {submitting
-            ? 'Please wait…'
-            : mode === 'signup'
-              ? 'Create account'
-              : 'Log in'}
+        {error && <p style={{ fontSize: 12, color: '#ef4444' }}>{error}</p>}
+        <button type="submit" disabled={submitting} className="btn-gold" style={{ padding: '12px', fontSize: 14, marginTop: 4 }}>
+          {submitting ? 'Please wait…' : mode === 'signup' ? 'Create account →' : 'Log in →'}
         </button>
       </form>
     </div>

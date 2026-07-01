@@ -1,28 +1,41 @@
 import { useProducts } from '../hooks/useProducts'
 import ProductCard from './ProductCard'
+import { useScrollReveal } from '../hooks/useScrollReveal'
+
+function SkeletonCard() {
+  return (
+    <div style={{ background: 'var(--black-card)', borderRadius: 16, border: '1px solid var(--black-border)', overflow: 'hidden' }}>
+      <div style={{ aspectRatio: '1', background: 'linear-gradient(90deg, #161616 25%, #1E1E1E 50%, #161616 75%)', backgroundSize: '200% 100%', animation: 'shimmerBg 1.5s infinite' }} />
+      <div style={{ padding: 14 }}>
+        <div style={{ height: 12, background: '#1E1E1E', borderRadius: 6, marginBottom: 8, width: '80%' }} />
+        <div style={{ height: 10, background: '#1E1E1E', borderRadius: 6, marginBottom: 12, width: '50%' }} />
+        <div style={{ height: 14, background: '#1A1500', borderRadius: 6, width: '40%' }} />
+      </div>
+    </div>
+  )
+}
 
 export default function ProductGrid({ category, searchQuery, shopType }) {
   const { products, loading, error } = useProducts(category, searchQuery, shopType)
+  const revealRef = useScrollReveal(0.05)
 
   if (loading) {
     return (
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-        {Array.from({ length: 10 }).map((_, i) => (
-          <div key={i} className="bg-stone-100 rounded-2xl aspect-square animate-pulse" />
-        ))}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 12 }}>
+        {Array.from({ length: 10 }).map((_, i) => <SkeletonCard key={i} />)}
       </div>
     )
   }
 
   if (error) {
-    return <div className="text-sm text-red-600 py-6">Couldn't load products. {error}</div>
+    return <div style={{ padding: '24px', color: '#ef4444', fontSize: 14 }}>Couldn't load products: {error}</div>
   }
 
   if (products.length === 0) {
     return (
-      <div className="text-center py-16">
-        <p className="text-2xl mb-2">🔍</p>
-        <p className="text-sm text-stone-500">
+      <div style={{ textAlign: 'center', padding: '64px 0' }}>
+        <p style={{ fontSize: 32, marginBottom: 12 }}>🔍</p>
+        <p style={{ color: 'var(--white-dim)', fontSize: 14 }}>
           {searchQuery ? `No results for "${searchQuery}"` : 'No products here yet.'}
         </p>
       </div>
@@ -30,12 +43,12 @@ export default function ProductGrid({ category, searchQuery, shopType }) {
   }
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+    <div ref={revealRef} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 12 }}>
       {products.map((product, i) => (
         <div
           key={product.id}
-          className="fade-up"
-          style={{ animationDelay: `${i * 30}ms` }}
+          className="reveal"
+          style={{ transitionDelay: `${Math.min(i * 40, 400)}ms` }}
         >
           <ProductCard product={product} />
         </div>

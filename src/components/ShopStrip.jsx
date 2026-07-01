@@ -15,49 +15,46 @@ export default function ShopStrip({ shopType }) {
       .from('shops')
       .select('id, name, location, shop_type, products(count)')
       .order('created_at', { ascending: false })
-
-    if (shopType && shopType !== 'all') {
-      query = query.eq('shop_type', shopType)
-    }
-
-    query.then(({ data }) => {
-      setShops(data ?? [])
-      setLoading(false)
-    })
+    if (shopType && shopType !== 'all') query = query.eq('shop_type', shopType)
+    query.then(({ data }) => { setShops(data ?? []); setLoading(false) })
   }, [shopType])
 
   if (loading) {
     return (
-      <div className="flex gap-3">
-        {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="w-40 h-20 bg-stone-100 rounded-xl animate-pulse flex-shrink-0" />
+      <div style={{ display: 'flex', gap: 12, overflowX: 'auto', paddingBottom: 8 }}>
+        {[1,2,3,4].map((i) => (
+          <div key={i} style={{ minWidth: 160, height: 80, background: 'var(--black-card)', borderRadius: 14, border: '1px solid var(--black-border)', flexShrink: 0 }} />
         ))}
       </div>
     )
   }
 
   if (shops.length === 0) {
-    return <p className="text-sm text-stone-400">No shops yet.</p>
+    return <p style={{ color: 'var(--white-dim)', fontSize: 13 }}>No shops yet — be the first.</p>
   }
 
   return (
-    <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1">
-      {shops.map((shop) => {
+    <div style={{ display: 'flex', gap: 12, overflowX: 'auto', paddingBottom: 8, marginLeft: -4, paddingLeft: 4 }}>
+      {shops.map((shop, i) => {
         const type = getShopType(shop.shop_type)
+        const count = shop.products?.[0]?.count ?? 0
         return (
           <div
             key={shop.id}
-            className="card-lift flex-shrink-0 w-44 bg-white border border-stone-200/80 rounded-xl p-3 cursor-default"
+            className="card fade-up"
+            style={{ minWidth: 168, flexShrink: 0, padding: '14px', animationDelay: `${i * 60}ms`, cursor: 'default' }}
           >
-            <div className="flex items-center gap-2 mb-2">
-              <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-semibold text-xs ${type.color}`}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
+              <div style={{ width: 34, height: 34, borderRadius: 10, background: 'linear-gradient(135deg, var(--gold-dark), #1A1500)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700, color: 'var(--gold)', border: '1px solid rgba(201,168,76,0.2)', flexShrink: 0 }}>
                 {initials(shop.name)}
               </div>
-              <span className="text-base">{type.emoji}</span>
+              <span style={{ fontSize: 18 }}>{type.emoji}</span>
             </div>
-            <p className="text-sm font-medium text-stone-900 truncate">{shop.name}</p>
-            <p className="text-xs text-stone-400 mt-0.5">
-              {shop.location} · {shop.products?.[0]?.count ?? 0} listings
+            <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--white)', marginBottom: 3, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              {shop.name}
+            </p>
+            <p style={{ fontSize: 11, color: 'var(--white-dim)' }}>
+              {shop.location} · {count} listing{count !== 1 ? 's' : ''}
             </p>
           </div>
         )

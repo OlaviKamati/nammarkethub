@@ -1,60 +1,179 @@
 @import "tailwindcss";
 
+/* ============================================================
+   NamMarketHub — Black & Gold Design System
+   ============================================================ */
+
 :root {
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --gold:        #C9A84C;
+  --gold-light:  #E8C96A;
+  --gold-dark:   #9A7A2E;
+  --gold-muted:  #C9A84C22;
+  --black:       #0A0A0A;
+  --black-soft:  #111111;
+  --black-card:  #161616;
+  --black-border:#2A2A2A;
+  --white:       #FAFAF8;
+  --white-dim:   #A0A09A;
+  --ease-expo:   cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-* {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+* { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; box-sizing: border-box; }
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Segoe UI", sans-serif;
-  background: #f9f9f7;
+  background: var(--black);
+  color: var(--white);
 }
 
-/* Smooth scrollbar */
-::-webkit-scrollbar { width: 6px; height: 6px; }
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #d1d1c7; border-radius: 99px; }
+::-webkit-scrollbar-thumb { background: var(--black-border); border-radius: 99px; }
 
-/* Carousel */
-.carousel-slide {
-  transition: transform 0.6s var(--ease-out-expo), opacity 0.4s ease;
-}
-
-/* Card hover lift */
-.card-lift {
-  transition: transform 0.2s var(--ease-out-expo), box-shadow 0.2s ease;
-}
-.card-lift:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px -4px rgba(0,0,0,0.10);
+/* ── Gold gradient text ── */
+.gold-text {
+  background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 50%, var(--gold-dark) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-/* Fade in animation */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
+/* ── Gold shimmer effect ── */
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
 }
-.fade-up {
-  animation: fadeUp 0.5s var(--ease-out-expo) both;
+.gold-shimmer {
+  background: linear-gradient(90deg, var(--gold-dark) 0%, var(--gold-light) 40%, var(--gold) 50%, var(--gold-light) 60%, var(--gold-dark) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
 }
 
-/* Tag pill */
+/* ── Card styles ── */
+.card {
+  background: var(--black-card);
+  border: 1px solid var(--black-border);
+  border-radius: 16px;
+  transition: border-color 0.2s ease, transform 0.25s var(--ease-expo), box-shadow 0.25s ease;
+}
+.card:hover {
+  border-color: var(--gold-dark);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px -8px rgba(201,168,76,0.15);
+}
+.card-gold {
+  background: linear-gradient(135deg, #1A1500 0%, #0A0A0A 100%);
+  border: 1px solid var(--gold-dark);
+}
+
+/* ── Gold button ── */
+.btn-gold {
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+  color: var(--black);
+  font-weight: 600;
+  border: none;
+  border-radius: 99px;
+  cursor: pointer;
+  transition: filter 0.2s ease, transform 0.15s var(--ease-expo);
+}
+.btn-gold:hover { filter: brightness(1.1); transform: translateY(-1px); }
+.btn-gold:active { transform: translateY(0); }
+
+/* ── Outline button ── */
+.btn-outline {
+  background: transparent;
+  color: var(--gold);
+  border: 1px solid var(--gold-dark);
+  border-radius: 99px;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+.btn-outline:hover { background: var(--gold-muted); border-color: var(--gold); }
+
+/* ── Input ── */
+.input-dark {
+  background: var(--black-card);
+  border: 1px solid var(--black-border);
+  border-radius: 12px;
+  color: var(--white);
+  transition: border-color 0.2s ease;
+}
+.input-dark::placeholder { color: var(--white-dim); }
+.input-dark:focus { outline: none; border-color: var(--gold-dark); }
+
+/* ── Tag ── */
 .tag {
   font-family: ui-monospace, "SF Mono", monospace;
   font-size: 10px;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
-/* Real-time pulse dot */
+/* ── Animations ── */
+
+/* Fade up */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fadeUp 0.6s var(--ease-expo) both; }
+
+/* Fade in */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.fade-in { animation: fadeIn 0.4s ease both; }
+
+/* Scale in */
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.scale-in { animation: scaleIn 0.5s var(--ease-expo) both; }
+
+/* Slide in from left */
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.slide-left { animation: slideInLeft 0.5s var(--ease-expo) both; }
+
+/* Counter count-up (JS driven, just needs transition) */
+.counter { transition: all 0.8s var(--ease-expo); }
+
+/* Gold pulse dot (live indicator) */
 @keyframes pulse-dot {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.5; transform: scale(0.8); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(201,168,76,0.6); }
+  50%       { box-shadow: 0 0 0 6px rgba(201,168,76,0); }
 }
-.pulse-dot {
-  animation: pulse-dot 1.8s ease-in-out infinite;
+.pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
+
+/* Carousel */
+.carousel-slide { transition: transform 0.7s var(--ease-expo), opacity 0.5s ease; }
+
+/* Scroll reveal (class toggled by IntersectionObserver) */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s var(--ease-expo), transform 0.7s var(--ease-expo); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* Gold divider */
+.gold-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-dark), transparent);
 }
+
+/* Glassmorphism nav */
+.glass-nav {
+  background: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--black-border);
+}
+
+/* Page transition wrapper */
+.page-enter { animation: fadeUp 0.4s var(--ease-expo) both; }
