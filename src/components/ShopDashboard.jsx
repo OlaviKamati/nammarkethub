@@ -5,6 +5,19 @@ import { useOrderNotifications } from '../hooks/useOrderNotifications'
 
 const EMPTY_FORM = { name: '', category_id: '', price: '', stock_count: '', description: '', photo_url: '' }
 
+const INPUT = {
+  width: '100%',
+  padding: '10px 14px',
+  fontSize: 14,
+  background: '#1A1A1A',
+  border: '1px solid #2A2A2A',
+  borderRadius: 10,
+  color: '#FAFAF8',
+  outline: 'none',
+}
+
+const LABEL = { fontSize: 11, color: '#A0A09A', display: 'block', marginBottom: 6 }
+
 export default function ShopDashboard({ shop }) {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
@@ -13,7 +26,7 @@ export default function ShopDashboard({ shop }) {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState(null)
   const [showForm, setShowForm] = useState(false)
-  const [tab, setTab] = useState('products') // 'products' | 'orders'
+  const [tab, setTab] = useState('products')
 
   const { notifications, unreadCount, clearUnread } = useOrderNotifications(shop.id)
   const categories = CATEGORIES_BY_TYPE[shop.shop_type] ?? CATEGORIES_BY_TYPE['general']
@@ -28,7 +41,6 @@ export default function ShopDashboard({ shop }) {
 
   useEffect(() => { fetchProducts() }, [shop.id])
 
-  // Init default category when shop type loads
   useEffect(() => {
     if (!form.category_id && categories.length > 0) {
       setForm((f) => ({ ...f, category_id: categories[0].id }))
@@ -89,20 +101,20 @@ export default function ShopDashboard({ shop }) {
   return (
     <div>
       {/* Tab bar */}
-      <div className="flex gap-1 mb-5 bg-stone-100 rounded-xl p-1 w-fit">
-        <button
-          onClick={() => setTab('products')}
-          className={`text-sm px-4 py-1.5 rounded-lg transition-colors ${tab === 'products' ? 'bg-white shadow-sm font-medium' : 'text-stone-500'}`}
-        >
+      <div style={{ display: 'flex', gap: 4, background: '#161616', borderRadius: 14, padding: 4, width: 'fit-content', marginBottom: 24, border: '1px solid #2A2A2A' }}>
+        <button onClick={() => setTab('products')}
+          style={{ fontSize: 13, fontWeight: 600, padding: '8px 18px', borderRadius: 10, border: 'none', cursor: 'pointer', transition: 'all 0.2s',
+            background: tab === 'products' ? 'linear-gradient(135deg, #C9A84C, #9A7A2E)' : 'transparent',
+            color: tab === 'products' ? '#0A0A0A' : '#A0A09A' }}>
           Products ({products.length})
         </button>
-        <button
-          onClick={() => { setTab('orders'); clearUnread() }}
-          className={`text-sm px-4 py-1.5 rounded-lg transition-colors relative ${tab === 'orders' ? 'bg-white shadow-sm font-medium' : 'text-stone-500'}`}
-        >
+        <button onClick={() => { setTab('orders'); clearUnread() }}
+          style={{ fontSize: 13, fontWeight: 600, padding: '8px 18px', borderRadius: 10, border: 'none', cursor: 'pointer', transition: 'all 0.2s', position: 'relative',
+            background: tab === 'orders' ? 'linear-gradient(135deg, #C9A84C, #9A7A2E)' : 'transparent',
+            color: tab === 'orders' ? '#0A0A0A' : '#A0A09A' }}>
           Orders
           {unreadCount > 0 && (
-            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
+            <span style={{ position: 'absolute', top: -4, right: -4, background: '#ef4444', color: '#fff', fontSize: 10, width: 16, height: 16, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               {unreadCount}
             </span>
           )}
@@ -111,10 +123,10 @@ export default function ShopDashboard({ shop }) {
 
       {tab === 'products' && (
         <div>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-base font-semibold text-stone-900">Your products</h2>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+            <h2 style={{ fontSize: 16, fontWeight: 700, color: '#FAFAF8' }}>Your products</h2>
             {!showForm && (
-              <button onClick={startAdd} className="text-sm bg-stone-900 text-white rounded-full px-4 py-1.5 hover:bg-stone-800 transition-colors">
+              <button onClick={startAdd} className="btn-gold" style={{ fontSize: 13, padding: '8px 18px' }}>
                 + Add product
               </button>
             )}
@@ -122,51 +134,53 @@ export default function ShopDashboard({ shop }) {
 
           {/* Form */}
           {showForm && (
-            <div className="bg-stone-50 border border-stone-200 rounded-2xl p-4 mb-5">
-              <h3 className="text-sm font-semibold text-stone-900 mb-3">{editingId ? 'Edit product' : 'New product'}</h3>
-              <form onSubmit={handleSave} className="space-y-3">
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="col-span-2">
-                    <label className="text-xs text-stone-500 block mb-1">Product name</label>
+            <div style={{ background: '#111', border: '1px solid #2A2A2A', borderRadius: 16, padding: 20, marginBottom: 20 }}>
+              <h3 style={{ fontSize: 14, fontWeight: 700, color: '#FAFAF8', marginBottom: 16 }}>
+                {editingId ? 'Edit product' : 'New product'}
+              </h3>
+              <form onSubmit={handleSave}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
+                  <div style={{ gridColumn: '1 / -1' }}>
+                    <label style={LABEL}>Product name</label>
                     <input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })}
-                      className="w-full border border-stone-200 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:border-stone-400" placeholder="Product name" />
+                      style={INPUT} placeholder="e.g. Samsung Galaxy A15" />
                   </div>
                   <div>
-                    <label className="text-xs text-stone-500 block mb-1">Category</label>
+                    <label style={LABEL}>Category</label>
                     <select value={form.category_id} onChange={(e) => setForm({ ...form, category_id: e.target.value })}
-                      className="w-full border border-stone-200 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none">
-                      {categories.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
+                      style={{ ...INPUT }}>
+                      {categories.map((c) => <option key={c.id} value={c.id} style={{ background: '#1A1A1A', color: '#FAFAF8' }}>{c.label}</option>)}
                     </select>
                   </div>
                   <div>
-                    <label className="text-xs text-stone-500 block mb-1">Price (N$)</label>
+                    <label style={LABEL}>Price (N$)</label>
                     <input required type="number" min={0} value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })}
-                      className="w-full border border-stone-200 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none" placeholder="0" />
+                      style={INPUT} placeholder="0" />
                   </div>
                   <div>
-                    <label className="text-xs text-stone-500 block mb-1">Stock count</label>
+                    <label style={LABEL}>Stock count</label>
                     <input required type="number" min={0} value={form.stock_count} onChange={(e) => setForm({ ...form, stock_count: e.target.value })}
-                      className="w-full border border-stone-200 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none" placeholder="0" />
+                      style={INPUT} placeholder="0" />
                   </div>
                   <div>
-                    <label className="text-xs text-stone-500 block mb-1">Photo URL (optional)</label>
+                    <label style={LABEL}>Photo URL (optional)</label>
                     <input type="url" value={form.photo_url} onChange={(e) => setForm({ ...form, photo_url: e.target.value })}
-                      className="w-full border border-stone-200 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none" placeholder="https://..." />
+                      style={INPUT} placeholder="https://..." />
                   </div>
-                  <div className="col-span-2">
-                    <label className="text-xs text-stone-500 block mb-1">Description (optional)</label>
+                  <div style={{ gridColumn: '1 / -1' }}>
+                    <label style={LABEL}>Description (optional)</label>
                     <textarea rows={2} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })}
-                      className="w-full border border-stone-200 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none" placeholder="Brief description" />
+                      style={{ ...INPUT, resize: 'vertical' }} placeholder="Brief description" />
                   </div>
                 </div>
-                {error && <p className="text-xs text-red-600">{error}</p>}
-                <div className="flex gap-2">
-                  <button type="submit" disabled={saving}
-                    className="bg-stone-900 text-white rounded-xl px-4 py-2 text-sm font-medium disabled:opacity-50 hover:bg-stone-800 transition-colors">
+
+                {error && <p style={{ fontSize: 12, color: '#ef4444', marginBottom: 12 }}>{error}</p>}
+
+                <div style={{ display: 'flex', gap: 10 }}>
+                  <button type="submit" disabled={saving} className="btn-gold" style={{ fontSize: 13, padding: '10px 20px' }}>
                     {saving ? 'Saving…' : editingId ? 'Save changes' : 'Add product'}
                   </button>
-                  <button type="button" onClick={cancelForm}
-                    className="border border-stone-200 rounded-xl px-4 py-2 text-sm text-stone-600 hover:border-stone-300 transition-colors">
+                  <button type="button" onClick={cancelForm} className="btn-outline" style={{ fontSize: 13, padding: '10px 20px' }}>
                     Cancel
                   </button>
                 </div>
@@ -176,31 +190,31 @@ export default function ShopDashboard({ shop }) {
 
           {/* Products list */}
           {loading ? (
-            <div className="space-y-2">
-              {[1,2,3].map((i) => <div key={i} className="h-16 bg-stone-100 rounded-xl animate-pulse" />)}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {[1,2,3].map((i) => <div key={i} style={{ height: 64, background: '#161616', borderRadius: 12, border: '1px solid #2A2A2A' }} />)}
             </div>
           ) : products.length === 0 ? (
-            <div className="text-center py-10">
-              <p className="text-2xl mb-2">📦</p>
-              <p className="text-sm text-stone-400">No products yet. Add your first one.</p>
+            <div style={{ textAlign: 'center', padding: '48px 0' }}>
+              <p style={{ fontSize: 28, marginBottom: 10 }}>📦</p>
+              <p style={{ fontSize: 14, color: '#A0A09A' }}>No products yet. Add your first one.</p>
             </div>
           ) : (
-            <div className="space-y-2">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {products.map((p) => (
-                <div key={p.id} className={`flex items-center gap-3 bg-white border rounded-xl p-3 transition-opacity ${p.is_active ? 'border-stone-200' : 'border-stone-100 opacity-50'}`}>
-                  <div className="w-10 h-10 rounded-lg bg-stone-50 flex-shrink-0 overflow-hidden border border-stone-100">
+                <div key={p.id} style={{ display: 'flex', alignItems: 'center', gap: 12, background: '#111', border: '1px solid #2A2A2A', borderRadius: 12, padding: '12px 14px', opacity: p.is_active ? 1 : 0.5 }}>
+                  <div style={{ width: 40, height: 40, borderRadius: 10, background: '#1A1A1A', flexShrink: 0, overflow: 'hidden', border: '1px solid #2A2A2A' }}>
                     {p.photo_url
-                      ? <img src={p.photo_url} alt={p.name} className="w-full h-full object-cover" />
-                      : <div className="w-full h-full flex items-center justify-center text-lg">📦</div>}
+                      ? <img src={p.photo_url} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      : <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18 }}>📦</div>}
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-stone-900 truncate">{p.name}</p>
-                    <p className="text-xs text-stone-400">N${Number(p.price).toLocaleString()} · {p.stock_count} in stock</p>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{ fontSize: 13, fontWeight: 600, color: '#FAFAF8', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</p>
+                    <p style={{ fontSize: 11, color: '#A0A09A' }}>N${Number(p.price).toLocaleString()} · {p.stock_count} in stock</p>
                   </div>
-                  <div className="flex items-center gap-2 flex-shrink-0">
-                    <button onClick={() => toggleActive(p)} className="text-xs text-stone-400 hover:text-stone-600">{p.is_active ? 'Hide' : 'Show'}</button>
-                    <button onClick={() => startEdit(p)} className="text-xs text-teal-700 hover:text-teal-900">Edit</button>
-                    <button onClick={() => handleDelete(p.id)} className="text-xs text-red-500 hover:text-red-700">Delete</button>
+                  <div style={{ display: 'flex', gap: 12, flexShrink: 0 }}>
+                    <button onClick={() => toggleActive(p)} style={{ fontSize: 12, color: '#A0A09A', background: 'none', border: 'none', cursor: 'pointer' }}>{p.is_active ? 'Hide' : 'Show'}</button>
+                    <button onClick={() => startEdit(p)} style={{ fontSize: 12, color: '#C9A84C', background: 'none', border: 'none', cursor: 'pointer' }}>Edit</button>
+                    <button onClick={() => handleDelete(p.id)} style={{ fontSize: 12, color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer' }}>Delete</button>
                   </div>
                 </div>
               ))}
@@ -211,36 +225,35 @@ export default function ShopDashboard({ shop }) {
 
       {tab === 'orders' && (
         <div>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-base font-semibold text-stone-900">Incoming orders</h2>
-            <div className="flex items-center gap-1.5 text-xs text-stone-400">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 pulse-dot inline-block" />
-              Live
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+            <h2 style={{ fontSize: 16, fontWeight: 700, color: '#FAFAF8' }}>Incoming orders</h2>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: '#C9A84C', fontFamily: 'ui-monospace, monospace', letterSpacing: '0.08em' }}>
+              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#C9A84C', display: 'inline-block' }} className="pulse-dot" />
+              LIVE
             </div>
           </div>
 
           {notifications.length === 0 ? (
-            <div className="text-center py-10">
-              <p className="text-2xl mb-2">📬</p>
-              <p className="text-sm text-stone-400">No orders yet. They'll appear here in real time.</p>
+            <div style={{ textAlign: 'center', padding: '48px 0' }}>
+              <p style={{ fontSize: 28, marginBottom: 10 }}>📬</p>
+              <p style={{ fontSize: 14, color: '#A0A09A' }}>No orders yet. They'll appear here in real time.</p>
             </div>
           ) : (
-            <div className="space-y-2">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {notifications.map((order) => (
-                <div key={order.id} className="bg-white border border-stone-200 rounded-xl p-4">
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-medium text-stone-900">{order.products?.name ?? 'Product'}</p>
-                      <p className="text-xs text-stone-500 mt-0.5">
-                        {order.buyer_name} · {order.buyer_contact} · qty {order.quantity}
-                      </p>
-                    </div>
-                    <div className="text-right flex-shrink-0">
-                      <span className={`tag px-2 py-0.5 rounded-full ${order.status === 'pending' ? 'bg-amber-50 text-amber-700' : 'bg-green-50 text-green-700'}`}>
-                        {order.status}
-                      </span>
-                      <p className="text-xs text-stone-400 mt-1">{timeAgo(order.created_at)}</p>
-                    </div>
+                <div key={order.id} style={{ background: '#111', border: '1px solid #2A2A2A', borderRadius: 12, padding: '14px 16px', display: 'flex', alignItems: 'start', justifyContent: 'space-between', gap: 12 }}>
+                  <div>
+                    <p style={{ fontSize: 13, fontWeight: 600, color: '#FAFAF8', marginBottom: 4 }}>{order.products?.name ?? 'Product'}</p>
+                    <p style={{ fontSize: 12, color: '#A0A09A' }}>{order.buyer_name} · {order.buyer_contact} · qty {order.quantity}</p>
+                  </div>
+                  <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                    <span style={{ fontSize: 10, fontFamily: 'ui-monospace, monospace', letterSpacing: '0.06em', textTransform: 'uppercase', padding: '3px 8px', borderRadius: 99,
+                      background: order.status === 'pending' ? 'rgba(201,168,76,0.1)' : 'rgba(34,197,94,0.1)',
+                      color: order.status === 'pending' ? '#C9A84C' : '#22c55e',
+                      border: `1px solid ${order.status === 'pending' ? 'rgba(201,168,76,0.2)' : 'rgba(34,197,94,0.2)'}` }}>
+                      {order.status}
+                    </span>
+                    <p style={{ fontSize: 11, color: '#A0A09A', marginTop: 4 }}>{timeAgo(order.created_at)}</p>
                   </div>
                 </div>
               ))}
