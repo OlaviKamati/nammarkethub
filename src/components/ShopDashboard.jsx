@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import { CATEGORIES_BY_TYPE } from '../lib/shopTypes'
+import ImageUpload from './ImageUpload'
 import { useOrderNotifications } from '../hooks/useOrderNotifications'
 
 const EMPTY_FORM = { name: '', category_id: '', price: '', stock_count: '', description: '', photo_url: '' }
@@ -163,9 +164,8 @@ export default function ShopDashboard({ shop }) {
                       style={INPUT} placeholder="0" />
                   </div>
                   <div>
-                    <label style={LABEL}>Photo URL (optional)</label>
-                    <input type="url" value={form.photo_url} onChange={(e) => setForm({ ...form, photo_url: e.target.value })}
-                      style={INPUT} placeholder="https://..." />
+                    <label style={LABEL}>Product photo (optional)</label>
+                    <ImageUpload value={form.photo_url} onChange={(url) => setForm({ ...form, photo_url: url })} />
                   </div>
                   <div style={{ gridColumn: '1 / -1' }}>
                     <label style={LABEL}>Description (optional)</label>

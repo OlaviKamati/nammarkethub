@@ -31,7 +31,7 @@ export default function Home() {
         {/* Stats bar */}
         <div
           ref={statsRef}
-          style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 1, background: 'var(--black-border)', borderRadius: 16, overflow: 'hidden', marginBottom: 40, border: '1px solid var(--black-border)' }}
+          className='stats-grid' style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 1, background: 'var(--black-border)', borderRadius: 16, overflow: 'hidden', marginBottom: 40, border: '1px solid var(--black-border)' }}
         >
           {[
             { label: 'Shops', value: 50, suffix: '+' },

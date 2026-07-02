@@ -63,7 +63,7 @@ export default function ProductDetail() {
           ← Back
         </button>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, alignItems: 'start' }}>
+        <div className='product-detail-grid' style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, alignItems: 'start' }}>
 
           {/* Left — image */}
           <div>

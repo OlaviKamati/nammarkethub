@@ -190,3 +190,55 @@ select option {
 
 /* Page transition wrapper */
 .page-enter { animation: fadeUp 0.4s var(--ease-expo) both; }
+
+/* ============================================================
+   Mobile optimizations
+   ============================================================ */
+
+/* Prevent horizontal scroll on mobile */
+html, body { overflow-x: hidden; }
+
+/* Better tap targets on mobile */
+@media (max-width: 640px) {
+  .btn-gold, .btn-outline {
+    min-height: 44px;
+    font-size: 14px !important;
+  }
+
+  /* Tighter padding on mobile */
+  main {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  /* Full width search on mobile */
+  input[type="text"] {
+    font-size: 16px !important; /* Prevents iOS zoom on focus */
+  }
+
+  /* Stack product detail two-column layout on mobile */
+  .product-detail-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Smaller hero on mobile */
+  .hero-carousel {
+    min-height: 260px !important;
+  }
+
+  /* Stats bar 2x2 on mobile */
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* Touch-friendly card interactions */
+@media (hover: none) {
+  .card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  .card:active {
+    transform: scale(0.98);
+  }
+}
