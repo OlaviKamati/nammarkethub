@@ -20,12 +20,37 @@ export default function ProductDetail() {
     e.preventDefault()
     setSubmitting(true)
     setSubmitError(null)
-    const { error } = await supabase.from('orders').insert({
+
+    const { data: orderData, error } = await supabase.from('orders').insert({
       product_id: product.id, buyer_name: buyerName, buyer_contact: buyerContact, quantity
-    })
+    }).select().single()
+
+    if (error) {
+      setSubmitting(false)
+      setSubmitError('Could not send request. Try again.')
+      return
+    }
+
+    // Trigger email notification via Edge Function
+    try {
+      await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/notify-order`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          },
+          body: JSON.stringify({ record: orderData }),
+        }
+      )
+    } catch (err) {
+      // Email failed silently — order was still saved
+      console.error('Email notification failed:', err)
+    }
+
     setSubmitting(false)
-    if (error) setSubmitError('Could not send request. Try again.')
-    else setDone(true)
+    setDone(true)
   }
 
   if (loading) {
