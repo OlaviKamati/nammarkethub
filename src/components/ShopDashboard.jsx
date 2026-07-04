@@ -6,6 +6,199 @@ import { useOrderNotifications } from '../hooks/useOrderNotifications'
 
 const EMPTY_FORM = { name: '', category_id: '', price: '', stock_count: '', description: '', photo_url: '' }
 
+const STATUS_CONFIG = {
+  pending:     { label: 'Pending',     color: '#C9A84C', bg: 'rgba(201,168,76,0.1)',  border: 'rgba(201,168,76,0.2)',  next: 'attending',   nextLabel: '📞 Attending' },
+  attending:   { label: 'Attending',   color: '#60a5fa', bg: 'rgba(96,165,250,0.1)',  border: 'rgba(96,165,250,0.2)', next: 'in_progress', nextLabel: '🔄 In Progress' },
+  in_progress: { label: 'In Progress', color: '#a78bfa', bg: 'rgba(167,139,250,0.1)', border: 'rgba(167,139,250,0.2)', next: 'completed',   nextLabel: '✅ Resolve' },
+  completed:   { label: 'Resolved',    color: '#22c55e', bg: 'rgba(34,197,94,0.1)',   border: 'rgba(34,197,94,0.2)',  next: null,          nextLabel: null },
+  cancelled:   { label: 'Cancelled',   color: '#ef4444', bg: 'rgba(239,68,68,0.1)',   border: 'rgba(239,68,68,0.2)',  next: null,          nextLabel: null },
+}
+
+function OrdersTab({ shopId, notifications, timeAgo }) {
+  const [orders, setOrders] = useState(notifications)
+  const [expandedId, setExpandedId] = useState(null)
+  const [noteInputs, setNoteInputs] = useState({})
+  const [saving, setSaving] = useState({})
+  const [filterStatus, setFilterStatus] = useState('active') // 'active' | 'completed' | 'all'
+
+  useEffect(() => { setOrders(notifications) }, [notifications])
+
+  async function updateStatus(orderId, newStatus) {
+    setSaving(s => ({ ...s, [orderId]: true }))
+    await supabase.from('orders').update({ status: newStatus }).eq('id', orderId)
+    setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus } : o))
+    setSaving(s => ({ ...s, [orderId]: false }))
+  }
+
+  async function saveNote(orderId) {
+    const note = noteInputs[orderId]?.trim()
+    if (!note) return
+    setSaving(s => ({ ...s, [`note_${orderId}`]: true }))
+    await supabase.from('orders').update({ notes: note }).eq('id', orderId)
+    setOrders(prev => prev.map(o => o.id === orderId ? { ...o, notes: note } : o))
+    setSaving(s => ({ ...s, [`note_${orderId}`]: false }))
+    setNoteInputs(n => ({ ...n, [orderId]: '' }))
+  }
+
+  async function cancelOrder(orderId) {
+    if (!window.confirm('Cancel this order?')) return
+    await updateStatus(orderId, 'cancelled')
+  }
+
+  // Sort: active orders on top, resolved/cancelled at bottom
+  const sorted = [...orders].sort((a, b) => {
+    const activeStatuses = ['pending', 'attending', 'in_progress']
+    const aActive = activeStatuses.includes(a.status)
+    const bActive = activeStatuses.includes(b.status)
+    if (aActive && !bActive) return -1
+    if (!aActive && bActive) return 1
+    // Within active: pending first, then attending, then in_progress
+    const order = ['pending', 'attending', 'in_progress', 'completed', 'cancelled']
+    return order.indexOf(a.status) - order.indexOf(b.status)
+  })
+
+  const filtered = sorted.filter(o => {
+    if (filterStatus === 'active') return ['pending', 'attending', 'in_progress'].includes(o.status)
+    if (filterStatus === 'completed') return ['completed', 'cancelled'].includes(o.status)
+    return true
+  })
+
+  const activeCount = sorted.filter(o => ['pending', 'attending', 'in_progress'].includes(o.status)).length
+
+  return (
+    <div>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16, flexWrap: 'wrap', gap: 10 }}>
+        <h2 style={{ fontSize: 16, fontWeight: 700, color: '#FAFAF8' }}>
+          Orders {activeCount > 0 && <span style={{ fontSize: 12, background: '#C9A84C', color: '#0A0A0A', borderRadius: 99, padding: '2px 8px', marginLeft: 6 }}>{activeCount} active</span>}
+        </h2>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: '#C9A84C', fontFamily: 'ui-monospace, monospace', letterSpacing: '0.08em' }}>
+          <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#C9A84C', display: 'inline-block' }} className="pulse-dot" />
+          LIVE
+        </div>
+      </div>
+
+      {/* Filter tabs */}
+      <div style={{ display: 'flex', gap: 4, background: '#161616', borderRadius: 10, padding: 3, marginBottom: 16, width: 'fit-content', border: '1px solid #2A2A2A' }}>
+        {[['active', '🔔 Active'], ['completed', '✅ Resolved'], ['all', 'All']].map(([val, label]) => (
+          <button key={val} onClick={() => setFilterStatus(val)}
+            style={{ fontSize: 11, fontWeight: 600, padding: '6px 12px', borderRadius: 7, border: 'none', cursor: 'pointer',
+              background: filterStatus === val ? 'linear-gradient(135deg, #C9A84C, #9A7A2E)' : 'transparent',
+              color: filterStatus === val ? '#0A0A0A' : '#A0A09A' }}>
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {filtered.length === 0 ? (
+        <div style={{ textAlign: 'center', padding: '48px 0' }}>
+          <p style={{ fontSize: 28, marginBottom: 10 }}>📬</p>
+          <p style={{ fontSize: 14, color: '#A0A09A' }}>
+            {filterStatus === 'active' ? 'No active orders right now.' : 'No orders here yet.'}
+          </p>
+        </div>
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {filtered.map((order) => {
+            const cfg = STATUS_CONFIG[order.status] ?? STATUS_CONFIG.pending
+            const isExpanded = expandedId === order.id
+            const isResolved = ['completed', 'cancelled'].includes(order.status)
+
+            return (
+              <div key={order.id} style={{ background: '#111', border: `1px solid ${isResolved ? '#1A1A1A' : '#2A2A2A'}`, borderRadius: 14, overflow: 'hidden', opacity: isResolved ? 0.7 : 1, transition: 'opacity 0.2s' }}>
+                {/* Order header */}
+                <div style={{ padding: '14px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, cursor: 'pointer' }}
+                  onClick={() => setExpandedId(isExpanded ? null : order.id)}>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                      <span style={{ fontSize: 10, fontFamily: 'ui-monospace, monospace', letterSpacing: '0.06em', textTransform: 'uppercase', padding: '2px 8px', borderRadius: 99,
+                        background: cfg.bg, color: cfg.color, border: `1px solid ${cfg.border}`, flexShrink: 0 }}>
+                        {cfg.label}
+                      </span>
+                      <p style={{ fontSize: 13, fontWeight: 600, color: '#FAFAF8', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {order.products?.name ?? 'Product'}
+                      </p>
+                    </div>
+                    <p style={{ fontSize: 12, color: '#A0A09A', margin: 0 }}>
+                      {order.buyer_name} · {order.buyer_contact} · qty {order.quantity} · {timeAgo(order.created_at)}
+                    </p>
+                    {order.notes && !isExpanded && (
+                      <p style={{ fontSize: 11, color: '#C9A84C', margin: '4px 0 0', fontStyle: 'italic' }}>📝 {order.notes}</p>
+                    )}
+                  </div>
+                  <span style={{ color: '#555', fontSize: 12, flexShrink: 0 }}>{isExpanded ? '▲' : '▼'}</span>
+                </div>
+
+                {/* Expanded actions */}
+                {isExpanded && (
+                  <div style={{ padding: '0 16px 16px', borderTop: '1px solid #1A1A1A' }}>
+                    <div style={{ paddingTop: 12 }}>
+
+                      {/* Action buttons */}
+                      {!isResolved && (
+                        <div style={{ display: 'flex', gap: 8, marginBottom: 12, flexWrap: 'wrap' }}>
+                          {cfg.next && (
+                            <button
+                              onClick={() => updateStatus(order.id, cfg.next)}
+                              disabled={saving[order.id]}
+                              style={{ fontSize: 12, fontWeight: 600, padding: '8px 14px', borderRadius: 99, border: 'none', cursor: 'pointer',
+                                background: 'linear-gradient(135deg, #C9A84C, #9A7A2E)', color: '#0A0A0A', opacity: saving[order.id] ? 0.6 : 1 }}>
+                              {saving[order.id] ? '...' : cfg.nextLabel}
+                            </button>
+                          )}
+                          <button
+                            onClick={() => cancelOrder(order.id)}
+                            style={{ fontSize: 12, padding: '8px 14px', borderRadius: 99, border: '1px solid rgba(239,68,68,0.3)', cursor: 'pointer', background: 'transparent', color: '#ef4444' }}>
+                            ✕ Cancel
+                          </button>
+                          {order.buyer_contact && (
+                            <a
+                              href={`https://wa.me/${order.buyer_contact.replace(/\D/g, '')}`}
+                              target="_blank" rel="noopener noreferrer"
+                              style={{ fontSize: 12, padding: '8px 14px', borderRadius: 99, border: '1px solid rgba(34,197,94,0.3)', color: '#22c55e', textDecoration: 'none', background: 'transparent' }}>
+                              💬 WhatsApp
+                            </a>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Notes */}
+                      <div>
+                        {order.notes && (
+                          <div style={{ background: '#161616', borderRadius: 8, padding: '8px 12px', marginBottom: 8, border: '1px solid #2A2A2A' }}>
+                            <p style={{ fontSize: 11, color: '#C9A84C', margin: '0 0 2px', fontFamily: 'ui-monospace, monospace' }}>NOTE</p>
+                            <p style={{ fontSize: 12, color: '#FAFAF8', margin: 0 }}>{order.notes}</p>
+                          </div>
+                        )}
+                        <div style={{ display: 'flex', gap: 6 }}>
+                          <input
+                            value={noteInputs[order.id] ?? ''}
+                            onChange={(e) => setNoteInputs(n => ({ ...n, [order.id]: e.target.value }))}
+                            onKeyDown={(e) => e.key === 'Enter' && saveNote(order.id)}
+                            placeholder="Add a note (e.g. didn't pick up, arranged pickup)…"
+                            style={{ flex: 1, background: '#161616', border: '1px solid #2A2A2A', borderRadius: 8, color: '#FAFAF8', fontSize: 12, padding: '8px 10px', outline: 'none' }}
+                          />
+                          <button
+                            onClick={() => saveNote(order.id)}
+                            disabled={!noteInputs[order.id]?.trim() || saving[`note_${order.id}`]}
+                            style={{ fontSize: 12, padding: '8px 12px', borderRadius: 8, border: 'none', cursor: 'pointer',
+                              background: noteInputs[order.id]?.trim() ? 'linear-gradient(135deg, #C9A84C, #9A7A2E)' : '#2A2A2A',
+                              color: noteInputs[order.id]?.trim() ? '#0A0A0A' : '#555' }}>
+                            Save
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )
+          })}
+        </div>
+      )}
+    </div>
+  )
+}
+
 const INPUT = {
   width: '100%',
   padding: '10px 14px',
@@ -224,42 +417,7 @@ export default function ShopDashboard({ shop }) {
       )}
 
       {tab === 'orders' && (
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-            <h2 style={{ fontSize: 16, fontWeight: 700, color: '#FAFAF8' }}>Incoming orders</h2>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: '#C9A84C', fontFamily: 'ui-monospace, monospace', letterSpacing: '0.08em' }}>
-              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#C9A84C', display: 'inline-block' }} className="pulse-dot" />
-              LIVE
-            </div>
-          </div>
-
-          {notifications.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '48px 0' }}>
-              <p style={{ fontSize: 28, marginBottom: 10 }}>📬</p>
-              <p style={{ fontSize: 14, color: '#A0A09A' }}>No orders yet. They'll appear here in real time.</p>
-            </div>
-          ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              {notifications.map((order) => (
-                <div key={order.id} style={{ background: '#111', border: '1px solid #2A2A2A', borderRadius: 12, padding: '14px 16px', display: 'flex', alignItems: 'start', justifyContent: 'space-between', gap: 12 }}>
-                  <div>
-                    <p style={{ fontSize: 13, fontWeight: 600, color: '#FAFAF8', marginBottom: 4 }}>{order.products?.name ?? 'Product'}</p>
-                    <p style={{ fontSize: 12, color: '#A0A09A' }}>{order.buyer_name} · {order.buyer_contact} · qty {order.quantity}</p>
-                  </div>
-                  <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                    <span style={{ fontSize: 10, fontFamily: 'ui-monospace, monospace', letterSpacing: '0.06em', textTransform: 'uppercase', padding: '3px 8px', borderRadius: 99,
-                      background: order.status === 'pending' ? 'rgba(201,168,76,0.1)' : 'rgba(34,197,94,0.1)',
-                      color: order.status === 'pending' ? '#C9A84C' : '#22c55e',
-                      border: `1px solid ${order.status === 'pending' ? 'rgba(201,168,76,0.2)' : 'rgba(34,197,94,0.2)'}` }}>
-                      {order.status}
-                    </span>
-                    <p style={{ fontSize: 11, color: '#A0A09A', marginTop: 4 }}>{timeAgo(order.created_at)}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+        <OrdersTab shopId={shop.id} notifications={notifications} timeAgo={timeAgo} />
       )}
     </div>
   )
