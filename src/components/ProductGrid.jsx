@@ -17,7 +17,7 @@ function SkeletonCard() {
 
 export default function ProductGrid({ category, searchQuery, shopType }) {
   const { products, loading, error } = useProducts(category, searchQuery, shopType)
-  const revealRef = useScrollReveal(0.05)
+  const revealRef = useScrollReveal(0.05, [loading, products.length])
 
   if (loading) {
     return (
