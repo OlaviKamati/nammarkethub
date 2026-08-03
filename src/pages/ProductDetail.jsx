@@ -104,7 +104,7 @@ export default function ProductDetail() {
             {shop && (
               <div style={{ marginTop: 16, padding: '16px 20px', background: 'var(--black-card)', borderRadius: 16, border: '1px solid var(--black-border)' }}>
                 <p style={{ fontSize: 10, color: 'var(--gold)', fontFamily: 'ui-monospace, monospace', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8 }}>Sold by</p>
-                <p style={{ fontSize: 15, fontWeight: 600, color: 'var(--white)', marginBottom: 2 }}>{shop.name}</p>
+                <Link to={`/shop/${shop.id}`} style={{ fontSize: 15, fontWeight: 600, color: 'var(--white)', marginBottom: 2, display: 'block', textDecoration: 'none' }}>{shop.name}</Link>
                 <p style={{ fontSize: 12, color: 'var(--white-dim)', marginBottom: shop.whatsapp_number ? 12 : 0 }}>{shop.location}</p>
                 {shop.whatsapp_number && (
                   <a

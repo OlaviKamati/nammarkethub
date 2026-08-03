@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { getShopType } from '../lib/shopTypes'
 
@@ -7,6 +8,7 @@ function initials(name) {
 }
 
 export default function ShopStrip({ shopType }) {
+  const navigate = useNavigate()
   const [shops, setShops] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -41,8 +43,9 @@ export default function ShopStrip({ shopType }) {
         return (
           <div
             key={shop.id}
+            onClick={() => navigate(`/shop/${shop.id}`)}
             className="card fade-up"
-            style={{ minWidth: 168, flexShrink: 0, padding: '14px', animationDelay: `${i * 60}ms`, cursor: 'default' }}
+            style={{ minWidth: 168, flexShrink: 0, padding: '14px', animationDelay: `${i * 60}ms`, cursor: 'pointer' }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
               <div style={{ width: 34, height: 34, borderRadius: 10, background: 'linear-gradient(135deg, var(--gold-dark), #1A1500)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700, color: 'var(--gold)', border: '1px solid rgba(201,168,76,0.2)', flexShrink: 0 }}>
