@@ -44,8 +44,10 @@ export default function ShopDetail() {
         </button>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 12 }}>
-          <div style={{ width: 56, height: 56, borderRadius: 14, background: 'linear-gradient(135deg, var(--gold-dark), #1A1500)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26, border: '1px solid rgba(201,168,76,0.2)', flexShrink: 0 }}>
-            {type.emoji}
+          <div style={{ width: 56, height: 56, borderRadius: 14, background: 'linear-gradient(135deg, var(--gold-dark), #1A1500)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26, border: '1px solid rgba(201,168,76,0.2)', flexShrink: 0, overflow: 'hidden' }}>
+            {shop.logo_url ? (
+              <img src={shop.logo_url} alt={shop.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            ) : type.emoji}
           </div>
           <div>
             <h1 style={{ fontSize: 'clamp(1.3rem, 3vw, 1.8rem)', fontWeight: 700, color: 'var(--white)', marginBottom: 4 }}>

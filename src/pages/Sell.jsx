@@ -56,8 +56,10 @@ export default function Sell() {
         {/* Shop header */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 32, flexWrap: 'wrap', gap: 16 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-            <div style={{ width: 48, height: 48, borderRadius: 14, background: 'linear-gradient(135deg, var(--gold-dark), #1A1500)', border: '1px solid rgba(201,168,76,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>
-              {type.emoji}
+            <div style={{ width: 48, height: 48, borderRadius: 14, background: 'linear-gradient(135deg, var(--gold-dark), #1A1500)', border: '1px solid rgba(201,168,76,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, overflow: 'hidden' }}>
+              {shop.logo_url ? (
+                <img src={shop.logo_url} alt={shop.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              ) : type.emoji}
             </div>
             <div>
               <h1 style={{ fontSize: 20, fontWeight: 700, color: 'var(--white)', marginBottom: 2 }}>{shop.name}</h1>
@@ -78,7 +80,7 @@ export default function Sell() {
           </div>
         </div>
 
-        <ShopDashboard shop={shop} />
+        <ShopDashboard shop={shop} onShopUpdated={refetch} />
       </div>
     </>
   )

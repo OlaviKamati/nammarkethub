@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import { CATEGORIES_BY_TYPE } from '../lib/shopTypes'
 import ImageUpload from './ImageUpload'
+import ShopSettingsForm from './ShopSettingsForm'
 import { useOrderNotifications } from '../hooks/useOrderNotifications'
 
 const EMPTY_FORM = { name: '', category_id: '', price: '', stock_count: '', description: '', photo_url: '' }
@@ -212,7 +213,7 @@ const INPUT = {
 
 const LABEL = { fontSize: 11, color: '#A0A09A', display: 'block', marginBottom: 6 }
 
-export default function ShopDashboard({ shop }) {
+export default function ShopDashboard({ shop, onShopUpdated }) {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [form, setForm] = useState(EMPTY_FORM)
@@ -313,7 +314,17 @@ export default function ShopDashboard({ shop }) {
             </span>
           )}
         </button>
+        <button onClick={() => setTab('settings')}
+          style={{ fontSize: 13, fontWeight: 600, padding: '8px 18px', borderRadius: 10, border: 'none', cursor: 'pointer', transition: 'all 0.2s',
+            background: tab === 'settings' ? 'linear-gradient(135deg, #C9A84C, #9A7A2E)' : 'transparent',
+            color: tab === 'settings' ? '#0A0A0A' : '#A0A09A' }}>
+          Settings
+        </button>
       </div>
+
+      {tab === 'settings' && (
+        <ShopSettingsForm shop={shop} onUpdated={onShopUpdated} />
+      )}
 
       {tab === 'products' && (
         <div>

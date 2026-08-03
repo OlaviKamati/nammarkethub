@@ -15,7 +15,7 @@ export default function ShopStrip({ shopType }) {
   useEffect(() => {
     let query = supabase
       .from('shops')
-      .select('id, name, location, shop_type, products(count)')
+      .select('id, name, location, shop_type, logo_url, products(count)')
       .order('created_at', { ascending: false })
     if (shopType && shopType !== 'all') query = query.eq('shop_type', shopType)
     query.then(({ data }) => { setShops(data ?? []); setLoading(false) })
@@ -48,8 +48,10 @@ export default function ShopStrip({ shopType }) {
             style={{ minWidth: 168, flexShrink: 0, padding: '14px', animationDelay: `${i * 60}ms`, cursor: 'pointer' }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
-              <div style={{ width: 34, height: 34, borderRadius: 10, background: 'linear-gradient(135deg, var(--gold-dark), #1A1500)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700, color: 'var(--gold)', border: '1px solid rgba(201,168,76,0.2)', flexShrink: 0 }}>
-                {initials(shop.name)}
+              <div style={{ width: 34, height: 34, borderRadius: 10, background: 'linear-gradient(135deg, var(--gold-dark), #1A1500)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700, color: 'var(--gold)', border: '1px solid rgba(201,168,76,0.2)', flexShrink: 0, overflow: 'hidden' }}>
+                {shop.logo_url ? (
+                  <img src={shop.logo_url} alt={shop.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                ) : initials(shop.name)}
               </div>
               <span style={{ fontSize: 18 }}>{type.emoji}</span>
             </div>

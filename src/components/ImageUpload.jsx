@@ -14,7 +14,7 @@ const INPUT = {
 
 // Handles both direct file upload (to Supabase Storage) and manual URL entry.
 // Calls onChange(url) with whatever the final image URL is.
-export default function ImageUpload({ value, onChange }) {
+export default function ImageUpload({ value, onChange, folder = 'products' }) {
   const [uploading, setUploading] = useState(false)
   const [uploadError, setUploadError] = useState(null)
   const [mode, setMode] = useState('url') // 'url' | 'upload'
@@ -38,7 +38,7 @@ export default function ImageUpload({ value, onChange }) {
 
     const ext = file.name.split('.').pop()
     const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
-    const path = `products/${filename}`
+    const path = `${folder}/${filename}`
 
     const { error } = await supabase.storage
       .from('product-photos')
