@@ -1,6 +1,5 @@
 import { useProducts } from '../hooks/useProducts'
 import ProductCard from './ProductCard'
-import { useScrollReveal } from '../hooks/useScrollReveal'
 
 function SkeletonCard() {
   return (
@@ -17,7 +16,6 @@ function SkeletonCard() {
 
 export default function ProductGrid({ category, searchQuery, shopType }) {
   const { products, loading, error } = useProducts(category, searchQuery, shopType)
-  const revealRef = useScrollReveal(0.05, [loading, products.length])
 
   if (loading) {
     return (
@@ -43,15 +41,9 @@ export default function ProductGrid({ category, searchQuery, shopType }) {
   }
 
   return (
-    <div ref={revealRef} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 12 }}>
-      {products.map((product, i) => (
-        <div
-          key={product.id}
-          className="reveal"
-          style={{ transitionDelay: `${Math.min(i * 40, 400)}ms` }}
-        >
-          <ProductCard product={product} />
-        </div>
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 12 }}>
+      {products.map((product) => (
+        <ProductCard key={product.id} product={product} />
       ))}
     </div>
   )
