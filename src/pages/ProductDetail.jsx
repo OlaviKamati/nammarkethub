@@ -12,17 +12,28 @@ export default function ProductDetail() {
   const [buyerName, setBuyerName] = useState('')
   const [buyerContact, setBuyerContact] = useState('')
   const [quantity, setQuantity] = useState(1)
+  const [selectedOptions, setSelectedOptions] = useState({})
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState(null)
   const [done, setDone] = useState(false)
 
+  const optionGroups = product?.options ?? []
+  const allOptionsSelected = optionGroups.every((g) => selectedOptions[g.name])
+
   async function handleOrder(e) {
     e.preventDefault()
+
+    if (!allOptionsSelected) {
+      setSubmitError('Please select an option for each choice above.')
+      return
+    }
+
     setSubmitting(true)
     setSubmitError(null)
 
     const { data: orderData, error } = await supabase.from('orders').insert({
-      product_id: product.id, buyer_name: buyerName, buyer_contact: buyerContact, quantity
+      product_id: product.id, buyer_name: buyerName, buyer_contact: buyerContact, quantity,
+      selected_options: optionGroups.length > 0 ? selectedOptions : null,
     }).select().single()
 
     if (error) {
@@ -142,6 +153,38 @@ export default function ProductDetail() {
               <p style={{ fontSize: 14, color: 'var(--white-dim)', lineHeight: 1.6, marginBottom: 24 }}>{product.description}</p>
             )}
 
+            {optionGroups.length > 0 && (
+              <div style={{ marginBottom: 24 }}>
+                {optionGroups.map((group) => (
+                  <div key={group.name} style={{ marginBottom: 16 }}>
+                    <p style={{ fontSize: 12, color: 'var(--white-dim)', marginBottom: 8 }}>
+                      {group.name}{selectedOptions[group.name] ? `: ${selectedOptions[group.name]}` : ''}
+                    </p>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                      {group.values.map((value) => {
+                        const active = selectedOptions[group.name] === value
+                        return (
+                          <button
+                            key={value}
+                            type="button"
+                            onClick={() => setSelectedOptions((s) => ({ ...s, [group.name]: value }))}
+                            style={{
+                              fontSize: 13, padding: '7px 16px', borderRadius: 99, cursor: 'pointer',
+                              border: active ? 'none' : '1px solid var(--black-border)',
+                              background: active ? 'linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%)' : 'var(--black-card)',
+                              color: active ? 'var(--black)' : 'var(--white-dim)',
+                            }}
+                          >
+                            {value}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
             <div className="gold-divider" style={{ marginBottom: 24 }} />
 
             {/* Order form */}
@@ -168,7 +211,7 @@ export default function ProductDetail() {
                           className="input-dark" style={{ width: '100%', padding: '10px 14px', fontSize: 14 }} />
                       </div>
                       {submitError && <p style={{ fontSize: 12, color: '#ef4444' }}>{submitError}</p>}
-                      <button type="submit" disabled={submitting} className="btn-gold" style={{ padding: '12px', fontSize: 14, marginTop: 4 }}>
+                      <button type="submit" disabled={submitting || !allOptionsSelected} className="btn-gold" style={{ padding: '12px', fontSize: 14, marginTop: 4, opacity: !allOptionsSelected ? 0.5 : 1 }}>
                         {submitting ? 'Sending…' : 'Send request →'}
                       </button>
                       <p style={{ fontSize: 11, color: 'var(--white-dim)', textAlign: 'center' }}>

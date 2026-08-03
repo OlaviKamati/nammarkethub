@@ -3,9 +3,10 @@ import { supabase } from '../lib/supabase'
 import { CATEGORIES_BY_TYPE } from '../lib/shopTypes'
 import ImageUpload from './ImageUpload'
 import ShopSettingsForm from './ShopSettingsForm'
+import ProductOptionsEditor from './ProductOptionsEditor'
 import { useOrderNotifications } from '../hooks/useOrderNotifications'
 
-const EMPTY_FORM = { name: '', category_id: '', price: '', stock_count: '', description: '', photo_url: '' }
+const EMPTY_FORM = { name: '', category_id: '', price: '', stock_count: '', description: '', photo_url: '', options: [] }
 
 const STATUS_CONFIG = {
   pending:     { label: 'Pending',     color: '#C9A84C', bg: 'rgba(201,168,76,0.1)',  border: 'rgba(201,168,76,0.2)',  next: 'attending',   nextLabel: '📞 Attending' },
@@ -122,6 +123,11 @@ function OrdersTab({ shopId, notifications, timeAgo }) {
                     <p style={{ fontSize: 12, color: '#A0A09A', margin: 0 }}>
                       {order.buyer_name} · {order.buyer_contact} · qty {order.quantity} · {timeAgo(order.created_at)}
                     </p>
+                    {order.selected_options && Object.keys(order.selected_options).length > 0 && (
+                      <p style={{ fontSize: 11, color: '#C9A84C', margin: '4px 0 0' }}>
+                        {Object.entries(order.selected_options).map(([k, v]) => `${k}: ${v}`).join(' · ')}
+                      </p>
+                    )}
                     {order.notes && !isExpanded && (
                       <p style={{ fontSize: 11, color: '#C9A84C', margin: '4px 0 0', fontStyle: 'italic' }}>📝 {order.notes}</p>
                     )}
@@ -251,7 +257,7 @@ export default function ShopDashboard({ shop, onShopUpdated }) {
 
   function startEdit(p) {
     setEditingId(p.id)
-    setForm({ name: p.name, category_id: p.category_id, price: p.price, stock_count: p.stock_count, description: p.description ?? '', photo_url: p.photo_url ?? '' })
+    setForm({ name: p.name, category_id: p.category_id, price: p.price, stock_count: p.stock_count, description: p.description ?? '', photo_url: p.photo_url ?? '', options: p.options ?? [] })
     setError(null)
     setShowForm(true)
   }
@@ -262,7 +268,10 @@ export default function ShopDashboard({ shop, onShopUpdated }) {
     e.preventDefault()
     setSaving(true)
     setError(null)
-    const payload = { shop_id: shop.id, name: form.name, category_id: form.category_id, price: Number(form.price), stock_count: Number(form.stock_count), description: form.description || null, photo_url: form.photo_url || null, is_active: true }
+    const cleanOptions = form.options
+      .filter((g) => g.name.trim() && g.values.length > 0)
+      .map((g) => ({ name: g.name.trim(), values: g.values }))
+    const payload = { shop_id: shop.id, name: form.name, category_id: form.category_id, price: Number(form.price), stock_count: Number(form.stock_count), description: form.description || null, photo_url: form.photo_url || null, options: cleanOptions, is_active: true }
     const { error } = editingId
       ? await supabase.from('products').update(payload).eq('id', editingId)
       : await supabase.from('products').insert(payload)
@@ -375,6 +384,9 @@ export default function ShopDashboard({ shop, onShopUpdated }) {
                     <label style={LABEL}>Description (optional)</label>
                     <textarea rows={2} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })}
                       style={{ ...INPUT, resize: 'vertical' }} placeholder="Brief description" />
+                  </div>
+                  <div style={{ gridColumn: '1 / -1' }}>
+                    <ProductOptionsEditor options={form.options} onChange={(options) => setForm({ ...form, options })} />
                   </div>
                 </div>
 
