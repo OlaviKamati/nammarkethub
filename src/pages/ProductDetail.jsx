@@ -9,7 +9,7 @@ import ShareButtons from '../components/ShareButtons'
 import ProductReviews from '../components/ProductReviews'
 
 // Anonymous browsers get a taste of the cart, then are asked to sign up to keep going.
-const MAX_ANONYMOUS_CART_ITEMS = 5
+const MAX_ANONYMOUS_CART_ITEMS = 3
 
 export default function ProductDetail() {
   const { id } = useParams()
