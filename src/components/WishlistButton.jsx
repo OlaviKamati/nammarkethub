@@ -12,7 +12,7 @@ export default function WishlistButton({ productId, style }) {
     e.preventDefault()
     e.stopPropagation()
     if (!user) {
-      navigate('/account')
+      navigate('/account', { state: { reason: 'wishlist' } })
       return
     }
     toggle(productId)

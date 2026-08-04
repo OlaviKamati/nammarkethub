@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
 import { useMyOrders } from '../hooks/useMyOrders'
 import { useWishlist } from '../hooks/useWishlist'
+import { useProfile } from '../hooks/useProfile'
 import Navbar from '../components/Navbar'
 import AuthForm from '../components/AuthForm'
 import ProductCard from '../components/ProductCard'
+import ProfileSettingsForm from '../components/ProfileSettingsForm'
 
 const STATUS_LABEL = {
   pending: 'Pending', attending: 'Attending', in_progress: 'In Progress',
@@ -96,9 +99,22 @@ function OrdersTab({ userId }) {
   )
 }
 
+const GATE_MESSAGES = {
+  'cart-limit': { icon: '🛒', text: "You've added 5 items to your cart — create a free account to keep going." },
+  wishlist: { icon: '❤️', text: 'Sign up to save products to your wishlist.' },
+}
+
 export default function Account() {
   const { user, loading: authLoading } = useAuth()
+  const { profile, loading: profileLoading, refetch: refetchProfile } = useProfile(user?.id)
+  const location = useLocation()
   const [tab, setTab] = useState('orders')
+  const gate = GATE_MESSAGES[location.state?.reason]
+
+  // Nudge new accounts to set a username instead of quietly showing their email everywhere
+  useEffect(() => {
+    if (!profileLoading && !profile) setTab('profile')
+  }, [profileLoading, profile])
 
   if (authLoading) {
     return (
@@ -118,6 +134,11 @@ export default function Account() {
             <h1 className="gold-shimmer" style={{ fontSize: 28, fontWeight: 700, marginBottom: 8 }}>Your account</h1>
             <p style={{ color: 'var(--white-dim)', fontSize: 14 }}>Sign in to track your orders and wishlist</p>
           </div>
+          {gate && (
+            <div style={{ background: 'rgba(201,168,76,0.08)', border: '1px solid rgba(201,168,76,0.25)', borderRadius: 14, padding: '14px 16px', marginBottom: 24, textAlign: 'center' }}>
+              <p style={{ fontSize: 13, color: 'var(--gold)' }}>{gate.icon} {gate.text}</p>
+            </div>
+          )}
           <AuthForm />
         </div>
       </>
@@ -128,10 +149,19 @@ export default function Account() {
     <>
       <Navbar />
       <div style={{ maxWidth: 700, margin: '0 auto', padding: '32px 24px' }} className="page-enter">
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
-          <div>
-            <h1 style={{ fontSize: 20, fontWeight: 700, color: 'var(--white)', marginBottom: 2 }}>Your account</h1>
-            <p style={{ fontSize: 12, color: 'var(--white-dim)' }}>{user.email}</p>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24, gap: 16, flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{ width: 44, height: 44, borderRadius: '50%', overflow: 'hidden', background: 'var(--black-card)', border: '1px solid var(--black-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0 }}>
+              {profile?.avatar_url ? <img src={profile.avatar_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : '👤'}
+            </div>
+            <div>
+              <h1 style={{ fontSize: 20, fontWeight: 700, color: 'var(--white)', marginBottom: 2 }}>
+                {profile?.username ? `@${profile.username}` : 'Your account'}
+              </h1>
+              <p style={{ fontSize: 12, color: 'var(--white-dim)' }}>
+                {profile?.full_name ? `${profile.full_name} · ` : ''}{user.email}
+              </p>
+            </div>
           </div>
           <button onClick={() => supabase.auth.signOut()} className="btn-outline" style={{ fontSize: 13, padding: '7px 16px' }}>
             Log out
@@ -139,7 +169,7 @@ export default function Account() {
         </div>
 
         <div style={{ display: 'flex', gap: 4, background: 'var(--black-card)', borderRadius: 14, padding: 4, width: 'fit-content', marginBottom: 24, border: '1px solid var(--black-border)' }}>
-          {[['orders', 'Orders'], ['wishlist', 'Wishlist']].map(([val, label]) => (
+          {[['orders', 'Orders'], ['wishlist', 'Wishlist'], ['profile', 'Profile']].map(([val, label]) => (
             <button key={val} onClick={() => setTab(val)}
               style={{ fontSize: 13, fontWeight: 600, padding: '8px 18px', borderRadius: 10, border: 'none', cursor: 'pointer',
                 background: tab === val ? 'linear-gradient(135deg, var(--gold), var(--gold-dark))' : 'transparent',
@@ -149,7 +179,9 @@ export default function Account() {
           ))}
         </div>
 
-        {tab === 'orders' ? <OrdersTab userId={user.id} /> : <WishlistTab userId={user.id} />}
+        {tab === 'orders' && <OrdersTab userId={user.id} />}
+        {tab === 'wishlist' && <WishlistTab userId={user.id} />}
+        {tab === 'profile' && <ProfileSettingsForm userId={user.id} profile={profile} onSaved={refetchProfile} />}
       </div>
     </>
   )

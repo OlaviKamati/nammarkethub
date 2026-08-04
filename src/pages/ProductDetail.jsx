@@ -2,16 +2,21 @@ import { useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useProduct } from '../hooks/useProduct'
 import { useCart } from '../hooks/useCart'
+import { useAuth } from '../hooks/useAuth'
 import Navbar from '../components/Navbar'
 import WishlistButton from '../components/WishlistButton'
 import ShareButtons from '../components/ShareButtons'
 import ProductReviews from '../components/ProductReviews'
 
+// Anonymous browsers get a taste of the cart, then are asked to sign up to keep going.
+const MAX_ANONYMOUS_CART_ITEMS = 5
+
 export default function ProductDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
   const { product, loading, error } = useProduct(id)
-  const { addItem } = useCart()
+  const { user } = useAuth()
+  const { items, addItem } = useCart()
 
   const [quantity, setQuantity] = useState(1)
   const [selectedOptions, setSelectedOptions] = useState({})
@@ -23,6 +28,15 @@ export default function ProductDetail() {
   function handleAddToCart(e) {
     e.preventDefault()
     if (!allOptionsSelected) return
+
+    const optionsKey = JSON.stringify(optionGroups.length > 0 ? selectedOptions : {})
+    const alreadyInCart = items.some((i) => i.product.id === product.id && JSON.stringify(i.selectedOptions ?? {}) === optionsKey)
+
+    if (!user && !alreadyInCart && items.length >= MAX_ANONYMOUS_CART_ITEMS) {
+      navigate('/account', { state: { reason: 'cart-limit' } })
+      return
+    }
+
     addItem(product, quantity, optionGroups.length > 0 ? selectedOptions : null)
     setAdded(true)
     setTimeout(() => setAdded(false), 3000)
