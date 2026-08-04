@@ -67,6 +67,12 @@ function OrdersTab({ shopId, notifications, timeAgo }) {
 
   const activeCount = sorted.filter(o => ['pending', 'attending', 'in_progress'].includes(o.status)).length
 
+  // Count how many of this shop's orders share the same cart group_id (multi-item cart checkout)
+  const groupCounts = orders.reduce((acc, o) => {
+    if (o.group_id) acc[o.group_id] = (acc[o.group_id] ?? 0) + 1
+    return acc
+  }, {})
+
   return (
     <div>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16, flexWrap: 'wrap', gap: 10 }}>
@@ -123,6 +129,11 @@ function OrdersTab({ shopId, notifications, timeAgo }) {
                     <p style={{ fontSize: 12, color: '#A0A09A', margin: 0 }}>
                       {order.buyer_name} · {order.buyer_contact} · qty {order.quantity} · {timeAgo(order.created_at)}
                     </p>
+                    {order.group_id && groupCounts[order.group_id] > 1 && (
+                      <p style={{ fontSize: 11, color: '#60a5fa', margin: '4px 0 0' }}>
+                        🧾 part of a {groupCounts[order.group_id]}-item order
+                      </p>
+                    )}
                     {order.selected_options && Object.keys(order.selected_options).length > 0 && (
                       <p style={{ fontSize: 11, color: '#C9A84C', margin: '4px 0 0' }}>
                         {Object.entries(order.selected_options).map(([k, v]) => `${k}: ${v}`).join(' · ')}

@@ -1,10 +1,15 @@
 import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
+import { useMyShop } from '../hooks/useMyShop'
+import { useCart } from '../hooks/useCart'
 
 export default function Navbar() {
   const { user } = useAuth()
+  const { shop } = useMyShop(user?.id)
+  const { itemCount } = useCart()
   const location = useLocation()
   const onSell = location.pathname === '/sell'
+  const onAccount = location.pathname === '/account'
 
   return (
     <nav className="glass-nav sticky top-0 z-50">
@@ -16,12 +21,35 @@ export default function Navbar() {
         </Link>
 
         {/* Right side */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
           {/* Live indicator */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: 'var(--gold)', fontFamily: 'ui-monospace, monospace', letterSpacing: '0.08em' }}>
             <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--gold)', display: 'inline-block' }} className="pulse-dot" />
             LIVE
           </div>
+
+          {/* Cart icon */}
+          <Link to="/cart" style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: 34, height: 34, borderRadius: 10, border: '1px solid var(--black-border)', textDecoration: 'none', fontSize: 15 }}>
+            🛒
+            {itemCount > 0 && (
+              <span style={{ position: 'absolute', top: -5, right: -5, background: 'var(--gold)', color: 'var(--black)', fontSize: 10, fontWeight: 700, width: 16, height: 16, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {itemCount > 9 ? '9+' : itemCount}
+              </span>
+            )}
+          </Link>
+
+          {/* Account icon */}
+          <Link
+            to="/account"
+            style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'center', width: 34, height: 34, borderRadius: 10,
+              textDecoration: 'none', fontSize: 15,
+              border: onAccount ? 'none' : '1px solid var(--black-border)',
+              background: onAccount ? 'linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%)' : 'transparent',
+            }}
+          >
+            👤
+          </Link>
 
           <Link
             to="/sell"
@@ -37,7 +65,7 @@ export default function Navbar() {
                 : { border: '1px solid var(--gold-dark)', color: 'var(--gold)' })
             }}
           >
-            {user ? 'My Shop' : 'List your shop'}
+            {shop ? 'My Shop' : 'List your shop'}
           </Link>
         </div>
       </div>

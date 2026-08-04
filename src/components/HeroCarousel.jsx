@@ -43,9 +43,11 @@ export default function HeroCarousel() {
     return () => clearInterval(timer)
   }, [paused, next, slides.length])
 
+  const heroHeight = 'clamp(420px, 62vh, 680px)'
+
   if (slides.length === 0) {
     return (
-      <div style={{ height: 360, background: 'var(--black-card)', borderRadius: 20, border: '1px solid var(--black-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 32 }}>
+      <div style={{ height: heroHeight, background: 'var(--black-card)', borderRadius: 20, border: '1px solid var(--black-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 32 }}>
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontSize: 40, marginBottom: 12 }}>🛍️</div>
           <p style={{ color: 'var(--white-dim)', fontSize: 14 }}>Add products with photos to see them featured here</p>
@@ -59,20 +61,28 @@ export default function HeroCarousel() {
 
   return (
     <div
-      style={{ position: 'relative', height: 380, borderRadius: 20, overflow: 'hidden', marginBottom: 32, cursor: 'pointer' }}
+      style={{ position: 'relative', height: heroHeight, borderRadius: 20, overflow: 'hidden', marginBottom: 32, cursor: 'pointer', background: 'var(--black-card)' }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      {/* BG Image */}
+      {/* BG Image — contain so the full product is always visible, never cropped */}
       <div style={{ position: 'absolute', inset: 0, opacity: transitioning ? 0 : 1, transition: 'opacity 0.3s ease' }}>
+        {/* Blurred, zoomed backdrop fills the frame so contain-mode doesn't leave flat empty bars */}
+        <img
+          src={slide.photo_url}
+          alt=""
+          aria-hidden="true"
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: 'blur(40px) brightness(0.9) saturate(1.05)', transform: 'scale(1.15)' }}
+        />
+        {/* Sharp product image, always fully visible */}
         <img
           src={slide.photo_url}
           alt={slide.name}
-          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          style={{ position: 'relative', width: '100%', height: '100%', objectFit: 'contain' }}
         />
         {/* Overlays */}
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.6) 50%, rgba(10,10,10,0.2) 100%)' }} />
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(10,10,10,0.8) 0%, transparent 50%)' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.6) 50%, rgba(10,10,10,0.2) 100%)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(10,10,10,0.8) 0%, transparent 50%)', pointerEvents: 'none' }} />
       </div>
 
       {/* Gold corner accent */}

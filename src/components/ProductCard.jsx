@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { getShopType } from '../lib/shopTypes'
+import WishlistButton from './WishlistButton'
 
 export default function ProductCard({ product }) {
   const navigate = useNavigate()
@@ -9,7 +10,7 @@ export default function ProductCard({ product }) {
   const inStock = product.stock_count > 0
 
   return (
-    <button
+    <div
       onClick={() => navigate(`/product/${product.id}`)}
       className="card"
       style={{ textAlign: 'left', width: '100%', padding: 0, overflow: 'hidden', cursor: 'pointer' }}
@@ -43,6 +44,9 @@ export default function ProductCard({ product }) {
             {product.category_id}
           </span>
         </div>
+
+        {/* Wishlist */}
+        <WishlistButton productId={product.id} style={{ position: 'absolute', top: 8, right: 8 }} />
       </div>
 
       {/* Info */}
@@ -60,6 +64,6 @@ export default function ProductCard({ product }) {
           )}
         </div>
       </div>
-    </button>
+    </div>
   )
 }

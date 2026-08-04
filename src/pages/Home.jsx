@@ -5,6 +5,8 @@ import ShopStrip from '../components/ShopStrip'
 import CategoryFilter from '../components/CategoryFilter'
 import ProductGrid from '../components/ProductGrid'
 import AnimatedCounter from '../components/AnimatedCounter'
+import TrustBadges from '../components/TrustBadges'
+import NewsletterSignup from '../components/NewsletterSignup'
 import { SHOP_TYPES } from '../lib/shopTypes'
 import { useScrollReveal } from '../hooks/useScrollReveal'
 
@@ -136,6 +138,16 @@ export default function Home() {
 
         {/* Product grid */}
         <ProductGrid category={category} searchQuery={searchQuery} shopType={shopType} />
+
+        <div className="gold-divider" style={{ margin: '48px 0 32px' }} />
+
+        {/* Trust badges */}
+        <div style={{ marginBottom: 32 }}>
+          <TrustBadges />
+        </div>
+
+        {/* Newsletter */}
+        <NewsletterSignup />
 
         {/* Footer */}
         <div style={{ marginTop: 64, paddingTop: 32, borderTop: '1px solid var(--black-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
