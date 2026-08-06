@@ -53,7 +53,7 @@ export default function ShopStrip({ shopType }) {
                   <img src={shop.logo_url} alt={shop.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 ) : initials(shop.name)}
               </div>
-              <span style={{ fontSize: 18 }}>{type.emoji}</span>
+              <type.icon size={17} strokeWidth={1.75} color="var(--gold)" />
             </div>
             <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--white)', marginBottom: 3, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
               {shop.name}

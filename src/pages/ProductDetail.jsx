@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
+import { ArrowLeft, ArrowRight, Package, MessageCircle, ShoppingCart, Check } from 'lucide-react'
 import { useProduct } from '../hooks/useProduct'
 import { useCart } from '../hooks/useCart'
 import { useAuth } from '../hooks/useAuth'
@@ -75,7 +76,7 @@ export default function ProductDetail() {
           onClick={() => navigate(-1)}
           style={{ fontSize: 13, color: 'var(--white-dim)', background: 'none', border: 'none', cursor: 'pointer', marginBottom: 24, display: 'flex', alignItems: 'center', gap: 6 }}
         >
-          ← Back
+          <ArrowLeft size={14} strokeWidth={1.75} /> Back
         </button>
 
         <div className='product-detail-grid' style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, alignItems: 'start' }}>
@@ -86,9 +87,9 @@ export default function ProductDetail() {
               {product.photo_url ? (
                 <img src={product.photo_url} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               ) : (
-                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 56, background: 'linear-gradient(135deg, #111, #1A1500)' }}>📦</div>
+                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #111, #1A1500)' }}><Package size={48} strokeWidth={1.5} color="var(--white-dim)" /></div>
               )}
-              <WishlistButton productId={product.id} style={{ position: 'absolute', top: 12, right: 12, width: 36, height: 36, fontSize: 16 }} />
+              <WishlistButton productId={product.id} iconSize={17} style={{ position: 'absolute', top: 12, right: 12, width: 36, height: 36 }} />
             </div>
 
             {/* Shop info below image */}
@@ -104,7 +105,7 @@ export default function ProductDetail() {
                     rel="noopener noreferrer"
                     style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--gold)', textDecoration: 'none', padding: '6px 14px', border: '1px solid rgba(201,168,76,0.3)', borderRadius: 99, background: 'rgba(201,168,76,0.08)' }}
                   >
-                    💬 WhatsApp the shop
+                    <MessageCircle size={14} strokeWidth={1.75} /> WhatsApp the shop
                   </a>
                 )}
               </div>
@@ -118,7 +119,7 @@ export default function ProductDetail() {
                 {product.category_id}
               </span>
             </div>
-            <h1 style={{ fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: 700, color: 'var(--white)', lineHeight: 1.2, marginBottom: 12 }}>
+            <h1 className="font-display" style={{ fontSize: 'clamp(1.4rem, 3vw, 2rem)', color: 'var(--white)', lineHeight: 1.2, marginBottom: 12 }}>
               {product.name}
             </h1>
 
@@ -181,12 +182,12 @@ export default function ProductDetail() {
                       onChange={(e) => setQuantity(Number(e.target.value))}
                       className="input-dark" style={{ width: '100%', padding: '10px 14px', fontSize: 14 }} />
                   </div>
-                  <button type="submit" disabled={!allOptionsSelected} className="btn-gold" style={{ padding: '12px', fontSize: 14, marginTop: 4, opacity: !allOptionsSelected ? 0.5 : 1 }}>
-                    {added ? 'Added ✓' : 'Add to cart 🛒'}
+                  <button type="submit" disabled={!allOptionsSelected} className="btn-gold" style={{ padding: '12px', fontSize: 14, marginTop: 4, opacity: !allOptionsSelected ? 0.5 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+                    {added ? <><Check size={15} strokeWidth={2} /> Added</> : <><ShoppingCart size={15} strokeWidth={1.75} /> Add to cart</>}
                   </button>
                   {added && (
-                    <p style={{ fontSize: 12, color: 'var(--gold)', textAlign: 'center' }}>
-                      Added to cart · <Link to="/cart" style={{ color: 'var(--gold)' }}>View cart →</Link>
+                    <p style={{ fontSize: 12, color: 'var(--gold)', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
+                      Added to cart · <Link to="/cart" style={{ color: 'var(--gold)', display: 'inline-flex', alignItems: 'center', gap: 3 }}>View cart <ArrowRight size={12} strokeWidth={1.75} /></Link>
                     </p>
                   )}
                   <p style={{ fontSize: 11, color: 'var(--white-dim)', textAlign: 'center' }}>

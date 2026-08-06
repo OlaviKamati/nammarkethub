@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Phone, RefreshCw, CheckCircle2, Bell, Inbox, Receipt, Pencil, ChevronUp, ChevronDown, X, MessageCircle, Package, Plus } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { CATEGORIES_BY_TYPE } from '../lib/shopTypes'
 import ImageUpload from './ImageUpload'
@@ -9,11 +10,11 @@ import { useOrderNotifications } from '../hooks/useOrderNotifications'
 const EMPTY_FORM = { name: '', category_id: '', price: '', stock_count: '', description: '', photo_url: '', options: [] }
 
 const STATUS_CONFIG = {
-  pending:     { label: 'Pending',     color: '#C9A84C', bg: 'rgba(201,168,76,0.1)',  border: 'rgba(201,168,76,0.2)',  next: 'attending',   nextLabel: '📞 Attending' },
-  attending:   { label: 'Attending',   color: '#60a5fa', bg: 'rgba(96,165,250,0.1)',  border: 'rgba(96,165,250,0.2)', next: 'in_progress', nextLabel: '🔄 In Progress' },
-  in_progress: { label: 'In Progress', color: '#a78bfa', bg: 'rgba(167,139,250,0.1)', border: 'rgba(167,139,250,0.2)', next: 'completed',   nextLabel: '✅ Resolve' },
-  completed:   { label: 'Resolved',    color: '#22c55e', bg: 'rgba(34,197,94,0.1)',   border: 'rgba(34,197,94,0.2)',  next: null,          nextLabel: null },
-  cancelled:   { label: 'Cancelled',   color: '#ef4444', bg: 'rgba(239,68,68,0.1)',   border: 'rgba(239,68,68,0.2)',  next: null,          nextLabel: null },
+  pending:     { label: 'Pending',     color: '#C9A84C', bg: 'rgba(201,168,76,0.1)',  border: 'rgba(201,168,76,0.2)',  next: 'attending',   nextLabel: 'Attending',   nextIcon: Phone },
+  attending:   { label: 'Attending',   color: '#60a5fa', bg: 'rgba(96,165,250,0.1)',  border: 'rgba(96,165,250,0.2)', next: 'in_progress', nextLabel: 'In Progress', nextIcon: RefreshCw },
+  in_progress: { label: 'In Progress', color: '#a78bfa', bg: 'rgba(167,139,250,0.1)', border: 'rgba(167,139,250,0.2)', next: 'completed',   nextLabel: 'Resolve',     nextIcon: CheckCircle2 },
+  completed:   { label: 'Resolved',    color: '#22c55e', bg: 'rgba(34,197,94,0.1)',   border: 'rgba(34,197,94,0.2)',  next: null,          nextLabel: null, nextIcon: null },
+  cancelled:   { label: 'Cancelled',   color: '#ef4444', bg: 'rgba(239,68,68,0.1)',   border: 'rgba(239,68,68,0.2)',  next: null,          nextLabel: null, nextIcon: null },
 }
 
 function OrdersTab({ shopId, notifications, timeAgo }) {
@@ -87,19 +88,19 @@ function OrdersTab({ shopId, notifications, timeAgo }) {
 
       {/* Filter tabs */}
       <div style={{ display: 'flex', gap: 4, background: '#161616', borderRadius: 10, padding: 3, marginBottom: 16, width: 'fit-content', border: '1px solid #2A2A2A' }}>
-        {[['active', '🔔 Active'], ['completed', '✅ Resolved'], ['all', 'All']].map(([val, label]) => (
+        {[['active', Bell, 'Active'], ['completed', CheckCircle2, 'Resolved'], ['all', null, 'All']].map(([val, Icon, label]) => (
           <button key={val} onClick={() => setFilterStatus(val)}
-            style={{ fontSize: 11, fontWeight: 600, padding: '6px 12px', borderRadius: 7, border: 'none', cursor: 'pointer',
+            style={{ fontSize: 11, fontWeight: 600, padding: '6px 12px', borderRadius: 7, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 5,
               background: filterStatus === val ? 'linear-gradient(135deg, #C9A84C, #9A7A2E)' : 'transparent',
               color: filterStatus === val ? '#0A0A0A' : '#A0A09A' }}>
-            {label}
+            {Icon && <Icon size={12} strokeWidth={1.75} />} {label}
           </button>
         ))}
       </div>
 
       {filtered.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '48px 0' }}>
-          <p style={{ fontSize: 28, marginBottom: 10 }}>📬</p>
+          <Inbox size={28} strokeWidth={1.5} color="#A0A09A" style={{ marginBottom: 10 }} />
           <p style={{ fontSize: 14, color: '#A0A09A' }}>
             {filterStatus === 'active' ? 'No active orders right now.' : 'No orders here yet.'}
           </p>
@@ -130,8 +131,8 @@ function OrdersTab({ shopId, notifications, timeAgo }) {
                       {order.buyer_name} · {order.buyer_contact} · qty {order.quantity} · {timeAgo(order.created_at)}
                     </p>
                     {order.group_id && groupCounts[order.group_id] > 1 && (
-                      <p style={{ fontSize: 11, color: '#60a5fa', margin: '4px 0 0' }}>
-                        🧾 part of a {groupCounts[order.group_id]}-item order
+                      <p style={{ fontSize: 11, color: '#60a5fa', margin: '4px 0 0', display: 'flex', alignItems: 'center', gap: 4 }}>
+                        <Receipt size={11} strokeWidth={1.75} /> part of a {groupCounts[order.group_id]}-item order
                       </p>
                     )}
                     {order.selected_options && Object.keys(order.selected_options).length > 0 && (
@@ -140,10 +141,12 @@ function OrdersTab({ shopId, notifications, timeAgo }) {
                       </p>
                     )}
                     {order.notes && !isExpanded && (
-                      <p style={{ fontSize: 11, color: '#C9A84C', margin: '4px 0 0', fontStyle: 'italic' }}>📝 {order.notes}</p>
+                      <p style={{ fontSize: 11, color: '#C9A84C', margin: '4px 0 0', fontStyle: 'italic', display: 'flex', alignItems: 'center', gap: 4 }}>
+                        <Pencil size={11} strokeWidth={1.75} /> {order.notes}
+                      </p>
                     )}
                   </div>
-                  <span style={{ color: '#555', fontSize: 12, flexShrink: 0 }}>{isExpanded ? '▲' : '▼'}</span>
+                  <span style={{ color: '#555', flexShrink: 0, display: 'flex' }}>{isExpanded ? <ChevronUp size={16} strokeWidth={1.75} /> : <ChevronDown size={16} strokeWidth={1.75} />}</span>
                 </div>
 
                 {/* Expanded actions */}
@@ -158,22 +161,22 @@ function OrdersTab({ shopId, notifications, timeAgo }) {
                             <button
                               onClick={() => updateStatus(order.id, cfg.next)}
                               disabled={saving[order.id]}
-                              style={{ fontSize: 12, fontWeight: 600, padding: '8px 14px', borderRadius: 99, border: 'none', cursor: 'pointer',
+                              style={{ fontSize: 12, fontWeight: 600, padding: '8px 14px', borderRadius: 99, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 5,
                                 background: 'linear-gradient(135deg, #C9A84C, #9A7A2E)', color: '#0A0A0A', opacity: saving[order.id] ? 0.6 : 1 }}>
-                              {saving[order.id] ? '...' : cfg.nextLabel}
+                              {saving[order.id] ? '...' : <><cfg.nextIcon size={13} strokeWidth={1.75} /> {cfg.nextLabel}</>}
                             </button>
                           )}
                           <button
                             onClick={() => cancelOrder(order.id)}
-                            style={{ fontSize: 12, padding: '8px 14px', borderRadius: 99, border: '1px solid rgba(239,68,68,0.3)', cursor: 'pointer', background: 'transparent', color: '#ef4444' }}>
-                            ✕ Cancel
+                            style={{ fontSize: 12, padding: '8px 14px', borderRadius: 99, border: '1px solid rgba(239,68,68,0.3)', cursor: 'pointer', background: 'transparent', color: '#ef4444', display: 'flex', alignItems: 'center', gap: 5 }}>
+                            <X size={13} strokeWidth={1.75} /> Cancel
                           </button>
                           {order.buyer_contact && (
                             <a
                               href={`https://wa.me/${order.buyer_contact.replace(/\D/g, '')}`}
                               target="_blank" rel="noopener noreferrer"
-                              style={{ fontSize: 12, padding: '8px 14px', borderRadius: 99, border: '1px solid rgba(34,197,94,0.3)', color: '#22c55e', textDecoration: 'none', background: 'transparent' }}>
-                              💬 WhatsApp
+                              style={{ fontSize: 12, padding: '8px 14px', borderRadius: 99, border: '1px solid rgba(34,197,94,0.3)', color: '#22c55e', textDecoration: 'none', background: 'transparent', display: 'flex', alignItems: 'center', gap: 5 }}>
+                              <MessageCircle size={13} strokeWidth={1.75} /> WhatsApp
                             </a>
                           )}
                         </div>
@@ -351,8 +354,8 @@ export default function ShopDashboard({ shop, onShopUpdated }) {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
             <h2 style={{ fontSize: 16, fontWeight: 700, color: '#FAFAF8' }}>Your products</h2>
             {!showForm && (
-              <button onClick={startAdd} className="btn-gold" style={{ fontSize: 13, padding: '8px 18px' }}>
-                + Add product
+              <button onClick={startAdd} className="btn-gold" style={{ fontSize: 13, padding: '8px 18px', display: 'flex', alignItems: 'center', gap: 6 }}>
+                <Plus size={15} strokeWidth={2} /> Add product
               </button>
             )}
           </div>
@@ -422,7 +425,7 @@ export default function ShopDashboard({ shop, onShopUpdated }) {
             </div>
           ) : products.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '48px 0' }}>
-              <p style={{ fontSize: 28, marginBottom: 10 }}>📦</p>
+              <Package size={28} strokeWidth={1.5} color="#A0A09A" style={{ marginBottom: 10 }} />
               <p style={{ fontSize: 14, color: '#A0A09A' }}>No products yet. Add your first one.</p>
             </div>
           ) : (
@@ -432,7 +435,7 @@ export default function ShopDashboard({ shop, onShopUpdated }) {
                   <div style={{ width: 40, height: 40, borderRadius: 10, background: '#1A1A1A', flexShrink: 0, overflow: 'hidden', border: '1px solid #2A2A2A' }}>
                     {p.photo_url
                       ? <img src={p.photo_url} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                      : <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18 }}>📦</div>}
+                      : <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Package size={16} strokeWidth={1.5} color="#A0A09A" /></div>}
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <p style={{ fontSize: 13, fontWeight: 600, color: '#FAFAF8', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</p>

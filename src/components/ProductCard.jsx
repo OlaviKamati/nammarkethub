@@ -26,8 +26,8 @@ export default function ProductCard({ product }) {
             onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
           />
         ) : (
-          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 36, background: 'linear-gradient(135deg, #111 0%, #1A1500 100%)' }}>
-            {shopType.emoji}
+          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #111 0%, #1A1500 100%)' }}>
+            <shopType.icon size={32} strokeWidth={1.5} color="var(--gold-dark)" />
           </div>
         )}
 

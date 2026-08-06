@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
+import { Heart, Package, User, ShoppingCart } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
 import { useMyOrders } from '../hooks/useMyOrders'
@@ -45,7 +46,7 @@ function WishlistTab({ userId }) {
   if (products.length === 0) {
     return (
       <div style={{ textAlign: 'center', padding: '48px 0' }}>
-        <p style={{ fontSize: 28, marginBottom: 10 }}>♡</p>
+        <Heart size={28} strokeWidth={1.5} color="var(--white-dim)" style={{ marginBottom: 10 }} />
         <p style={{ fontSize: 14, color: 'var(--white-dim)' }}>No saved products yet.</p>
       </div>
     )
@@ -70,7 +71,7 @@ function OrdersTab({ userId }) {
       </p>
       {orders.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '48px 0' }}>
-          <p style={{ fontSize: 28, marginBottom: 10 }}>📦</p>
+          <Package size={28} strokeWidth={1.5} color="var(--white-dim)" style={{ marginBottom: 10 }} />
           <p style={{ fontSize: 14, color: 'var(--white-dim)' }}>No orders yet.</p>
         </div>
       ) : (
@@ -100,8 +101,8 @@ function OrdersTab({ userId }) {
 }
 
 const GATE_MESSAGES = {
-  'cart-limit': { icon: '🛒', text: "You've added 3 items to your cart — create a free account to keep going." },
-  wishlist: { icon: '❤️', text: 'Sign up to save products to your wishlist.' },
+  'cart-limit': { icon: ShoppingCart, text: "You've added 3 items to your cart — create a free account to keep going." },
+  wishlist: { icon: Heart, text: 'Sign up to save products to your wishlist.' },
 }
 
 export default function Account() {
@@ -131,12 +132,14 @@ export default function Account() {
         <Navbar />
         <div style={{ maxWidth: 440, margin: '0 auto', padding: '60px 24px' }} className="page-enter">
           <div style={{ textAlign: 'center', marginBottom: 36 }}>
-            <h1 className="gold-shimmer" style={{ fontSize: 28, fontWeight: 700, marginBottom: 8 }}>Your account</h1>
+            <h1 className="gold-shimmer font-display" style={{ fontSize: 28, marginBottom: 8 }}>Your account</h1>
             <p style={{ color: 'var(--white-dim)', fontSize: 14 }}>Sign in to track your orders and wishlist</p>
           </div>
           {gate && (
             <div style={{ background: 'rgba(201,168,76,0.08)', border: '1px solid rgba(201,168,76,0.25)', borderRadius: 14, padding: '14px 16px', marginBottom: 24, textAlign: 'center' }}>
-              <p style={{ fontSize: 13, color: 'var(--gold)' }}>{gate.icon} {gate.text}</p>
+              <p style={{ fontSize: 13, color: 'var(--gold)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+                <gate.icon size={15} strokeWidth={1.75} /> {gate.text}
+              </p>
             </div>
           )}
           <AuthForm />
@@ -151,11 +154,11 @@ export default function Account() {
       <div style={{ maxWidth: 700, margin: '0 auto', padding: '32px 24px' }} className="page-enter">
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24, gap: 16, flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <div style={{ width: 44, height: 44, borderRadius: '50%', overflow: 'hidden', background: 'var(--black-card)', border: '1px solid var(--black-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0 }}>
-              {profile?.avatar_url ? <img src={profile.avatar_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : '👤'}
+            <div style={{ width: 44, height: 44, borderRadius: '50%', overflow: 'hidden', background: 'var(--black-card)', border: '1px solid var(--black-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              {profile?.avatar_url ? <img src={profile.avatar_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <User size={20} strokeWidth={1.75} color="var(--white-dim)" />}
             </div>
             <div>
-              <h1 style={{ fontSize: 20, fontWeight: 700, color: 'var(--white)', marginBottom: 2 }}>
+              <h1 className="font-display" style={{ fontSize: 20, color: 'var(--white)', marginBottom: 2 }}>
                 {profile?.username ? `@${profile.username}` : 'Your account'}
               </h1>
               <p style={{ fontSize: 12, color: 'var(--white-dim)' }}>

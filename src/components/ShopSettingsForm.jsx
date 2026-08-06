@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Check } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { getShopType } from '../lib/shopTypes'
 import ImageUpload from './ImageUpload'
@@ -57,8 +58,8 @@ export default function ShopSettingsForm({ shop, onUpdated }) {
   return (
     <div style={{ background: '#111', border: '1px solid #2A2A2A', borderRadius: 16, padding: 20, maxWidth: 480 }}>
       <h3 style={{ fontSize: 14, fontWeight: 700, color: '#FAFAF8', marginBottom: 4 }}>Shop profile</h3>
-      <p style={{ fontSize: 12, color: '#A0A09A', marginBottom: 16 }}>
-        {type.emoji} {type.label} · shop type can't be changed here
+      <p style={{ fontSize: 12, color: '#A0A09A', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 6 }}>
+        <type.icon size={13} strokeWidth={1.75} /> {type.label} · shop type can't be changed here
       </p>
 
       <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -84,7 +85,7 @@ export default function ShopSettingsForm({ shop, onUpdated }) {
         </div>
 
         {error && <p style={{ fontSize: 12, color: '#ef4444' }}>{error}</p>}
-        {saved && <p style={{ fontSize: 12, color: '#22c55e' }}>Saved ✓</p>}
+        {saved && <p style={{ fontSize: 12, color: '#22c55e', display: 'flex', alignItems: 'center', gap: 4 }}><Check size={13} strokeWidth={2} /> Saved</p>}
 
         <button type="submit" disabled={saving} className="btn-gold" style={{ fontSize: 13, padding: '10px 20px', width: 'fit-content' }}>
           {saving ? 'Saving…' : 'Save changes'}

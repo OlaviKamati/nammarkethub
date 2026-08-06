@@ -17,14 +17,41 @@
   --white-dim:   #A0A09A;
   --ease-expo:   cubic-bezier(0.16, 1, 0.3, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --radius-xs:   6px;
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-lg:   16px;
+  --radius-xl:   20px;
+  --radius-pill: 999px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  --shadow-sm:   0 2px 8px rgba(0,0,0,0.3);
+  --shadow-gold: 0 12px 40px -8px rgba(201,168,76,0.15);
+
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: 'Fraunces', serif;
 }
 
 * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; box-sizing: border-box; }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Segoe UI", sans-serif;
+  font-family: var(--font-body);
   background: var(--black);
   color: var(--white);
+}
+
+.font-display {
+  font-family: var(--font-display);
+  font-weight: 600;
 }
 
 /* ── Scrollbar ── */
@@ -230,7 +257,56 @@ html, body { overflow-x: hidden; }
   .stats-grid {
     grid-template-columns: repeat(2, 1fr) !important;
   }
+
+  /* Room for the fixed bottom tab bar */
+  main {
+    padding-bottom: calc(72px + env(safe-area-inset-bottom)) !important;
+  }
+
+  .desktop-nav-actions { display: none !important; }
+  .mobile-tab-bar { display: flex !important; }
+
+  /* Keep the chatbot clear of the fixed bottom tab bar */
+  .chatbot-bubble {
+    bottom: calc(92px + env(safe-area-inset-bottom)) !important;
+  }
+  .chatbot-window {
+    bottom: calc(162px + env(safe-area-inset-bottom)) !important;
+    left: 16px !important;
+    right: 16px !important;
+    width: auto !important;
+  }
 }
+
+/* Fixed bottom tab bar — hidden by default, shown only under the mobile breakpoint above */
+.mobile-tab-bar {
+  display: none;
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 50;
+  padding-bottom: env(safe-area-inset-bottom);
+  background: rgba(10, 10, 10, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--black-border);
+  align-items: stretch;
+  justify-content: space-around;
+}
+.mobile-tab-bar a {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 8px 0 10px;
+  text-decoration: none;
+  color: var(--white-dim);
+  font-size: 10px;
+  font-weight: 600;
+  position: relative;
+}
+.mobile-tab-bar a.active { color: var(--gold); }
 
 /* Touch-friendly card interactions */
 @media (hover: none) {

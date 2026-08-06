@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import { Bot, X, ArrowUp } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { useNavigate } from 'react-router-dom'
 
@@ -54,8 +55,8 @@ function Message({ msg }) {
       alignItems: 'flex-end'
     }}>
       {isBot && (
-        <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'linear-gradient(135deg, #C9A84C, #9A7A2E)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, flexShrink: 0 }}>
-          🤖
+        <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'linear-gradient(135deg, #C9A84C, #9A7A2E)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <Bot size={15} strokeWidth={1.75} color="#0A0A0A" />
         </div>
       )}
       <div style={{
@@ -185,7 +186,7 @@ export default function Chatbot() {
     <>
       {/* Chat window */}
       {open && (
-        <div style={{
+        <div className="chatbot-window" style={{
           position: 'fixed', bottom: 90, right: 20, width: 360, height: 520,
           background: '#0A0A0A', border: '1px solid #2A2A2A', borderRadius: 20,
           display: 'flex', flexDirection: 'column', zIndex: 1000,
@@ -202,8 +203,8 @@ export default function Chatbot() {
           {/* Header */}
           <div style={{ padding: '14px 16px', borderBottom: '1px solid #2A2A2A', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'linear-gradient(135deg, #C9A84C, #9A7A2E)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18 }}>
-                🤖
+              <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'linear-gradient(135deg, #C9A84C, #9A7A2E)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Bot size={19} strokeWidth={1.75} color="#0A0A0A" />
               </div>
               <div>
                 <p style={{ fontSize: 13, fontWeight: 700, color: '#FAFAF8', margin: 0 }}>NamBot</p>
@@ -213,7 +214,7 @@ export default function Chatbot() {
                 </div>
               </div>
             </div>
-            <button onClick={() => setOpen(false)} style={{ background: 'none', border: 'none', color: '#A0A09A', cursor: 'pointer', fontSize: 18, padding: 4 }}>✕</button>
+            <button onClick={() => setOpen(false)} style={{ background: 'none', border: 'none', color: '#A0A09A', cursor: 'pointer', padding: 4, display: 'flex' }}><X size={18} strokeWidth={1.75} /></button>
           </div>
 
           {/* Messages */}
@@ -221,7 +222,7 @@ export default function Chatbot() {
             {messages.map((msg, i) => <Message key={i} msg={msg} />)}
             {loading && (
               <div style={{ display: 'flex', gap: 8, alignItems: 'flex-end', marginBottom: 12 }}>
-                <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'linear-gradient(135deg, #C9A84C, #9A7A2E)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>🤖</div>
+                <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'linear-gradient(135deg, #C9A84C, #9A7A2E)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Bot size={15} strokeWidth={1.75} color="#0A0A0A" /></div>
                 <div style={{ background: '#1A1A1A', border: '1px solid #2A2A2A', borderRadius: '4px 16px 16px 16px' }}>
                   <TypingIndicator />
                 </div>
@@ -265,11 +266,11 @@ export default function Chatbot() {
                 width: 38, height: 38, borderRadius: '50%', border: 'none', cursor: 'pointer',
                 background: input.trim() && !loading ? 'linear-gradient(135deg, #C9A84C, #9A7A2E)' : '#2A2A2A',
                 color: input.trim() && !loading ? '#0A0A0A' : '#555',
-                fontSize: 16, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
                 transition: 'all 0.2s', flexShrink: 0, alignSelf: 'flex-end'
               }}
             >
-              ↑
+              <ArrowUp size={17} strokeWidth={2} />
             </button>
           </div>
         </div>
@@ -278,17 +279,19 @@ export default function Chatbot() {
       {/* Floating bubble */}
       <button
         onClick={() => setOpen(o => !o)}
+        className="chatbot-bubble"
         style={{
           position: 'fixed', bottom: 20, right: 20, width: 56, height: 56,
           borderRadius: '50%', border: 'none', cursor: 'pointer', zIndex: 1000,
           background: open ? '#2A2A2A' : 'linear-gradient(135deg, #C9A84C, #9A7A2E)',
           boxShadow: '0 4px 20px rgba(201,168,76,0.4)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: 24, transition: 'all 0.3s cubic-bezier(0.16,1,0.3,1)',
+          color: open ? '#FAFAF8' : '#0A0A0A',
+          transition: 'all 0.3s cubic-bezier(0.16,1,0.3,1)',
           transform: open ? 'scale(0.9)' : 'scale(1)',
         }}
       >
-        {open ? '✕' : '🤖'}
+        {open ? <X size={24} strokeWidth={1.75} /> : <Bot size={24} strokeWidth={1.75} />}
         {unread > 0 && !open && (
           <span style={{
             position: 'absolute', top: -4, right: -4, background: '#ef4444',

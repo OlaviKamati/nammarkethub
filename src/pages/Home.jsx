@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Store, Search } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import HeroCarousel from '../components/HeroCarousel'
 import ShopStrip from '../components/ShopStrip'
@@ -22,8 +23,9 @@ export default function Home() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--black)' }} className="page-enter">
+    <>
       <Navbar />
+      <div style={{ minHeight: '100vh', background: 'var(--black)' }} className="page-enter">
 
       <main style={{ maxWidth: 1200, margin: '0 auto', padding: '2rem 1.5rem' }}>
 
@@ -77,7 +79,7 @@ export default function Home() {
                 transition: 'all 0.2s var(--ease-expo)',
               }}
             >
-              🏬 All shops
+              <Store size={14} strokeWidth={1.75} /> All shops
             </button>
             {SHOP_TYPES.map((t) => (
               <button
@@ -93,7 +95,7 @@ export default function Home() {
                   transition: 'all 0.2s var(--ease-expo)',
                 }}
               >
-                {t.emoji} {t.label}
+                <t.icon size={14} strokeWidth={1.75} /> {t.label}
               </button>
             ))}
           </div>
@@ -112,7 +114,7 @@ export default function Home() {
         {/* Search */}
         <div style={{ marginBottom: 16 }}>
           <div style={{ position: 'relative', maxWidth: 480 }}>
-            <span style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', fontSize: 14, color: 'var(--white-dim)' }}>🔍</span>
+            <Search size={15} strokeWidth={1.75} style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', color: 'var(--white-dim)' }} />
             <input
               type="text"
               value={searchQuery}
@@ -157,6 +159,7 @@ export default function Home() {
           </p>
         </div>
       </main>
-    </div>
+      </div>
+    </>
   )
 }

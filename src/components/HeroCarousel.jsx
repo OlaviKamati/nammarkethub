@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { ShoppingBag, ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 
 export default function HeroCarousel() {
@@ -49,7 +50,7 @@ export default function HeroCarousel() {
     return (
       <div style={{ height: heroHeight, background: 'var(--black-card)', borderRadius: 20, border: '1px solid var(--black-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 32 }}>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: 40, marginBottom: 12 }}>🛍️</div>
+          <ShoppingBag size={40} strokeWidth={1.5} color="var(--white-dim)" style={{ marginBottom: 12 }} />
           <p style={{ color: 'var(--white-dim)', fontSize: 14 }}>Add products with photos to see them featured here</p>
         </div>
       </div>
@@ -99,7 +100,7 @@ export default function HeroCarousel() {
             </span>
           </div>
 
-          <h2 style={{ color: 'var(--white)', fontSize: 'clamp(1.4rem, 3vw, 2.2rem)', fontWeight: 700, letterSpacing: '-0.02em', marginBottom: 8, maxWidth: 480, lineHeight: 1.2 }}>
+          <h2 className="font-display" style={{ color: 'var(--white)', fontSize: 'clamp(1.4rem, 3vw, 2.2rem)', letterSpacing: '-0.02em', marginBottom: 8, maxWidth: 480, lineHeight: 1.2 }}>
             {slide.name}
           </h2>
 
@@ -114,9 +115,9 @@ export default function HeroCarousel() {
             <button
               onClick={() => navigate(`/product/${slide.id}`)}
               className="btn-gold"
-              style={{ fontSize: 13, padding: '8px 20px' }}
+              style={{ fontSize: 13, padding: '8px 20px', display: 'inline-flex', alignItems: 'center', gap: 6 }}
             >
-              View product →
+              View product <ArrowRight size={14} strokeWidth={1.75} />
             </button>
           </div>
         </div>
@@ -125,8 +126,8 @@ export default function HeroCarousel() {
       {/* Prev / Next arrows */}
       {slides.length > 1 && (
         <>
-          <button onClick={prev} style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', width: 36, height: 36, borderRadius: '50%', background: 'rgba(201,168,76,0.15)', border: '1px solid rgba(201,168,76,0.3)', color: 'var(--gold)', fontSize: 18, cursor: 'pointer', zIndex: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background 0.2s' }}>‹</button>
-          <button onClick={next} style={{ position: 'absolute', right: 16, top: '50%', transform: 'translateY(-50%)', width: 36, height: 36, borderRadius: '50%', background: 'rgba(201,168,76,0.15)', border: '1px solid rgba(201,168,76,0.3)', color: 'var(--gold)', fontSize: 18, cursor: 'pointer', zIndex: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background 0.2s' }}>›</button>
+          <button onClick={prev} style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', width: 36, height: 36, borderRadius: '50%', background: 'rgba(201,168,76,0.15)', border: '1px solid rgba(201,168,76,0.3)', color: 'var(--gold)', cursor: 'pointer', zIndex: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background 0.2s' }}><ChevronLeft size={20} strokeWidth={1.75} /></button>
+          <button onClick={next} style={{ position: 'absolute', right: 16, top: '50%', transform: 'translateY(-50%)', width: 36, height: 36, borderRadius: '50%', background: 'rgba(201,168,76,0.15)', border: '1px solid rgba(201,168,76,0.3)', color: 'var(--gold)', cursor: 'pointer', zIndex: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background 0.2s' }}><ChevronRight size={20} strokeWidth={1.75} /></button>
         </>
       )}
 

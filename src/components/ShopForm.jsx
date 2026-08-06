@@ -1,6 +1,20 @@
 import { useState } from 'react'
+import { ArrowRight } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { SHOP_TYPES } from '../lib/shopTypes'
+
+const INPUT = {
+  width: '100%',
+  padding: '10px 14px',
+  fontSize: 14,
+  background: 'var(--black-card)',
+  border: '1px solid var(--black-border)',
+  borderRadius: 10,
+  color: 'var(--white)',
+  outline: 'none',
+}
+
+const LABEL = { fontSize: 11, color: 'var(--white-dim)', display: 'block', marginBottom: 6 }
 
 export default function ShopForm({ userId, onCreated }) {
   const [name, setName] = useState('')
@@ -35,28 +49,29 @@ export default function ShopForm({ userId, onCreated }) {
   }
 
   return (
-    <div className="max-w-sm mx-auto">
-      <h2 className="text-lg font-semibold text-stone-900 mb-1">Set up your shop</h2>
-      <p className="text-sm text-stone-500 mb-5">What buyers will see on NamMarketHub.</p>
+    <div style={{ maxWidth: 400, margin: '0 auto' }}>
+      <h2 className="font-display" style={{ fontSize: 20, color: 'var(--white)', marginBottom: 4 }}>Set up your shop</h2>
+      <p style={{ fontSize: 13, color: 'var(--white-dim)', marginBottom: 20 }}>What buyers will see on NamMarketHub.</p>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         {/* Shop type */}
         <div>
-          <label className="text-xs font-medium text-stone-500 block mb-2">Shop type</label>
-          <div className="grid grid-cols-2 gap-2">
+          <label style={LABEL}>Shop type</label>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
             {SHOP_TYPES.map((t) => (
               <button
                 key={t.id}
                 type="button"
                 onClick={() => setShopType(t.id)}
-                className={
-                  'flex items-center gap-2 px-3 py-2 rounded-xl border text-sm transition-colors ' +
-                  (shopType === t.id
-                    ? 'bg-stone-900 text-white border-stone-900'
-                    : 'bg-white text-stone-700 border-stone-200 hover:border-stone-300')
-                }
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 8, padding: '10px 12px', borderRadius: 10,
+                  fontSize: 13, cursor: 'pointer', transition: 'all 0.2s ease',
+                  border: shopType === t.id ? 'none' : '1px solid var(--black-border)',
+                  background: shopType === t.id ? 'linear-gradient(135deg, var(--gold), var(--gold-dark))' : 'var(--black-card)',
+                  color: shopType === t.id ? 'var(--black)' : 'var(--white-dim)',
+                }}
               >
-                <span>{t.emoji}</span>
+                <t.icon size={15} strokeWidth={1.75} />
                 <span>{t.label}</span>
               </button>
             ))}
@@ -64,54 +79,55 @@ export default function ShopForm({ userId, onCreated }) {
         </div>
 
         <div>
-          <label className="text-xs font-medium text-stone-500 block mb-1">Shop name</label>
+          <label style={LABEL}>Shop name</label>
           <input
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full border border-stone-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-stone-400"
+            style={INPUT}
             placeholder="Incredible Connection Windhoek"
           />
         </div>
         <div>
-          <label className="text-xs font-medium text-stone-500 block mb-1">Location</label>
+          <label style={LABEL}>Location</label>
           <input
             required
             value={location}
             onChange={(e) => setLocation(e.target.value)}
-            className="w-full border border-stone-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-stone-400"
+            style={INPUT}
             placeholder="Windhoek"
           />
         </div>
         <div>
-          <label className="text-xs font-medium text-stone-500 block mb-1">WhatsApp number</label>
+          <label style={LABEL}>WhatsApp number</label>
           <input
             required
             value={whatsapp}
             onChange={(e) => setWhatsapp(e.target.value)}
-            className="w-full border border-stone-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-stone-400"
+            style={INPUT}
             placeholder="+264 81 234 5678"
           />
         </div>
         <div>
-          <label className="text-xs font-medium text-stone-500 block mb-1">Description (optional)</label>
+          <label style={LABEL}>Description (optional)</label>
           <textarea
             rows={3}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full border border-stone-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-stone-400"
+            style={{ ...INPUT, resize: 'vertical' }}
             placeholder="What do you sell?"
           />
         </div>
 
-        {error && <p className="text-xs text-red-600">{error}</p>}
+        {error && <p style={{ fontSize: 12, color: '#ef4444' }}>{error}</p>}
 
         <button
           type="submit"
           disabled={submitting}
-          className="w-full bg-stone-900 text-white rounded-xl py-2.5 text-sm font-medium disabled:opacity-50 hover:bg-stone-800 transition-colors"
+          className="btn-gold"
+          style={{ padding: '12px', fontSize: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
         >
-          {submitting ? 'Creating…' : 'Create shop →'}
+          {submitting ? 'Creating…' : <>Create shop <ArrowRight size={15} strokeWidth={1.75} /></>}
         </button>
       </form>
     </div>

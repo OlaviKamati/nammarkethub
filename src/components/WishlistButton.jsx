@@ -1,8 +1,9 @@
 import { useNavigate } from 'react-router-dom'
+import { Heart } from 'lucide-react'
 import { useAuth } from '../hooks/useAuth'
 import { useWishlist } from '../hooks/useWishlist'
 
-export default function WishlistButton({ productId, style }) {
+export default function WishlistButton({ productId, style, iconSize = 13 }) {
   const navigate = useNavigate()
   const { user } = useAuth()
   const { productIds, toggle } = useWishlist(user?.id)
@@ -25,11 +26,11 @@ export default function WishlistButton({ productId, style }) {
       style={{
         width: 28, height: 28, borderRadius: '50%', border: 'none', cursor: 'pointer',
         background: 'rgba(10,10,10,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontSize: 13, color: active ? 'var(--gold)' : 'var(--white-dim)',
+        color: active ? 'var(--gold)' : 'var(--white-dim)',
         ...style,
       }}
     >
-      {active ? '♥' : '♡'}
+      <Heart size={iconSize} strokeWidth={1.75} fill={active ? 'currentColor' : 'none'} />
     </button>
   )
 }

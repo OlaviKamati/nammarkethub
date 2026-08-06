@@ -1,4 +1,5 @@
 import { useParams, useNavigate, Link } from 'react-router-dom'
+import { ArrowLeft, MessageCircle } from 'lucide-react'
 import { useShop } from '../hooks/useShop'
 import { getShopType } from '../lib/shopTypes'
 import Navbar from '../components/Navbar'
@@ -40,17 +41,17 @@ export default function ShopDetail() {
           onClick={() => navigate(-1)}
           style={{ fontSize: 13, color: 'var(--white-dim)', background: 'none', border: 'none', cursor: 'pointer', marginBottom: 24, display: 'flex', alignItems: 'center', gap: 6 }}
         >
-          ← Back
+          <ArrowLeft size={14} strokeWidth={1.75} /> Back
         </button>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 12 }}>
-          <div style={{ width: 56, height: 56, borderRadius: 14, background: 'linear-gradient(135deg, var(--gold-dark), #1A1500)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26, border: '1px solid rgba(201,168,76,0.2)', flexShrink: 0, overflow: 'hidden' }}>
+          <div style={{ width: 56, height: 56, borderRadius: 14, background: 'linear-gradient(135deg, var(--gold-dark), #1A1500)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(201,168,76,0.2)', flexShrink: 0, overflow: 'hidden' }}>
             {shop.logo_url ? (
               <img src={shop.logo_url} alt={shop.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            ) : type.emoji}
+            ) : <type.icon size={26} strokeWidth={1.75} color="var(--gold)" />}
           </div>
           <div>
-            <h1 style={{ fontSize: 'clamp(1.3rem, 3vw, 1.8rem)', fontWeight: 700, color: 'var(--white)', marginBottom: 4 }}>
+            <h1 className="font-display" style={{ fontSize: 'clamp(1.3rem, 3vw, 1.8rem)', color: 'var(--white)', marginBottom: 4 }}>
               {shop.name}
             </h1>
             <p style={{ fontSize: 13, color: 'var(--white-dim)' }}>{shop.location} · {type.label}</p>
@@ -68,7 +69,7 @@ export default function ShopDetail() {
             rel="noopener noreferrer"
             style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--gold)', textDecoration: 'none', padding: '6px 14px', border: '1px solid rgba(201,168,76,0.3)', borderRadius: 99, background: 'rgba(201,168,76,0.08)', marginBottom: 24 }}
           >
-            💬 WhatsApp the shop
+            <MessageCircle size={14} strokeWidth={1.75} /> WhatsApp the shop
           </a>
         )}
 

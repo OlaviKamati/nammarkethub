@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { CheckCircle2, ShoppingCart, ArrowLeft, ArrowRight, Package, Minus, Plus } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { useCart } from '../hooks/useCart'
 import { useAuth } from '../hooks/useAuth'
@@ -67,12 +68,14 @@ export default function Cart() {
       <>
         <Navbar />
         <div style={{ maxWidth: 600, margin: '80px auto', textAlign: 'center', padding: '0 24px' }} className="page-enter">
-          <p style={{ fontSize: 32, marginBottom: 12 }}>✅</p>
+          <CheckCircle2 size={36} strokeWidth={1.5} color="var(--gold)" style={{ marginBottom: 12 }} />
           <p style={{ fontSize: 18, fontWeight: 700, color: 'var(--white)', marginBottom: 8 }}>Request sent!</p>
           <p style={{ fontSize: 14, color: 'var(--white-dim)', marginBottom: 24 }}>
             The shop{Object.keys(groups).length > 1 ? 's' : ''} will contact you shortly to arrange payment & pickup.
           </p>
-          <Link to="/" style={{ color: 'var(--gold)', fontSize: 14, textDecoration: 'none' }}>← Back to marketplace</Link>
+          <Link to="/" style={{ color: 'var(--gold)', fontSize: 14, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+            <ArrowLeft size={14} strokeWidth={1.75} /> Back to marketplace
+          </Link>
         </div>
       </>
     )
@@ -82,13 +85,15 @@ export default function Cart() {
     <>
       <Navbar />
       <div style={{ maxWidth: 700, margin: '0 auto', padding: '32px 24px' }} className="page-enter">
-        <h1 style={{ fontSize: 22, fontWeight: 700, color: 'var(--white)', marginBottom: 24 }}>Your cart</h1>
+        <h1 className="font-display" style={{ fontSize: 22, color: 'var(--white)', marginBottom: 24 }}>Your cart</h1>
 
         {items.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '64px 0' }}>
-            <p style={{ fontSize: 32, marginBottom: 12 }}>🛒</p>
+            <ShoppingCart size={36} strokeWidth={1.5} color="var(--white-dim)" style={{ marginBottom: 12 }} />
             <p style={{ color: 'var(--white-dim)', fontSize: 14, marginBottom: 16 }}>Your cart is empty.</p>
-            <Link to="/" style={{ color: 'var(--gold)', fontSize: 14, textDecoration: 'none' }}>Browse products →</Link>
+            <Link to="/" style={{ color: 'var(--gold)', fontSize: 14, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+              Browse products <ArrowRight size={14} strokeWidth={1.75} />
+            </Link>
           </div>
         ) : (
           <>
@@ -104,7 +109,7 @@ export default function Cart() {
                         {item.product.photo_url ? (
                           <img src={item.product.photo_url} alt={item.product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         ) : (
-                          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>📦</div>
+                          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Package size={18} strokeWidth={1.5} color="var(--white-dim)" /></div>
                         )}
                       </div>
                       <div style={{ flex: 1, minWidth: 0 }}>
@@ -118,10 +123,10 @@ export default function Cart() {
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
                         <button type="button" onClick={() => updateQuantity(item.key, Math.max(1, item.quantity - 1))}
-                          style={{ width: 26, height: 26, borderRadius: 8, border: '1px solid var(--black-border)', background: 'transparent', color: 'var(--white)', cursor: 'pointer' }}>−</button>
+                          style={{ width: 26, height: 26, borderRadius: 8, border: '1px solid var(--black-border)', background: 'transparent', color: 'var(--white)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Minus size={13} strokeWidth={2} /></button>
                         <span style={{ fontSize: 13, color: 'var(--white)', minWidth: 18, textAlign: 'center' }}>{item.quantity}</span>
                         <button type="button" onClick={() => updateQuantity(item.key, Math.min(item.product.stock_count, item.quantity + 1))}
-                          style={{ width: 26, height: 26, borderRadius: 8, border: '1px solid var(--black-border)', background: 'transparent', color: 'var(--white)', cursor: 'pointer' }}>+</button>
+                          style={{ width: 26, height: 26, borderRadius: 8, border: '1px solid var(--black-border)', background: 'transparent', color: 'var(--white)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Plus size={13} strokeWidth={2} /></button>
                       </div>
                       <button type="button" onClick={() => removeItem(item.key)}
                         style={{ fontSize: 12, color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer', flexShrink: 0 }}>
@@ -153,8 +158,8 @@ export default function Cart() {
                   className="input-dark" style={{ width: '100%', padding: '10px 14px', fontSize: 14 }} placeholder="081 234 5678" />
               </div>
               {submitError && <p style={{ fontSize: 12, color: '#ef4444' }}>{submitError}</p>}
-              <button type="submit" disabled={submitting} className="btn-gold" style={{ padding: '12px', fontSize: 14, marginTop: 4 }}>
-                {submitting ? 'Sending…' : 'Send request →'}
+              <button type="submit" disabled={submitting} className="btn-gold" style={{ padding: '12px', fontSize: 14, marginTop: 4, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+                {submitting ? 'Sending…' : <>Send request <ArrowRight size={15} strokeWidth={1.75} /></>}
               </button>
               <p style={{ fontSize: 11, color: 'var(--white-dim)', textAlign: 'center' }}>
                 Shops will contact you directly to arrange payment & pickup.

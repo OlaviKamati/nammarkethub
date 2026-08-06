@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Mail, Check, ArrowRight } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 
 const PASSWORD_RULES = [
@@ -53,7 +54,7 @@ export default function AuthForm() {
       <div
         style={{ background: 'var(--black-card)', border: '1px solid var(--black-border)', borderRadius: 16, padding: '32px 24px', textAlign: 'center' }}
       >
-        <p style={{ fontSize: 32, marginBottom: 12 }}>📩</p>
+        <Mail size={32} strokeWidth={1.5} color="var(--gold)" style={{ marginBottom: 12 }} />
         <p style={{ fontSize: 16, fontWeight: 600, color: 'var(--white)', marginBottom: 8 }}>Check your email</p>
         <p style={{ fontSize: 13, color: 'var(--white-dim)', lineHeight: 1.6, marginBottom: 4 }}>
           We sent a confirmation link to <strong style={{ color: 'var(--white)' }}>{email}</strong>.
@@ -102,7 +103,7 @@ export default function AuthForm() {
                 const met = password.length > 0 && rule.test(password)
                 return (
                   <li key={rule.label} style={{ fontSize: 11, color: met ? 'var(--gold)' : 'var(--white-dim)', display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <span>{met ? '✓' : '·'}</span>{rule.label}
+                    {met ? <Check size={11} strokeWidth={2} /> : <span>·</span>}{rule.label}
                   </li>
                 )
               })}
@@ -110,8 +111,8 @@ export default function AuthForm() {
           )}
         </div>
         {error && <p style={{ fontSize: 12, color: '#ef4444' }}>{error}</p>}
-        <button type="submit" disabled={submitting} className="btn-gold" style={{ padding: '12px', fontSize: 14, marginTop: 4 }}>
-          {submitting ? 'Please wait…' : mode === 'signup' ? 'Create account →' : 'Log in →'}
+        <button type="submit" disabled={submitting} className="btn-gold" style={{ padding: '12px', fontSize: 14, marginTop: 4, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+          {submitting ? 'Please wait…' : <>{mode === 'signup' ? 'Create account' : 'Log in'} <ArrowRight size={15} strokeWidth={1.75} /></>}
         </button>
       </form>
     </div>

@@ -1,12 +1,14 @@
+import { Smartphone, Shirt, UtensilsCrossed, Sofa, Store } from 'lucide-react'
+
 // Central config for shop types and their product categories.
 // Used in signup forms, product forms, and category filters.
 
 export const SHOP_TYPES = [
-  { id: 'electronics', label: 'Electronics',  emoji: '📱', color: 'bg-blue-50 text-blue-800' },
-  { id: 'fashion',     label: 'Fashion',       emoji: '👗', color: 'bg-pink-50 text-pink-800' },
-  { id: 'food',        label: 'Food & Drink',  emoji: '🛒', color: 'bg-green-50 text-green-800' },
-  { id: 'furniture',   label: 'Furniture',     emoji: '🛋️', color: 'bg-amber-50 text-amber-800' },
-  { id: 'general',     label: 'General',       emoji: '🏪', color: 'bg-stone-100 text-stone-700' },
+  { id: 'electronics', label: 'Electronics',  icon: Smartphone,      color: 'bg-blue-50 text-blue-800' },
+  { id: 'fashion',     label: 'Fashion',       icon: Shirt,           color: 'bg-pink-50 text-pink-800' },
+  { id: 'food',        label: 'Food & Drink',  icon: UtensilsCrossed, color: 'bg-green-50 text-green-800' },
+  { id: 'furniture',   label: 'Furniture',     icon: Sofa,            color: 'bg-amber-50 text-amber-800' },
+  { id: 'general',     label: 'General',       icon: Store,           color: 'bg-stone-100 text-stone-700' },
 ]
 
 export const CATEGORIES_BY_TYPE = {

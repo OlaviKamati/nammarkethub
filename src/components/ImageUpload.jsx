@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link2, Folder, Camera } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 
 const INPUT = {
@@ -59,12 +60,12 @@ export default function ImageUpload({ value, onChange, folder = 'products' }) {
     <div>
       {/* Mode toggle */}
       <div style={{ display: 'flex', gap: 4, background: '#111', borderRadius: 8, padding: 3, marginBottom: 10, width: 'fit-content', border: '1px solid #2A2A2A' }}>
-        {['url', 'upload'].map((m) => (
+        {[['url', Link2, 'URL'], ['upload', Folder, 'Upload']].map(([m, Icon, label]) => (
           <button key={m} type="button" onClick={() => setMode(m)}
-            style={{ fontSize: 11, fontWeight: 600, padding: '5px 12px', borderRadius: 6, border: 'none', cursor: 'pointer', transition: 'all 0.2s',
+            style={{ fontSize: 11, fontWeight: 600, padding: '5px 12px', borderRadius: 6, border: 'none', cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: 5,
               background: mode === m ? 'linear-gradient(135deg, #C9A84C, #9A7A2E)' : 'transparent',
               color: mode === m ? '#0A0A0A' : '#A0A09A' }}>
-            {m === 'url' ? '🔗 URL' : '📁 Upload'}
+            <Icon size={12} strokeWidth={1.75} /> {label}
           </button>
         ))}
       </div>
@@ -87,7 +88,7 @@ export default function ImageUpload({ value, onChange, folder = 'products' }) {
               <p style={{ fontSize: 13, color: '#C9A84C' }}>Uploading…</p>
             ) : (
               <>
-                <p style={{ fontSize: 20, marginBottom: 6 }}>📸</p>
+                <Camera size={22} strokeWidth={1.5} color="#A0A09A" style={{ marginBottom: 6 }} />
                 <p style={{ fontSize: 13, color: '#A0A09A' }}>Click to select an image</p>
                 <p style={{ fontSize: 11, color: '#555', marginTop: 4 }}>JPG, PNG, WebP · Max 5MB</p>
               </>

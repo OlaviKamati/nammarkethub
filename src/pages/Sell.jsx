@@ -1,3 +1,4 @@
+import { ArrowLeft } from 'lucide-react'
 import { useAuth } from '../hooks/useAuth'
 import { useMyShop } from '../hooks/useMyShop'
 import { supabase } from '../lib/supabase'
@@ -59,16 +60,16 @@ export default function Sell() {
             <div style={{ width: 48, height: 48, borderRadius: 14, background: 'linear-gradient(135deg, var(--gold-dark), #1A1500)', border: '1px solid rgba(201,168,76,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, overflow: 'hidden' }}>
               {shop.logo_url ? (
                 <img src={shop.logo_url} alt={shop.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              ) : type.emoji}
+              ) : <type.icon size={22} strokeWidth={1.75} color="var(--gold)" />}
             </div>
             <div>
-              <h1 style={{ fontSize: 20, fontWeight: 700, color: 'var(--white)', marginBottom: 2 }}>{shop.name}</h1>
+              <h1 className="font-display" style={{ fontSize: 20, color: 'var(--white)', marginBottom: 2 }}>{shop.name}</h1>
               <p style={{ fontSize: 12, color: 'var(--white-dim)', fontFamily: 'ui-monospace, monospace' }}>{shop.location} · {type.label}</p>
             </div>
           </div>
           <div style={{ display: 'flex', gap: 10 }}>
-            <Link to="/" style={{ fontSize: 13, color: 'var(--white-dim)', textDecoration: 'none', padding: '7px 16px', border: '1px solid var(--black-border)', borderRadius: 99, transition: 'border-color 0.2s' }}>
-              ← Marketplace
+            <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--white-dim)', textDecoration: 'none', padding: '7px 16px', border: '1px solid var(--black-border)', borderRadius: 99, transition: 'border-color 0.2s' }}>
+              <ArrowLeft size={14} strokeWidth={1.75} /> Marketplace
             </Link>
             <button
               onClick={() => supabase.auth.signOut()}

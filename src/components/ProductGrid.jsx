@@ -1,3 +1,4 @@
+import { Search } from 'lucide-react'
 import { useProducts } from '../hooks/useProducts'
 import ProductCard from './ProductCard'
 
@@ -32,7 +33,7 @@ export default function ProductGrid({ category, searchQuery, shopType }) {
   if (products.length === 0) {
     return (
       <div style={{ textAlign: 'center', padding: '64px 0' }}>
-        <p style={{ fontSize: 32, marginBottom: 12 }}>🔍</p>
+        <Search size={32} strokeWidth={1.5} color="var(--white-dim)" style={{ marginBottom: 12 }} />
         <p style={{ color: 'var(--white-dim)', fontSize: 14 }}>
           {searchQuery ? `No results for "${searchQuery}"` : 'No products here yet.'}
         </p>
