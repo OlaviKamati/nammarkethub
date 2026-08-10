@@ -12,7 +12,7 @@ export function useProducts(categoryId, searchQuery, shopType) {
 
     let query = supabase
       .from('products')
-      .select('id, name, description, price, original_price, photo_url, stock_count, category_id, created_at, shops!inner(id, name, location, shop_type, is_verified)')
+      .select('id, name, description, price, original_price, is_featured, photo_url, stock_count, category_id, created_at, shops!inner(id, name, location, shop_type, is_verified)')
       .eq('is_active', true)
       .order('created_at', { ascending: false })
 

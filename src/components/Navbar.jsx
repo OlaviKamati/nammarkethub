@@ -39,7 +39,7 @@ export default function Navbar() {
             {user && <NotificationBell orders={myOrders} unreadCount={unreadCount} markAllSeen={markAllSeen} />}
 
             {/* Cart icon */}
-            <Link to="/cart" style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: 34, height: 34, borderRadius: 10, border: '1px solid var(--black-border)', textDecoration: 'none', color: 'var(--white)' }}>
+            <Link to="/cart" style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: 34, height: 34, borderRadius: 10, textDecoration: 'none', color: 'var(--nav-ink)' }}>
               <ShoppingCart size={16} strokeWidth={1.75} />
               {itemCount > 0 && (
                 <span style={{ position: 'absolute', top: -5, right: -5, background: 'var(--gold)', color: 'var(--black)', fontSize: 10, fontWeight: 700, width: 16, height: 16, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -54,9 +54,8 @@ export default function Navbar() {
               style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center', width: 34, height: 34, borderRadius: 10,
                 textDecoration: 'none',
-                border: onAccount ? 'none' : '1px solid var(--black-border)',
                 background: onAccount ? 'linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%)' : 'transparent',
-                color: onAccount ? 'var(--black)' : 'var(--white)',
+                color: onAccount ? 'var(--black)' : 'var(--nav-ink)',
               }}
             >
               <User size={16} strokeWidth={1.75} />

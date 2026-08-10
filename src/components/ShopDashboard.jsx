@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Phone, RefreshCw, CheckCircle2, Bell, Inbox, Receipt, Pencil, ChevronUp, ChevronDown, X, MessageCircle, Package, Plus, ShoppingBag } from 'lucide-react'
+import { Phone, RefreshCw, CheckCircle2, Bell, Inbox, Receipt, Pencil, ChevronUp, ChevronDown, X, MessageCircle, Package, Plus, ShoppingBag, Sparkles, Clock } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { CATEGORIES_BY_TYPE } from '../lib/shopTypes'
 import ImageUpload from './ImageUpload'
@@ -9,7 +9,7 @@ import LaybyProgressBar from './LaybyProgressBar'
 import ShopAnalytics from './ShopAnalytics'
 import { useOrderNotifications } from '../hooks/useOrderNotifications'
 
-const EMPTY_FORM = { name: '', category_id: '', price: '', original_price: '', stock_count: '', description: '', photo_url: '', options: [] }
+const EMPTY_FORM = { name: '', category_id: '', price: '', original_price: '', stock_count: '', description: '', photo_url: '', options: [], feature_requested: false }
 
 const STATUS_CONFIG = {
   pending:     { label: 'Pending',     color: '#C9A84C', bg: 'rgba(201,168,76,0.1)',  border: 'rgba(201,168,76,0.2)',  next: 'attending',   nextLabel: 'Attending',   nextIcon: Phone },
@@ -315,7 +315,7 @@ export default function ShopDashboard({ shop, onShopUpdated }) {
 
   function startEdit(p) {
     setEditingId(p.id)
-    setForm({ name: p.name, category_id: p.category_id, price: p.price, original_price: p.original_price ?? '', stock_count: p.stock_count, description: p.description ?? '', photo_url: p.photo_url ?? '', options: p.options ?? [] })
+    setForm({ name: p.name, category_id: p.category_id, price: p.price, original_price: p.original_price ?? '', stock_count: p.stock_count, description: p.description ?? '', photo_url: p.photo_url ?? '', options: p.options ?? [], feature_requested: p.feature_requested ?? false })
     setError(null)
     setShowForm(true)
   }
@@ -330,7 +330,7 @@ export default function ShopDashboard({ shop, onShopUpdated }) {
       .filter((g) => g.name.trim() && g.values.length > 0)
       .map((g) => ({ name: g.name.trim(), values: g.values }))
     const originalPrice = form.original_price ? Number(form.original_price) : null
-    const payload = { shop_id: shop.id, name: form.name, category_id: form.category_id, price: Number(form.price), original_price: originalPrice && originalPrice > Number(form.price) ? originalPrice : null, stock_count: Number(form.stock_count), description: form.description || null, photo_url: form.photo_url || null, options: cleanOptions, is_active: true }
+    const payload = { shop_id: shop.id, name: form.name, category_id: form.category_id, price: Number(form.price), original_price: originalPrice && originalPrice > Number(form.price) ? originalPrice : null, stock_count: Number(form.stock_count), description: form.description || null, photo_url: form.photo_url || null, options: cleanOptions, feature_requested: form.feature_requested, is_active: true }
     const { error } = editingId
       ? await supabase.from('products').update(payload).eq('id', editingId)
       : await supabase.from('products').insert(payload)
@@ -485,6 +485,27 @@ export default function ShopDashboard({ shop, onShopUpdated }) {
                   </div>
                 </div>
 
+                <div style={{ background: 'rgba(201,168,76,0.06)', border: '1px solid rgba(201,168,76,0.25)', borderRadius: 12, padding: 14, marginBottom: 12 }}>
+                  <p style={{ fontSize: 12, fontWeight: 700, color: '#C9A84C', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <Sparkles size={13} strokeWidth={1.75} /> Homepage slideshow (premium)
+                  </p>
+                  {editingId && products.find((p) => p.id === editingId)?.is_featured ? (
+                    <p style={{ fontSize: 12, color: '#22c55e', display: 'flex', alignItems: 'center', gap: 5 }}>
+                      <CheckCircle2 size={13} strokeWidth={1.75} /> Currently featured on the homepage.
+                    </p>
+                  ) : editingId && products.find((p) => p.id === editingId)?.feature_requested ? (
+                    <p style={{ fontSize: 12, color: '#C9A84C', display: 'flex', alignItems: 'center', gap: 5 }}>
+                      <Clock size={13} strokeWidth={1.75} /> Request sent — we'll be in touch about pricing.
+                    </p>
+                  ) : (
+                    <label style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 12, color: '#A0A09A', cursor: 'pointer', lineHeight: 1.4 }}>
+                      <input type="checkbox" checked={form.feature_requested} onChange={(e) => setForm({ ...form, feature_requested: e.target.checked })}
+                        style={{ marginTop: 2, accentColor: '#C9A84C' }} />
+                      Request featured placement on the homepage slideshow — more buyers see it. This is a paid placement; checking this just sends a request, we'll follow up about pricing before it goes live.
+                    </label>
+                  )}
+                </div>
+
                 {error && <p style={{ fontSize: 12, color: '#ef4444', marginBottom: 12 }}>{error}</p>}
 
                 <div style={{ display: 'flex', gap: 10 }}>
@@ -519,7 +540,15 @@ export default function ShopDashboard({ shop, onShopUpdated }) {
                       : <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Package size={16} strokeWidth={1.5} color="#A0A09A" /></div>}
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ fontSize: 13, fontWeight: 600, color: '#FAFAF8', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</p>
+                    <p style={{ fontSize: 13, fontWeight: 600, color: '#FAFAF8', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: 6 }}>
+                      {p.name}
+                      {p.is_featured && (
+                        <span style={{ fontSize: 9, fontWeight: 700, color: '#0A0A0A', background: 'linear-gradient(135deg, #C9A84C, #9A7A2E)', padding: '2px 7px', borderRadius: 99, flexShrink: 0 }}>FEATURED</span>
+                      )}
+                      {!p.is_featured && p.feature_requested && (
+                        <span style={{ fontSize: 9, fontWeight: 700, color: '#C9A84C', border: '1px solid rgba(201,168,76,0.4)', padding: '2px 7px', borderRadius: 99, flexShrink: 0 }}>REQUEST PENDING</span>
+                      )}
+                    </p>
                     <p style={{ fontSize: 11, color: '#A0A09A' }}>N${Number(p.price).toLocaleString()} · {p.stock_count} in stock</p>
                   </div>
                   <div style={{ display: 'flex', gap: 12, flexShrink: 0 }}>

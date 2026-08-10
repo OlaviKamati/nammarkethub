@@ -53,7 +53,7 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <div style={{ minHeight: '100vh', background: 'var(--black)' }} className="page-enter">
+      <div style={{ minHeight: '100vh', background: 'var(--bg)' }} className="page-enter">
 
       <main style={{ maxWidth: 1200, margin: '0 auto', padding: '2rem 1.5rem' }}>
 

@@ -31,7 +31,7 @@ export default function NotificationBell({ orders, unreadCount, markAllSeen }) {
       <button
         onClick={toggle}
         aria-label="Order notifications"
-        style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: 34, height: 34, borderRadius: 10, border: '1px solid var(--black-border)', background: 'transparent', color: 'var(--white)', cursor: 'pointer' }}
+        style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: 34, height: 34, borderRadius: 10, background: 'transparent', color: 'var(--nav-ink)', cursor: 'pointer' }}
       >
         <Bell size={16} strokeWidth={1.75} />
         {unreadCount > 0 && (

@@ -10,10 +10,12 @@ import CompareTray from './components/CompareTray'
 import { CartProvider } from './context/CartContext'
 import { CurrencyProvider } from './context/CurrencyContext'
 import { CompareProvider } from './context/CompareContext'
+import { ThemeProvider } from './context/ThemeContext'
 
 function App() {
   return (
     <BrowserRouter>
+      <ThemeProvider>
       <CurrencyProvider>
       <CartProvider>
       <CompareProvider>
@@ -30,6 +32,7 @@ function App() {
       </CompareProvider>
       </CartProvider>
       </CurrencyProvider>
+      </ThemeProvider>
     </BrowserRouter>
   )
 }

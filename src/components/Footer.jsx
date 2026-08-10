@@ -16,7 +16,11 @@ export default function Footer() {
     <footer style={{ marginTop: 64, paddingTop: 40, borderTop: '1px solid var(--black-border)' }}>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 32, justifyContent: 'space-between', marginBottom: 28 }}>
         <div style={{ maxWidth: 280 }}>
-          <img src="/logo.svg" alt="NamMarketHub" style={{ height: 28, marginBottom: 12 }} />
+          {/* Dark chip behind the logo — the wordmark's "Market" is baked into the SVG as
+              near-white, so it needs a dark backdrop to stay legible in the light theme. */}
+          <div style={{ display: 'inline-block', background: 'var(--black)', borderRadius: 10, padding: '8px 12px', marginBottom: 12 }}>
+            <img src="/logo.svg" alt="NamMarketHub" style={{ height: 28, display: 'block' }} />
+          </div>
           <p style={{ fontSize: 12, color: 'var(--white-dim)', lineHeight: 1.6 }}>
             A marketplace for Namibian shops to list products and connect directly with buyers — no middleman, payment and pickup arranged shop-to-buyer.
           </p>

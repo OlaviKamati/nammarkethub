@@ -7,25 +7,39 @@ import { useCurrency } from '../hooks/useCurrency'
 export default function HeroCarousel() {
   const { format } = useCurrency()
   const [allProducts, setAllProducts] = useState([])
+  const [featuredProducts, setFeaturedProducts] = useState([])
   const [tab, setTab] = useState('latest')
   const [current, setCurrent] = useState(0)
   const [paused, setPaused] = useState(false)
   const [transitioning, setTransitioning] = useState(false)
   const navigate = useNavigate()
 
+  const SLIDE_FIELDS = 'id, name, price, original_price, photo_url, description, category_id, shops(name, shop_type, is_verified)'
+
   useEffect(() => {
     supabase
       .from('products')
-      .select('id, name, price, original_price, photo_url, description, category_id, shops(name, shop_type, is_verified)')
+      .select(SLIDE_FIELDS)
       .eq('is_active', true)
       .not('photo_url', 'is', null)
       .order('created_at', { ascending: false })
       .limit(24)
       .then(({ data }) => setAllProducts(data ?? []))
+
+    // Featured listings are paid placements, so fetched separately — a featured
+    // product may be older than the 24 most-recent and would otherwise be cut off.
+    supabase
+      .from('products')
+      .select(SLIDE_FIELDS)
+      .eq('is_active', true)
+      .eq('is_featured', true)
+      .not('photo_url', 'is', null)
+      .limit(8)
+      .then(({ data }) => setFeaturedProducts(data ?? []))
   }, [])
 
   const saleProducts = allProducts.filter((p) => p.original_price > p.price)
-  const slides = (tab === 'sale' ? saleProducts : allProducts).slice(0, 8)
+  const slides = (tab === 'sale' ? saleProducts : tab === 'featured' ? featuredProducts : allProducts).slice(0, 8)
 
   function handleTab(next) {
     setTab(next)
@@ -100,9 +114,13 @@ export default function HeroCarousel() {
       <div style={{ position: 'absolute', top: 0, right: 0, width: 200, height: 200, background: 'radial-gradient(circle at top right, rgba(201,168,76,0.12) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
       {/* Tabs */}
-      {saleProducts.length > 0 && (
+      {(saleProducts.length > 0 || featuredProducts.length > 0) && (
         <div style={{ position: 'absolute', top: 16, left: 16, zIndex: 20, display: 'flex', gap: 6 }}>
-          {[['latest', 'Latest'], ['sale', 'On Sale']].map(([val, label]) => (
+          {[
+            ...(featuredProducts.length > 0 ? [['featured', 'Featured']] : []),
+            ['latest', 'Latest'],
+            ...(saleProducts.length > 0 ? [['sale', 'On Sale']] : []),
+          ].map(([val, label]) => (
             <button
               key={val}
               onClick={(e) => { e.stopPropagation(); handleTab(val) }}

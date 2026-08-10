@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ShieldCheck, Eye } from 'lucide-react'
+import { ShieldCheck, Eye, Sparkles } from 'lucide-react'
 import { getShopType } from '../lib/shopTypes'
 import { useCurrency } from '../hooks/useCurrency'
 import WishlistButton from './WishlistButton'
@@ -15,7 +15,7 @@ export default function ProductCard({ product }) {
   const inStock = product.stock_count > 0
   const isSale = product.original_price && Number(product.original_price) > Number(product.price)
   const discountPct = isSale ? Math.round((1 - Number(product.price) / Number(product.original_price)) * 100) : 0
-  const isNew = !isSale && product.created_at && (Date.now() - new Date(product.created_at).getTime()) < 14 * 86400000
+  const isNew = !isSale && !product.is_featured && product.created_at && (Date.now() - new Date(product.created_at).getTime()) < 14 * 86400000
 
   return (
     <div
@@ -52,6 +52,11 @@ export default function ProductCard({ product }) {
           <span style={{ fontSize: 10, background: 'rgba(10,10,10,0.7)', color: 'var(--gold)', padding: '2px 8px', borderRadius: 99, fontFamily: 'ui-monospace, monospace', letterSpacing: '0.06em', textTransform: 'uppercase', border: '1px solid rgba(201,168,76,0.2)' }}>
             {product.category_id}
           </span>
+          {product.is_featured && (
+            <span style={{ fontSize: 10, fontWeight: 700, background: 'linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%)', color: 'var(--black)', padding: '2px 8px', borderRadius: 99, display: 'flex', alignItems: 'center', gap: 3 }}>
+              <Sparkles size={9} strokeWidth={2.5} /> FEATURED
+            </span>
+          )}
           {isSale && (
             <span style={{ fontSize: 10, fontWeight: 700, background: '#ef4444', color: '#fff', padding: '2px 8px', borderRadius: 99 }}>
               {discountPct}% OFF

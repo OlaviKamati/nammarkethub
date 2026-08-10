@@ -13,8 +13,14 @@
   --black-soft:  #111111;
   --black-card:  #161616;
   --black-border:#2A2A2A;
+  --black-rgb:   10, 10, 10;
+  --bg:          var(--black);
   --white:       #FAFAF8;
   --white-dim:   #A0A09A;
+  /* Fixed light ink for content sitting on the navbar/tab-bar, which stay dark in
+     both themes (see --black-rgb note above) — these never get overridden for light. */
+  --nav-ink:     #FAFAF8;
+  --nav-ink-dim: #A0A09A;
   --ease-expo:   cubic-bezier(0.16, 1, 0.3, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
@@ -41,12 +47,28 @@
   --font-display: 'Fraunces', serif;
 }
 
+/* Light theme — overrides page/card/text surfaces only. --black and --gold* stay fixed:
+   they're used as "ink on gold" (active pills, badge text) and the brand accent, which
+   should read the same in both themes rather than flipping with the page background.
+   --black-rgb also stays fixed (dark) — .glass-nav and .mobile-tab-bar read it directly
+   so the navbar stays a dark bar in both themes (the logo's "Market" text is baked into
+   the SVG as near-white, so it needs a dark backdrop to stay legible). */
+:root[data-theme="light"] {
+  --black-soft:  #F2F0E9;
+  --black-card:  #F6F4EC;
+  --black-border:#CBC4AF;
+  --bg:          #EAE7DD;
+  --white:       #211F1A;
+  --white-dim:   #6B6759;
+}
+
 * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; box-sizing: border-box; }
 
 body {
   font-family: var(--font-body);
-  background: var(--black);
+  background: var(--bg);
   color: var(--white);
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 .font-display {
@@ -221,7 +243,7 @@ select option {
 
 /* Glassmorphism nav */
 .glass-nav {
-  background: rgba(10, 10, 10, 0.85);
+  background: rgba(var(--black-rgb), 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--black-border);
@@ -305,7 +327,7 @@ html, body { overflow-x: hidden; }
   left: 0; right: 0; bottom: 0;
   z-index: 50;
   padding-bottom: env(safe-area-inset-bottom);
-  background: rgba(10, 10, 10, 0.92);
+  background: rgba(var(--black-rgb), 0.92);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-top: 1px solid var(--black-border);
@@ -321,7 +343,7 @@ html, body { overflow-x: hidden; }
   gap: 2px;
   padding: 8px 0 10px;
   text-decoration: none;
-  color: var(--white-dim);
+  color: var(--nav-ink-dim);
   font-size: 10px;
   font-weight: 600;
   position: relative;

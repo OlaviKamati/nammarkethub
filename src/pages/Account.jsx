@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { Heart, User, ShoppingCart, Check, TrendingDown, FileText, Link2 } from 'lucide-react'
+import { Heart, User, ShoppingCart, Check, TrendingDown, FileText, Link2, Sun, Moon } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
 import { useMyOrders } from '../hooks/useMyOrders'
 import { useWishlist } from '../hooks/useWishlist'
 import { useProfile } from '../hooks/useProfile'
 import { useCurrency } from '../hooks/useCurrency'
+import { useTheme } from '../hooks/useTheme'
 import { CURRENCIES } from '../lib/currency'
 import Navbar from '../components/Navbar'
 import AuthForm from '../components/AuthForm'
@@ -44,7 +45,7 @@ function WishlistTab({ userId }) {
     Promise.all([
       supabase
         .from('products')
-        .select('id, name, description, price, original_price, photo_url, stock_count, category_id, created_at, shops(id, name, location, shop_type, is_verified)')
+        .select('id, name, description, price, original_price, is_featured, photo_url, stock_count, category_id, created_at, shops(id, name, location, shop_type, is_verified)')
         .in('id', ids)
         .eq('is_active', true),
       supabase.from('wishlist_items').select('product_id, price_at_add').eq('buyer_id', userId).in('product_id', ids),
@@ -149,6 +150,7 @@ function OrdersTab({ userId }) {
 
 function PreferencesTab({ userId }) {
   const { currency, setCurrency } = useCurrency()
+  const { theme, setTheme } = useTheme()
   const [copied, setCopied] = useState(false)
   const referralLink = `${window.location.origin}/?ref=${userId}`
 
@@ -160,6 +162,30 @@ function PreferencesTab({ userId }) {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+      <div style={{ background: 'var(--black-card)', border: '1px solid var(--black-border)', borderRadius: 16, padding: 20, maxWidth: 420 }}>
+        <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--white)', marginBottom: 4 }}>Appearance</p>
+        <p style={{ fontSize: 12, color: 'var(--white-dim)', marginBottom: 14, lineHeight: 1.5 }}>
+          Switch between dark and light.
+        </p>
+        <div style={{ display: 'flex', gap: 8 }}>
+          {[['dark', Moon, 'Dark'], ['light', Sun, 'Light']].map(([val, Icon, label]) => (
+            <button
+              key={val}
+              onClick={() => setTheme(val)}
+              style={{
+                flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                fontSize: 13, padding: '10px 14px', borderRadius: 10, cursor: 'pointer',
+                border: theme === val ? '1px solid var(--gold-dark)' : '1px solid var(--black-border)',
+                background: theme === val ? 'rgba(201,168,76,0.1)' : 'transparent',
+                color: theme === val ? 'var(--gold)' : 'var(--white-dim)',
+              }}
+            >
+              <Icon size={14} strokeWidth={1.75} /> {label}
+            </button>
+          ))}
+        </div>
+      </div>
+
       <div style={{ background: 'var(--black-card)', border: '1px solid var(--black-border)', borderRadius: 16, padding: 20, maxWidth: 420 }}>
         <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--white)', marginBottom: 4 }}>Display currency</p>
         <p style={{ fontSize: 12, color: 'var(--white-dim)', marginBottom: 14, lineHeight: 1.5 }}>
