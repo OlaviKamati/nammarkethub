@@ -52,20 +52,35 @@ export default function ProductReviews({ productId }) {
   }
 
   const average = reviews.length ? reviews.reduce((s, r) => s + r.rating, 0) / reviews.length : 0
+  const counts = [5, 4, 3, 2, 1].map((n) => reviews.filter((r) => r.rating === n).length)
 
   return (
     <div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
-        <h2 style={{ fontSize: 15, fontWeight: 700, color: 'var(--white)' }}>Reviews</h2>
-        {reviews.length > 0 && (
-          <>
-            <StarRating value={average} />
-            <span style={{ fontSize: 12, color: 'var(--white-dim)' }}>
-              {average.toFixed(1)} · {reviews.length} review{reviews.length !== 1 ? 's' : ''}
-            </span>
-          </>
-        )}
-      </div>
+      <h2 style={{ fontSize: 15, fontWeight: 700, color: 'var(--white)', marginBottom: 16 }}>Reviews</h2>
+
+      {reviews.length > 0 && (
+        <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: 24, alignItems: 'center', background: 'var(--black-card)', border: '1px solid var(--black-border)', borderRadius: 16, padding: '18px 20px', marginBottom: 20 }}>
+          <div style={{ textAlign: 'center', paddingRight: 24, borderRight: '1px solid var(--black-border)' }}>
+            <p className="gold-text" style={{ fontSize: 32, fontWeight: 700, lineHeight: 1 }}>{average.toFixed(1)}</p>
+            <div style={{ margin: '6px 0' }}><StarRating value={average} size={13} /></div>
+            <p style={{ fontSize: 11, color: 'var(--white-dim)' }}>{reviews.length} review{reviews.length !== 1 ? 's' : ''}</p>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+            {[5, 4, 3, 2, 1].map((n, i) => {
+              const pct = reviews.length ? Math.round((counts[i] / reviews.length) * 100) : 0
+              return (
+                <div key={n} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11 }}>
+                  <span style={{ color: 'var(--white-dim)', width: 10 }}>{n}</span>
+                  <div style={{ flex: 1, height: 5, background: 'var(--black-border)', borderRadius: 99, overflow: 'hidden' }}>
+                    <div style={{ width: `${pct}%`, height: '100%', background: 'linear-gradient(90deg, var(--gold-dark), var(--gold))', borderRadius: 99 }} />
+                  </div>
+                  <span style={{ color: 'var(--white-dim)', width: 24, textAlign: 'right' }}>{counts[i]}</span>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Leave a review */}
       <div style={{ background: 'var(--black-card)', border: '1px solid var(--black-border)', borderRadius: 16, padding: 16, marginBottom: 20 }}>
@@ -93,13 +108,13 @@ export default function ProductReviews({ productId }) {
       </div>
 
       {!loading && reviews.length === 0 && (
-        <p style={{ fontSize: 13, color: 'var(--white-dim)' }}>No reviews yet.</p>
+        <p style={{ fontSize: 13, color: 'var(--white-dim)' }}>No reviews yet — be the first to share your experience.</p>
       )}
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         {reviews.map((r) => (
-          <div key={r.id} style={{ borderBottom: '1px solid var(--black-border)', paddingBottom: 12 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+          <div key={r.id} style={{ background: 'var(--black-card)', border: '1px solid var(--black-border)', borderRadius: 14, padding: '14px 16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: r.comment ? 8 : 0 }}>
               <StarRating value={r.rating} size={13} />
               <span style={{ fontSize: 11, color: 'var(--white-dim)' }}>{timeAgo(r.created_at)}</span>
             </div>

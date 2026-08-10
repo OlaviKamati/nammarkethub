@@ -13,7 +13,7 @@ export function useMyOrders(userId) {
       setLoading(true)
       const { data } = await supabase
         .from('orders')
-        .select('id, quantity, status, selected_options, group_id, created_at, products(name, photo_url, price, shops(name))')
+        .select('id, quantity, status, selected_options, group_id, created_at, deposit_paid, products(name, photo_url, price, shops(name))')
         .eq('buyer_id', userId)
         .order('created_at', { ascending: false })
 

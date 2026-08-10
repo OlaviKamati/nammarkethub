@@ -22,7 +22,7 @@ export function useWishlist(userId) {
 
   useEffect(() => { refetch() }, [refetch])
 
-  async function toggle(productId) {
+  async function toggle(productId, currentPrice) {
     if (!userId) return
     if (productIds.has(productId)) {
       await supabase.from('wishlist_items').delete().eq('buyer_id', userId).eq('product_id', productId)
@@ -32,7 +32,7 @@ export function useWishlist(userId) {
         return next
       })
     } else {
-      await supabase.from('wishlist_items').insert({ buyer_id: userId, product_id: productId })
+      await supabase.from('wishlist_items').insert({ buyer_id: userId, product_id: productId, price_at_add: currentPrice ?? null })
       setProductIds((prev) => new Set(prev).add(productId))
     }
   }

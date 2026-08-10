@@ -1,10 +1,13 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ShoppingBag, ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react'
+import { ShoppingBag, ChevronLeft, ChevronRight, ArrowRight, ShieldCheck } from 'lucide-react'
 import { supabase } from '../lib/supabase'
+import { useCurrency } from '../hooks/useCurrency'
 
 export default function HeroCarousel() {
-  const [slides, setSlides] = useState([])
+  const { format } = useCurrency()
+  const [allProducts, setAllProducts] = useState([])
+  const [tab, setTab] = useState('latest')
   const [current, setCurrent] = useState(0)
   const [paused, setPaused] = useState(false)
   const [transitioning, setTransitioning] = useState(false)
@@ -13,13 +16,21 @@ export default function HeroCarousel() {
   useEffect(() => {
     supabase
       .from('products')
-      .select('id, name, price, photo_url, description, category_id, shops(name, shop_type)')
+      .select('id, name, price, original_price, photo_url, description, category_id, shops(name, shop_type, is_verified)')
       .eq('is_active', true)
       .not('photo_url', 'is', null)
       .order('created_at', { ascending: false })
-      .limit(8)
-      .then(({ data }) => setSlides(data ?? []))
+      .limit(24)
+      .then(({ data }) => setAllProducts(data ?? []))
   }, [])
+
+  const saleProducts = allProducts.filter((p) => p.original_price > p.price)
+  const slides = (tab === 'sale' ? saleProducts : allProducts).slice(0, 8)
+
+  function handleTab(next) {
+    setTab(next)
+    setCurrent(0)
+  }
 
   const goTo = useCallback((idx) => {
     if (transitioning) return
@@ -46,7 +57,7 @@ export default function HeroCarousel() {
 
   const heroHeight = 'clamp(420px, 62vh, 680px)'
 
-  if (slides.length === 0) {
+  if (allProducts.length === 0) {
     return (
       <div style={{ height: heroHeight, background: 'var(--black-card)', borderRadius: 20, border: '1px solid var(--black-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 32 }}>
         <div style={{ textAlign: 'center' }}>
@@ -58,7 +69,6 @@ export default function HeroCarousel() {
   }
 
   const slide = slides[current]
-  const priceFormatted = Number(slide.price).toLocaleString('en-NA', { minimumFractionDigits: 0 })
 
   return (
     <div
@@ -89,6 +99,26 @@ export default function HeroCarousel() {
       {/* Gold corner accent */}
       <div style={{ position: 'absolute', top: 0, right: 0, width: 200, height: 200, background: 'radial-gradient(circle at top right, rgba(201,168,76,0.12) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
+      {/* Tabs */}
+      {saleProducts.length > 0 && (
+        <div style={{ position: 'absolute', top: 16, left: 16, zIndex: 20, display: 'flex', gap: 6 }}>
+          {[['latest', 'Latest'], ['sale', 'On Sale']].map(([val, label]) => (
+            <button
+              key={val}
+              onClick={(e) => { e.stopPropagation(); handleTab(val) }}
+              style={{
+                fontSize: 11, fontWeight: 600, padding: '5px 12px', borderRadius: 99, cursor: 'pointer',
+                border: tab === val ? 'none' : '1px solid rgba(201,168,76,0.3)',
+                background: tab === val ? 'linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%)' : 'rgba(10,10,10,0.5)',
+                color: tab === val ? 'var(--black)' : 'var(--gold)',
+              }}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* Content */}
       <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: '2rem' }}>
         <div key={current} className="fade-up">
@@ -98,6 +128,7 @@ export default function HeroCarousel() {
             <span style={{ fontSize: 11, color: 'var(--gold)', fontFamily: 'ui-monospace, monospace', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
               {slide.shops?.name ?? 'Featured'}
             </span>
+            {slide.shops?.is_verified && <ShieldCheck size={12} strokeWidth={2} color="var(--gold)" />}
           </div>
 
           <h2 className="font-display" style={{ color: 'var(--white)', fontSize: 'clamp(1.4rem, 3vw, 2.2rem)', letterSpacing: '-0.02em', marginBottom: 8, maxWidth: 480, lineHeight: 1.2 }}>
@@ -110,8 +141,11 @@ export default function HeroCarousel() {
             </p>
           )}
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <span className="gold-text" style={{ fontSize: 24, fontWeight: 700 }}>N${priceFormatted}</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+            <span className="gold-text" style={{ fontSize: 24, fontWeight: 700 }}>{format(slide.price)}</span>
+            {slide.original_price > slide.price && (
+              <span style={{ fontSize: 15, color: 'rgba(250,250,248,0.5)', textDecoration: 'line-through' }}>{format(slide.original_price)}</span>
+            )}
             <button
               onClick={() => navigate(`/product/${slide.id}`)}
               className="btn-gold"

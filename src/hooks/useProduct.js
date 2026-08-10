@@ -14,7 +14,7 @@ export function useProduct(productId) {
       setLoading(true)
       const { data, error } = await supabase
         .from('products')
-        .select('*, shops(id, name, location, whatsapp_number, description)')
+        .select('*, shops(id, name, location, whatsapp_number, description, is_verified)')
         .eq('id', productId)
         .eq('is_active', true)
         .maybeSingle()

@@ -3,11 +3,14 @@ import { ShoppingCart, User, Home, Store } from 'lucide-react'
 import { useAuth } from '../hooks/useAuth'
 import { useMyShop } from '../hooks/useMyShop'
 import { useCart } from '../hooks/useCart'
+import { useMyOrderNotifications } from '../hooks/useMyOrderNotifications'
+import NotificationBell from './NotificationBell'
 
 export default function Navbar() {
   const { user } = useAuth()
   const { shop } = useMyShop(user?.id)
   const { itemCount } = useCart()
+  const { orders: myOrders, unreadCount, markAllSeen } = useMyOrderNotifications(user?.id)
   const location = useLocation()
   const onSell = location.pathname === '/sell'
   const onAccount = location.pathname === '/account'
@@ -20,8 +23,8 @@ export default function Navbar() {
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 1.5rem', height: 56, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 
           {/* Logo */}
-          <Link to="/" style={{ display: 'flex', alignItems: 'center' }}>
-            <img src="/logo.svg" alt="NamMarketHub" style={{ height: 36 }} />
+          <Link to="/" className="logo-glow" style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
+            <img src="/logo.svg" alt="NamMarketHub" style={{ height: 36, position: 'relative', zIndex: 1 }} />
           </Link>
 
           {/* Right side — hidden on mobile, replaced by the fixed bottom tab bar */}
@@ -31,6 +34,9 @@ export default function Navbar() {
               <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--gold)', display: 'inline-block' }} className="pulse-dot" />
               LIVE
             </div>
+
+            {/* Order notifications */}
+            {user && <NotificationBell orders={myOrders} unreadCount={unreadCount} markAllSeen={markAllSeen} />}
 
             {/* Cart icon */}
             <Link to="/cart" style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: 34, height: 34, borderRadius: 10, border: '1px solid var(--black-border)', textDecoration: 'none', color: 'var(--white)' }}>
@@ -95,9 +101,12 @@ export default function Navbar() {
           <Store size={20} strokeWidth={1.75} />
           {shop ? 'My Shop' : 'Sell'}
         </Link>
-        <Link to="/account" className={onAccount ? 'active' : ''}>
+        <Link to="/account" className={onAccount ? 'active' : ''} style={{ position: 'relative' }}>
           <User size={20} strokeWidth={1.75} />
           Account
+          {unreadCount > 0 && (
+            <span style={{ position: 'absolute', top: 2, right: '28%', width: 8, height: 8, borderRadius: '50%', background: 'var(--gold)' }} />
+          )}
         </Link>
       </div>
     </>

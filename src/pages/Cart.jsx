@@ -1,17 +1,23 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { CheckCircle2, ShoppingCart, ArrowLeft, ArrowRight, Package, Minus, Plus } from 'lucide-react'
+import confetti from 'canvas-confetti'
+import { CheckCircle2, ArrowLeft, ArrowRight, Package, Minus, Plus } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { useCart } from '../hooks/useCart'
 import { useAuth } from '../hooks/useAuth'
+import { useCurrency } from '../hooks/useCurrency'
 import Navbar from '../components/Navbar'
+import EmptyState from '../components/EmptyState'
+import Footer from '../components/Footer'
 
 export default function Cart() {
   const { items, updateQuantity, removeItem, clearCart, subtotal } = useCart()
   const { user } = useAuth()
+  const { format } = useCurrency()
 
   const [buyerName, setBuyerName] = useState(user?.user_metadata?.full_name ?? '')
   const [buyerContact, setBuyerContact] = useState(user?.user_metadata?.phone ?? '')
+  const [wantsPaymentPlan, setWantsPaymentPlan] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState(null)
   const [done, setDone] = useState(false)
@@ -49,6 +55,7 @@ export default function Cart() {
       selected_options: Object.keys(item.selectedOptions ?? {}).length > 0 ? item.selectedOptions : null,
       group_id: groupId,
       buyer_id: user?.id ?? null,
+      deposit_paid: wantsPaymentPlan ? 0 : null,
     }))
 
     const { error } = await supabase.from('orders').insert(rows)
@@ -61,6 +68,7 @@ export default function Cart() {
 
     clearCart()
     setDone(true)
+    confetti({ particleCount: 100, spread: 75, origin: { y: 0.6 }, colors: ['#C9A84C', '#9A7A2E', '#FAFAF8'] })
   }
 
   if (done) {
@@ -88,13 +96,13 @@ export default function Cart() {
         <h1 className="font-display" style={{ fontSize: 22, color: 'var(--white)', marginBottom: 24 }}>Your cart</h1>
 
         {items.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '64px 0' }}>
-            <ShoppingCart size={36} strokeWidth={1.5} color="var(--white-dim)" style={{ marginBottom: 12 }} />
-            <p style={{ color: 'var(--white-dim)', fontSize: 14, marginBottom: 16 }}>Your cart is empty.</p>
-            <Link to="/" style={{ color: 'var(--gold)', fontSize: 14, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-              Browse products <ArrowRight size={14} strokeWidth={1.75} />
-            </Link>
-          </div>
+          <EmptyState
+            variant="cart"
+            title="Your cart is empty"
+            description="Browse shops and add products — you'll arrange payment and pickup directly with the seller."
+            actionLabel="Browse products"
+            actionTo="/"
+          />
         ) : (
           <>
             {Object.entries(groups).map(([shopId, group]) => (
@@ -107,7 +115,7 @@ export default function Cart() {
                     <div key={item.key} style={{ display: 'flex', gap: 12, alignItems: 'center', background: 'var(--black-card)', border: '1px solid var(--black-border)', borderRadius: 14, padding: 12 }}>
                       <div style={{ width: 56, height: 56, borderRadius: 10, background: '#0D0D0D', flexShrink: 0, overflow: 'hidden' }}>
                         {item.product.photo_url ? (
-                          <img src={item.product.photo_url} alt={item.product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                          <img src={item.product.photo_url} alt={item.product.name} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         ) : (
                           <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Package size={18} strokeWidth={1.5} color="var(--white-dim)" /></div>
                         )}
@@ -119,7 +127,7 @@ export default function Cart() {
                             {Object.entries(item.selectedOptions).map(([k, v]) => `${k}: ${v}`).join(' · ')}
                           </p>
                         )}
-                        <p style={{ fontSize: 12, color: 'var(--gold)' }}>N${Number(item.product.price).toLocaleString('en-NA')}</p>
+                        <p style={{ fontSize: 12, color: 'var(--gold)' }}>{format(item.product.price)}</p>
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
                         <button type="button" onClick={() => updateQuantity(item.key, Math.max(1, item.quantity - 1))}
@@ -142,7 +150,7 @@ export default function Cart() {
 
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 24 }}>
               <span style={{ fontSize: 14, color: 'var(--white-dim)' }}>Subtotal</span>
-              <span className="gold-text" style={{ fontSize: 18, fontWeight: 700 }}>N${subtotal.toLocaleString('en-NA')}</span>
+              <span className="gold-text" style={{ fontSize: 18, fontWeight: 700 }}>{format(subtotal)}</span>
             </div>
 
             <form onSubmit={handleCheckout} style={{ background: 'var(--black-card)', border: '1px solid var(--black-border)', borderRadius: 16, padding: 20, display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -157,6 +165,11 @@ export default function Cart() {
                 <input required value={buyerContact} onChange={(e) => setBuyerContact(e.target.value)}
                   className="input-dark" style={{ width: '100%', padding: '10px 14px', fontSize: 14 }} placeholder="081 234 5678" />
               </div>
+              <label style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 12, color: 'var(--white-dim)', cursor: 'pointer', lineHeight: 1.4 }}>
+                <input type="checkbox" checked={wantsPaymentPlan} onChange={(e) => setWantsPaymentPlan(e.target.checked)}
+                  style={{ marginTop: 2, accentColor: 'var(--gold)' }} />
+                I'd like to ask about paying in instalments — the shop will confirm and track deposits with me directly.
+              </label>
               {submitError && <p style={{ fontSize: 12, color: '#ef4444' }}>{submitError}</p>}
               <button type="submit" disabled={submitting} className="btn-gold" style={{ padding: '12px', fontSize: 14, marginTop: 4, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
                 {submitting ? 'Sending…' : <>Send request <ArrowRight size={15} strokeWidth={1.75} /></>}
@@ -167,6 +180,8 @@ export default function Cart() {
             </form>
           </>
         )}
+
+        <Footer />
       </div>
     </>
   )

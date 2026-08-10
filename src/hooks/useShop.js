@@ -18,7 +18,7 @@ export function useShop(shopId) {
         supabase.from('shops').select('*').eq('id', shopId).maybeSingle(),
         supabase
           .from('products')
-          .select('id, name, description, price, photo_url, stock_count, category_id, shops(id, name, location, shop_type)')
+          .select('id, name, description, price, original_price, photo_url, stock_count, category_id, created_at, shops(id, name, location, shop_type, is_verified)')
           .eq('shop_id', shopId)
           .eq('is_active', true)
           .order('created_at', { ascending: false }),

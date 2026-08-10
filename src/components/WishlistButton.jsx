@@ -3,7 +3,7 @@ import { Heart } from 'lucide-react'
 import { useAuth } from '../hooks/useAuth'
 import { useWishlist } from '../hooks/useWishlist'
 
-export default function WishlistButton({ productId, style, iconSize = 13 }) {
+export default function WishlistButton({ productId, price, style, iconSize = 13 }) {
   const navigate = useNavigate()
   const { user } = useAuth()
   const { productIds, toggle } = useWishlist(user?.id)
@@ -16,7 +16,7 @@ export default function WishlistButton({ productId, style, iconSize = 13 }) {
       navigate('/account', { state: { reason: 'wishlist' } })
       return
     }
-    toggle(productId)
+    toggle(productId, price)
   }
 
   return (

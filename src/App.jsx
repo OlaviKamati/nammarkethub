@@ -6,12 +6,17 @@ import ShopDetail from './pages/ShopDetail'
 import Cart from './pages/Cart'
 import Account from './pages/Account'
 import Chatbot from './components/Chatbot'
+import CompareTray from './components/CompareTray'
 import { CartProvider } from './context/CartContext'
+import { CurrencyProvider } from './context/CurrencyContext'
+import { CompareProvider } from './context/CompareContext'
 
 function App() {
   return (
     <BrowserRouter>
+      <CurrencyProvider>
       <CartProvider>
+      <CompareProvider>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/sell" element={<Sell />} />
@@ -21,7 +26,10 @@ function App() {
           <Route path="/account" element={<Account />} />
         </Routes>
         <Chatbot />
+        <CompareTray />
+      </CompareProvider>
       </CartProvider>
+      </CurrencyProvider>
     </BrowserRouter>
   )
 }

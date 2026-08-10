@@ -4,13 +4,14 @@ import { ArrowLeft, ArrowRight, Package, MessageCircle, ShoppingCart, Check } fr
 import { useProduct } from '../hooks/useProduct'
 import { useCart } from '../hooks/useCart'
 import { useAuth } from '../hooks/useAuth'
+import { useCurrency } from '../hooks/useCurrency'
 import Navbar from '../components/Navbar'
 import WishlistButton from '../components/WishlistButton'
 import ShareButtons from '../components/ShareButtons'
 import ProductReviews from '../components/ProductReviews'
-
-// Anonymous browsers get a taste of the cart, then are asked to sign up to keep going.
-const MAX_ANONYMOUS_CART_ITEMS = 3
+import VerifiedBadge from '../components/VerifiedBadge'
+import Footer from '../components/Footer'
+import { MAX_ANONYMOUS_CART_ITEMS } from '../lib/cart'
 
 export default function ProductDetail() {
   const { id } = useParams()
@@ -18,6 +19,7 @@ export default function ProductDetail() {
   const { product, loading, error } = useProduct(id)
   const { user } = useAuth()
   const { items, addItem } = useCart()
+  const { format } = useCurrency()
 
   const [quantity, setQuantity] = useState(1)
   const [selectedOptions, setSelectedOptions] = useState({})
@@ -64,7 +66,6 @@ export default function ProductDetail() {
     )
   }
 
-  const price = Number(product.price).toLocaleString('en-NA', { minimumFractionDigits: 0 })
   const shop = product.shops
   const productUrl = `${window.location.origin}/product/${product.id}`
 
@@ -85,18 +86,21 @@ export default function ProductDetail() {
           <div>
             <div style={{ position: 'relative', borderRadius: 20, overflow: 'hidden', border: '1px solid var(--black-border)', aspectRatio: '1', background: 'var(--black-card)' }}>
               {product.photo_url ? (
-                <img src={product.photo_url} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={product.photo_url} alt={product.name} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               ) : (
                 <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #111, #1A1500)' }}><Package size={48} strokeWidth={1.5} color="var(--white-dim)" /></div>
               )}
-              <WishlistButton productId={product.id} iconSize={17} style={{ position: 'absolute', top: 12, right: 12, width: 36, height: 36 }} />
+              <WishlistButton productId={product.id} price={product.price} iconSize={17} style={{ position: 'absolute', top: 12, right: 12, width: 36, height: 36 }} />
             </div>
 
             {/* Shop info below image */}
             {shop && (
               <div style={{ marginTop: 16, padding: '16px 20px', background: 'var(--black-card)', borderRadius: 16, border: '1px solid var(--black-border)' }}>
                 <p style={{ fontSize: 10, color: 'var(--gold)', fontFamily: 'ui-monospace, monospace', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8 }}>Sold by</p>
-                <Link to={`/shop/${shop.id}`} style={{ fontSize: 15, fontWeight: 600, color: 'var(--white)', marginBottom: 2, display: 'block', textDecoration: 'none' }}>{shop.name}</Link>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 2, flexWrap: 'wrap' }}>
+                  <Link to={`/shop/${shop.id}`} style={{ fontSize: 15, fontWeight: 600, color: 'var(--white)', textDecoration: 'none' }}>{shop.name}</Link>
+                  {shop.is_verified && <VerifiedBadge />}
+                </div>
                 <p style={{ fontSize: 12, color: 'var(--white-dim)', marginBottom: shop.whatsapp_number ? 12 : 0 }}>{shop.location}</p>
                 {shop.whatsapp_number && (
                   <a
@@ -123,8 +127,11 @@ export default function ProductDetail() {
               {product.name}
             </h1>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 16 }}>
-              <span className="gold-text" style={{ fontSize: 28, fontWeight: 700 }}>N${price}</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 16, flexWrap: 'wrap' }}>
+              <span className="gold-text" style={{ fontSize: 28, fontWeight: 700 }}>{format(product.price)}</span>
+              {product.original_price > product.price && (
+                <span style={{ fontSize: 15, color: 'var(--white-dim)', textDecoration: 'line-through' }}>{format(product.original_price)}</span>
+              )}
               <span className="tag" style={{ color: product.stock_count > 0 ? 'var(--gold-dark)' : 'var(--white-dim)', background: product.stock_count > 0 ? 'rgba(201,168,76,0.1)' : 'rgba(255,255,255,0.05)', padding: '3px 10px', borderRadius: 6, border: `1px solid ${product.stock_count > 0 ? 'rgba(201,168,76,0.2)' : 'var(--black-border)'}` }}>
                 {product.stock_count > 0 ? `${product.stock_count} in stock` : 'Out of stock'}
               </span>
@@ -202,6 +209,8 @@ export default function ProductDetail() {
             </div>
           </div>
         </div>
+
+        <Footer />
       </div>
     </>
   )

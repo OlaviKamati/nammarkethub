@@ -4,6 +4,8 @@ import { useShop } from '../hooks/useShop'
 import { getShopType } from '../lib/shopTypes'
 import Navbar from '../components/Navbar'
 import ProductCard from '../components/ProductCard'
+import VerifiedBadge from '../components/VerifiedBadge'
+import Footer from '../components/Footer'
 
 export default function ShopDetail() {
   const { id } = useParams()
@@ -51,9 +53,12 @@ export default function ShopDetail() {
             ) : <type.icon size={26} strokeWidth={1.75} color="var(--gold)" />}
           </div>
           <div>
-            <h1 className="font-display" style={{ fontSize: 'clamp(1.3rem, 3vw, 1.8rem)', color: 'var(--white)', marginBottom: 4 }}>
-              {shop.name}
-            </h1>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4, flexWrap: 'wrap' }}>
+              <h1 className="font-display" style={{ fontSize: 'clamp(1.3rem, 3vw, 1.8rem)', color: 'var(--white)' }}>
+                {shop.name}
+              </h1>
+              {shop.is_verified && <VerifiedBadge size="md" />}
+            </div>
             <p style={{ fontSize: 13, color: 'var(--white-dim)' }}>{shop.location} · {type.label}</p>
           </div>
         </div>
@@ -88,6 +93,8 @@ export default function ShopDetail() {
             ))}
           </div>
         )}
+
+        <Footer />
       </div>
     </>
   )

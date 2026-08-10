@@ -14,7 +14,7 @@ export function useOrderNotifications(shopId) {
     async function fetchRecent() {
       const { data } = await supabase
         .from('orders')
-        .select('id, buyer_name, buyer_contact, quantity, status, notes, selected_options, group_id, created_at, products!inner(name)')
+        .select('id, buyer_name, buyer_contact, quantity, status, notes, selected_options, group_id, created_at, deposit_paid, products!inner(name, price)')
         .eq('products.shop_id', shopId)
         .order('created_at', { ascending: false })
         .limit(20)
@@ -38,7 +38,7 @@ export function useOrderNotifications(shopId) {
         // Fetch the full order with product name
         const { data } = await supabase
           .from('orders')
-          .select('id, buyer_name, buyer_contact, quantity, status, notes, selected_options, group_id, created_at, products(name, shop_id)')
+          .select('id, buyer_name, buyer_contact, quantity, status, notes, selected_options, group_id, created_at, deposit_paid, products(name, shop_id, price)')
           .eq('id', payload.new.id)
           .maybeSingle()
 

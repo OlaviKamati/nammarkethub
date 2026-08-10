@@ -122,6 +122,18 @@ body {
 }
 .btn-outline:hover { background: var(--gold-muted); border-color: var(--gold); }
 
+/* ── Logo glow ── */
+.logo-glow::before {
+  content: '';
+  position: absolute;
+  inset: -14px -10px;
+  background: radial-gradient(ellipse at center, rgba(201,168,76,0.22) 0%, transparent 72%);
+  opacity: 0.35;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+.logo-glow:hover::before { opacity: 1; }
+
 /* ── Input ── */
 .input-dark {
   background: var(--black-card);
@@ -276,6 +288,14 @@ html, body { overflow-x: hidden; }
     right: 16px !important;
     width: auto !important;
   }
+
+  /* Keep the compare tray clear of the fixed bottom tab bar */
+  .compare-tray {
+    bottom: calc(88px + env(safe-area-inset-bottom)) !important;
+    left: 12px !important;
+    right: 12px !important;
+    width: auto !important;
+  }
 }
 
 /* Fixed bottom tab bar — hidden by default, shown only under the mobile breakpoint above */
@@ -317,4 +337,13 @@ html, body { overflow-x: hidden; }
   .card:active {
     transform: scale(0.98);
   }
+}
+
+/* Printing an order summary: show only the card, in plain black-on-white */
+@media print {
+  body * { visibility: hidden; }
+  .order-summary-card, .order-summary-card * { visibility: visible; }
+  .order-summary-card { position: fixed; inset: 0; margin: 0; max-width: 100%; border: none; background: #fff; color: #000; }
+  .order-summary-card .gold-text, .order-summary-card span { color: #000 !important; }
+  .order-summary-hide-print { display: none !important; }
 }

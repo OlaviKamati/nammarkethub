@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react'
-import { Phone, RefreshCw, CheckCircle2, Bell, Inbox, Receipt, Pencil, ChevronUp, ChevronDown, X, MessageCircle, Package, Plus } from 'lucide-react'
+import { Phone, RefreshCw, CheckCircle2, Bell, Inbox, Receipt, Pencil, ChevronUp, ChevronDown, X, MessageCircle, Package, Plus, ShoppingBag } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { CATEGORIES_BY_TYPE } from '../lib/shopTypes'
 import ImageUpload from './ImageUpload'
 import ShopSettingsForm from './ShopSettingsForm'
 import ProductOptionsEditor from './ProductOptionsEditor'
+import LaybyProgressBar from './LaybyProgressBar'
+import ShopAnalytics from './ShopAnalytics'
 import { useOrderNotifications } from '../hooks/useOrderNotifications'
 
-const EMPTY_FORM = { name: '', category_id: '', price: '', stock_count: '', description: '', photo_url: '', options: [] }
+const EMPTY_FORM = { name: '', category_id: '', price: '', original_price: '', stock_count: '', description: '', photo_url: '', options: [] }
 
 const STATUS_CONFIG = {
   pending:     { label: 'Pending',     color: '#C9A84C', bg: 'rgba(201,168,76,0.1)',  border: 'rgba(201,168,76,0.2)',  next: 'attending',   nextLabel: 'Attending',   nextIcon: Phone },
@@ -21,6 +23,7 @@ function OrdersTab({ shopId, notifications, timeAgo }) {
   const [orders, setOrders] = useState(notifications)
   const [expandedId, setExpandedId] = useState(null)
   const [noteInputs, setNoteInputs] = useState({})
+  const [depositInputs, setDepositInputs] = useState({})
   const [saving, setSaving] = useState({})
   const [filterStatus, setFilterStatus] = useState('active') // 'active' | 'completed' | 'all'
 
@@ -41,6 +44,17 @@ function OrdersTab({ shopId, notifications, timeAgo }) {
     setOrders(prev => prev.map(o => o.id === orderId ? { ...o, notes: note } : o))
     setSaving(s => ({ ...s, [`note_${orderId}`]: false }))
     setNoteInputs(n => ({ ...n, [orderId]: '' }))
+  }
+
+  async function saveDeposit(orderId) {
+    const raw = depositInputs[orderId]
+    if (raw === undefined || raw === '') return
+    const amount = Number(raw)
+    if (Number.isNaN(amount) || amount < 0) return
+    setSaving(s => ({ ...s, [`deposit_${orderId}`]: true }))
+    await supabase.from('orders').update({ deposit_paid: amount }).eq('id', orderId)
+    setOrders(prev => prev.map(o => o.id === orderId ? { ...o, deposit_paid: amount } : o))
+    setSaving(s => ({ ...s, [`deposit_${orderId}`]: false }))
   }
 
   async function cancelOrder(orderId) {
@@ -145,6 +159,11 @@ function OrdersTab({ shopId, notifications, timeAgo }) {
                         <Pencil size={11} strokeWidth={1.75} /> {order.notes}
                       </p>
                     )}
+                    {order.deposit_paid != null && !isExpanded && (
+                      <div style={{ marginTop: 6, maxWidth: 220 }}>
+                        <LaybyProgressBar compact paid={order.deposit_paid} total={Number(order.products?.price ?? 0) * order.quantity} />
+                      </div>
+                    )}
                   </div>
                   <span style={{ color: '#555', flexShrink: 0, display: 'flex' }}>{isExpanded ? <ChevronUp size={16} strokeWidth={1.75} /> : <ChevronDown size={16} strokeWidth={1.75} />}</span>
                 </div>
@@ -208,6 +227,31 @@ function OrdersTab({ shopId, notifications, timeAgo }) {
                           </button>
                         </div>
                       </div>
+
+                      {/* Payment plan */}
+                      {order.deposit_paid != null && (
+                        <div style={{ marginTop: 12 }}>
+                          <LaybyProgressBar paid={order.deposit_paid} total={Number(order.products?.price ?? 0) * order.quantity} />
+                          <div style={{ display: 'flex', gap: 6, marginTop: 8 }}>
+                            <input
+                              type="number" min={0} step="0.01"
+                              value={depositInputs[order.id] ?? ''}
+                              onChange={(e) => setDepositInputs(d => ({ ...d, [order.id]: e.target.value }))}
+                              onKeyDown={(e) => e.key === 'Enter' && saveDeposit(order.id)}
+                              placeholder={`Update amount paid (currently ${order.deposit_paid})`}
+                              style={{ flex: 1, background: '#161616', border: '1px solid #2A2A2A', borderRadius: 8, color: '#FAFAF8', fontSize: 12, padding: '8px 10px', outline: 'none' }}
+                            />
+                            <button
+                              onClick={() => saveDeposit(order.id)}
+                              disabled={!depositInputs[order.id] || saving[`deposit_${order.id}`]}
+                              style={{ fontSize: 12, padding: '8px 12px', borderRadius: 8, border: 'none', cursor: 'pointer',
+                                background: depositInputs[order.id] ? 'linear-gradient(135deg, #C9A84C, #9A7A2E)' : '#2A2A2A',
+                                color: depositInputs[order.id] ? '#0A0A0A' : '#555' }}>
+                              Save
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
@@ -271,7 +315,7 @@ export default function ShopDashboard({ shop, onShopUpdated }) {
 
   function startEdit(p) {
     setEditingId(p.id)
-    setForm({ name: p.name, category_id: p.category_id, price: p.price, stock_count: p.stock_count, description: p.description ?? '', photo_url: p.photo_url ?? '', options: p.options ?? [] })
+    setForm({ name: p.name, category_id: p.category_id, price: p.price, original_price: p.original_price ?? '', stock_count: p.stock_count, description: p.description ?? '', photo_url: p.photo_url ?? '', options: p.options ?? [] })
     setError(null)
     setShowForm(true)
   }
@@ -285,7 +329,8 @@ export default function ShopDashboard({ shop, onShopUpdated }) {
     const cleanOptions = form.options
       .filter((g) => g.name.trim() && g.values.length > 0)
       .map((g) => ({ name: g.name.trim(), values: g.values }))
-    const payload = { shop_id: shop.id, name: form.name, category_id: form.category_id, price: Number(form.price), stock_count: Number(form.stock_count), description: form.description || null, photo_url: form.photo_url || null, options: cleanOptions, is_active: true }
+    const originalPrice = form.original_price ? Number(form.original_price) : null
+    const payload = { shop_id: shop.id, name: form.name, category_id: form.category_id, price: Number(form.price), original_price: originalPrice && originalPrice > Number(form.price) ? originalPrice : null, stock_count: Number(form.stock_count), description: form.description || null, photo_url: form.photo_url || null, options: cleanOptions, is_active: true }
     const { error } = editingId
       ? await supabase.from('products').update(payload).eq('id', editingId)
       : await supabase.from('products').insert(payload)
@@ -316,8 +361,29 @@ export default function ShopDashboard({ shop, onShopUpdated }) {
     return `${Math.floor(hrs / 24)}d ago`
   }
 
+  const activeOrderCount = notifications.filter((o) => ['pending', 'attending', 'in_progress'].includes(o.status)).length
+
   return (
     <div>
+      {/* KPI cards */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 10, marginBottom: 20 }}>
+        {[
+          { icon: Package, label: 'Products', value: products.length },
+          { icon: Bell, label: 'Active orders', value: activeOrderCount },
+          { icon: ShoppingBag, label: 'Recent orders', value: notifications.length },
+        ].map((kpi) => (
+          <div key={kpi.label} style={{ display: 'flex', alignItems: 'center', gap: 12, background: '#111', border: '1px solid #2A2A2A', borderRadius: 14, padding: '14px 16px' }}>
+            <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(201,168,76,0.1)', border: '1px solid rgba(201,168,76,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <kpi.icon size={17} strokeWidth={1.75} color="#C9A84C" />
+            </div>
+            <div>
+              <p style={{ fontSize: 20, fontWeight: 700, color: '#FAFAF8', lineHeight: 1.1 }}>{kpi.value}</p>
+              <p style={{ fontSize: 11, color: '#A0A09A' }}>{kpi.label}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
       {/* Tab bar */}
       <div style={{ display: 'flex', gap: 4, background: '#161616', borderRadius: 14, padding: 4, width: 'fit-content', marginBottom: 24, border: '1px solid #2A2A2A' }}>
         <button onClick={() => setTab('products')}
@@ -337,6 +403,12 @@ export default function ShopDashboard({ shop, onShopUpdated }) {
             </span>
           )}
         </button>
+        <button onClick={() => setTab('analytics')}
+          style={{ fontSize: 13, fontWeight: 600, padding: '8px 18px', borderRadius: 10, border: 'none', cursor: 'pointer', transition: 'all 0.2s',
+            background: tab === 'analytics' ? 'linear-gradient(135deg, #C9A84C, #9A7A2E)' : 'transparent',
+            color: tab === 'analytics' ? '#0A0A0A' : '#A0A09A' }}>
+          Analytics
+        </button>
         <button onClick={() => setTab('settings')}
           style={{ fontSize: 13, fontWeight: 600, padding: '8px 18px', borderRadius: 10, border: 'none', cursor: 'pointer', transition: 'all 0.2s',
             background: tab === 'settings' ? 'linear-gradient(135deg, #C9A84C, #9A7A2E)' : 'transparent',
@@ -344,6 +416,10 @@ export default function ShopDashboard({ shop, onShopUpdated }) {
           Settings
         </button>
       </div>
+
+      {tab === 'analytics' && (
+        <ShopAnalytics shopId={shop.id} />
+      )}
 
       {tab === 'settings' && (
         <ShopSettingsForm shop={shop} onUpdated={onShopUpdated} />
@@ -384,6 +460,11 @@ export default function ShopDashboard({ shop, onShopUpdated }) {
                     <label style={LABEL}>Price (N$)</label>
                     <input required type="number" min={0} value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })}
                       style={INPUT} placeholder="0" />
+                  </div>
+                  <div>
+                    <label style={LABEL}>Was price (optional — shows as a sale)</label>
+                    <input type="number" min={0} value={form.original_price} onChange={(e) => setForm({ ...form, original_price: e.target.value })}
+                      style={INPUT} placeholder="Leave blank if not on sale" />
                   </div>
                   <div>
                     <label style={LABEL}>Stock count</label>
@@ -434,7 +515,7 @@ export default function ShopDashboard({ shop, onShopUpdated }) {
                 <div key={p.id} style={{ display: 'flex', alignItems: 'center', gap: 12, background: '#111', border: '1px solid #2A2A2A', borderRadius: 12, padding: '12px 14px', opacity: p.is_active ? 1 : 0.5 }}>
                   <div style={{ width: 40, height: 40, borderRadius: 10, background: '#1A1A1A', flexShrink: 0, overflow: 'hidden', border: '1px solid #2A2A2A' }}>
                     {p.photo_url
-                      ? <img src={p.photo_url} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      ? <img src={p.photo_url} alt={p.name} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                       : <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Package size={16} strokeWidth={1.5} color="#A0A09A" /></div>}
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>

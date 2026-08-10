@@ -1,15 +1,21 @@
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { Heart, Package, User, ShoppingCart } from 'lucide-react'
+import { Heart, User, ShoppingCart, Check, TrendingDown, FileText, Link2 } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
 import { useMyOrders } from '../hooks/useMyOrders'
 import { useWishlist } from '../hooks/useWishlist'
 import { useProfile } from '../hooks/useProfile'
+import { useCurrency } from '../hooks/useCurrency'
+import { CURRENCIES } from '../lib/currency'
 import Navbar from '../components/Navbar'
 import AuthForm from '../components/AuthForm'
 import ProductCard from '../components/ProductCard'
 import ProfileSettingsForm from '../components/ProfileSettingsForm'
+import EmptyState from '../components/EmptyState'
+import Footer from '../components/Footer'
+import LaybyProgressBar from '../components/LaybyProgressBar'
+import OrderSummaryModal from '../components/OrderSummaryModal'
 
 const STATUS_LABEL = {
   pending: 'Pending', attending: 'Attending', in_progress: 'In Progress',
@@ -26,41 +32,65 @@ function timeAgo(dateStr) {
 
 function WishlistTab({ userId }) {
   const { productIds, loading: wishlistLoading } = useWishlist(userId)
+  const { format } = useCurrency()
   const [products, setProducts] = useState([])
+  const [priceAtAdd, setPriceAtAdd] = useState({})
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (wishlistLoading) return
     const ids = Array.from(productIds)
     if (ids.length === 0) { setProducts([]); setLoading(false); return }
-    supabase
-      .from('products')
-      .select('id, name, description, price, photo_url, stock_count, category_id, shops(id, name, location, shop_type)')
-      .in('id', ids)
-      .eq('is_active', true)
-      .then(({ data }) => { setProducts(data ?? []); setLoading(false) })
-  }, [wishlistLoading, productIds])
+    Promise.all([
+      supabase
+        .from('products')
+        .select('id, name, description, price, original_price, photo_url, stock_count, category_id, created_at, shops(id, name, location, shop_type, is_verified)')
+        .in('id', ids)
+        .eq('is_active', true),
+      supabase.from('wishlist_items').select('product_id, price_at_add').eq('buyer_id', userId).in('product_id', ids),
+    ]).then(([{ data: productsData }, { data: wishlistRows }]) => {
+      setProducts(productsData ?? [])
+      setPriceAtAdd(Object.fromEntries((wishlistRows ?? []).map((r) => [r.product_id, r.price_at_add])))
+      setLoading(false)
+    })
+  }, [wishlistLoading, productIds, userId])
 
   if (loading) return <p style={{ fontSize: 13, color: 'var(--white-dim)' }}>Loading…</p>
 
   if (products.length === 0) {
     return (
-      <div style={{ textAlign: 'center', padding: '48px 0' }}>
-        <Heart size={28} strokeWidth={1.5} color="var(--white-dim)" style={{ marginBottom: 10 }} />
-        <p style={{ fontSize: 14, color: 'var(--white-dim)' }}>No saved products yet.</p>
-      </div>
+      <EmptyState
+        compact
+        variant="basket"
+        title="No saved products yet"
+        description="Tap the heart on any product to save it here for later."
+      />
     )
   }
 
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 12 }}>
-      {products.map((p) => <ProductCard key={p.id} product={p} />)}
+      {products.map((p) => {
+        const savedAt = priceAtAdd[p.id]
+        const droppedPrice = savedAt != null && Number(p.price) < Number(savedAt)
+        return (
+          <div key={p.id}>
+            {droppedPrice && (
+              <p style={{ fontSize: 11, color: 'var(--gold)', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 4 }}>
+                <TrendingDown size={12} strokeWidth={2} /> Dropped from {format(savedAt)}
+              </p>
+            )}
+            <ProductCard product={p} />
+          </div>
+        )
+      })}
     </div>
   )
 }
 
 function OrdersTab({ userId }) {
   const { orders, loading } = useMyOrders(userId)
+  const [summaryOrder, setSummaryOrder] = useState(null)
 
   if (loading) return <p style={{ fontSize: 13, color: 'var(--white-dim)' }}>Loading…</p>
 
@@ -70,10 +100,14 @@ function OrdersTab({ userId }) {
         Only requests placed while logged in appear here.
       </p>
       {orders.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '48px 0' }}>
-          <Package size={28} strokeWidth={1.5} color="var(--white-dim)" style={{ marginBottom: 10 }} />
-          <p style={{ fontSize: 14, color: 'var(--white-dim)' }}>No orders yet.</p>
-        </div>
+        <EmptyState
+          compact
+          variant="basket"
+          title="No orders yet"
+          description="Requests you send to shops will show up here once you're logged in."
+          actionLabel="Browse products"
+          actionTo="/"
+        />
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {orders.map((o) => (
@@ -92,10 +126,77 @@ function OrdersTab({ userId }) {
                   {Object.entries(o.selected_options).map(([k, v]) => `${k}: ${v}`).join(' · ')}
                 </p>
               )}
+              {o.deposit_paid != null && (
+                <div style={{ marginTop: 10 }}>
+                  <LaybyProgressBar compact paid={o.deposit_paid} total={Number(o.products?.price ?? 0) * o.quantity} />
+                </div>
+              )}
+              <button
+                onClick={() => setSummaryOrder(o)}
+                style={{ fontSize: 11, color: 'var(--gold)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginTop: 10, display: 'flex', alignItems: 'center', gap: 4 }}
+              >
+                <FileText size={11} strokeWidth={1.75} /> View order summary
+              </button>
             </div>
           ))}
         </div>
       )}
+
+      {summaryOrder && <OrderSummaryModal order={summaryOrder} onClose={() => setSummaryOrder(null)} />}
+    </div>
+  )
+}
+
+function PreferencesTab({ userId }) {
+  const { currency, setCurrency } = useCurrency()
+  const [copied, setCopied] = useState(false)
+  const referralLink = `${window.location.origin}/?ref=${userId}`
+
+  async function handleCopyLink() {
+    await navigator.clipboard.writeText(referralLink)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+      <div style={{ background: 'var(--black-card)', border: '1px solid var(--black-border)', borderRadius: 16, padding: 20, maxWidth: 420 }}>
+        <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--white)', marginBottom: 4 }}>Display currency</p>
+        <p style={{ fontSize: 12, color: 'var(--white-dim)', marginBottom: 14, lineHeight: 1.5 }}>
+          Changes how prices are shown while browsing. Shops still arrange payment directly with you in N$ or R.
+        </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {Object.values(CURRENCIES).map((c) => (
+            <button
+              key={c.code}
+              onClick={() => setCurrency(c.code)}
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between', textAlign: 'left',
+                fontSize: 13, padding: '10px 14px', borderRadius: 10, cursor: 'pointer',
+                border: currency === c.code ? '1px solid var(--gold-dark)' : '1px solid var(--black-border)',
+                background: currency === c.code ? 'rgba(201,168,76,0.1)' : 'transparent',
+                color: currency === c.code ? 'var(--gold)' : 'var(--white-dim)',
+              }}
+            >
+              {c.label}
+              {currency === c.code && <Check size={14} strokeWidth={2} />}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ background: 'var(--black-card)', border: '1px solid var(--black-border)', borderRadius: 16, padding: 20, maxWidth: 420 }}>
+        <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--white)', marginBottom: 4 }}>Invite a friend</p>
+        <p style={{ fontSize: 12, color: 'var(--white-dim)', marginBottom: 14, lineHeight: 1.5 }}>
+          Share NamMarketHub with someone who'd like it.
+        </p>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <input readOnly value={referralLink} className="input-dark" style={{ flex: 1, padding: '10px 14px', fontSize: 12 }} onFocus={(e) => e.target.select()} />
+          <button onClick={handleCopyLink} className="btn-outline" style={{ fontSize: 12, padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 5, flexShrink: 0 }}>
+            {copied ? <Check size={13} strokeWidth={2} /> : <Link2 size={13} strokeWidth={1.75} />} {copied ? 'Copied' : 'Copy'}
+          </button>
+        </div>
+      </div>
     </div>
   )
 }
@@ -172,7 +273,7 @@ export default function Account() {
         </div>
 
         <div style={{ display: 'flex', gap: 4, background: 'var(--black-card)', borderRadius: 14, padding: 4, width: 'fit-content', marginBottom: 24, border: '1px solid var(--black-border)' }}>
-          {[['orders', 'Orders'], ['wishlist', 'Wishlist'], ['profile', 'Profile']].map(([val, label]) => (
+          {[['orders', 'Orders'], ['wishlist', 'Wishlist'], ['profile', 'Profile'], ['preferences', 'Preferences']].map(([val, label]) => (
             <button key={val} onClick={() => setTab(val)}
               style={{ fontSize: 13, fontWeight: 600, padding: '8px 18px', borderRadius: 10, border: 'none', cursor: 'pointer',
                 background: tab === val ? 'linear-gradient(135deg, var(--gold), var(--gold-dark))' : 'transparent',
@@ -185,6 +286,9 @@ export default function Account() {
         {tab === 'orders' && <OrdersTab userId={user.id} />}
         {tab === 'wishlist' && <WishlistTab userId={user.id} />}
         {tab === 'profile' && <ProfileSettingsForm userId={user.id} profile={profile} onSaved={refetchProfile} />}
+        {tab === 'preferences' && <PreferencesTab userId={user.id} />}
+
+        <Footer />
       </div>
     </>
   )
