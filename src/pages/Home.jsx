@@ -86,11 +86,8 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Gold divider */}
-        <div className="gold-divider" style={{ marginBottom: 32 }} />
-
         {/* Shop type filter */}
-        <div style={{ marginBottom: 28 }}>
+        <div style={{ marginBottom: 28, marginTop: 40 }}>
           <p style={{ fontSize: 11, color: 'var(--gold-ink)', fontFamily: 'ui-monospace, monospace', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 12 }}>
             Shop by category
           </p>
@@ -171,10 +168,8 @@ export default function Home() {
           <ShopStrip shopType={shopType} location={location} />
         </section>
 
-        <div className="gold-divider" style={{ marginBottom: 28 }} />
-
         {/* Search */}
-        <div style={{ marginBottom: 16 }}>
+        <div style={{ marginBottom: 16, marginTop: 40 }}>
           <div style={{ position: 'relative', maxWidth: 480 }}>
             <Search size={15} strokeWidth={1.75} style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', color: 'var(--white-dim)' }} />
             <input
@@ -219,10 +214,8 @@ export default function Home() {
         {/* Product grid */}
         <ProductGrid category={category} searchQuery={searchQuery} shopType={shopType} />
 
-        <div className="gold-divider" style={{ margin: '48px 0 32px' }} />
-
         {/* Trust badges */}
-        <div style={{ marginBottom: 32 }}>
+        <div style={{ marginBottom: 32, marginTop: 56 }}>
           <TrustBadges />
         </div>
 

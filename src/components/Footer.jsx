@@ -14,10 +14,6 @@ export default function Footer() {
 
   return (
     <footer style={{ marginTop: 64 }}>
-      {/* Soft fade-out divider — matches the .gold-divider used between sections
-          elsewhere, instead of a hard edge-to-edge border line. */}
-      <div className="gold-divider" style={{ marginBottom: 32 }} />
-
       <div style={{ background: 'var(--black-card)', border: '1px solid var(--black-border)', borderRadius: 20, padding: '32px 28px 20px' }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '32px 56px', marginBottom: 24 }}>
           <div style={{ flex: '1 1 240px', maxWidth: 320 }}>

@@ -146,9 +146,7 @@ export default function Cart() {
               </div>
             ))}
 
-            <div className="gold-divider" style={{ marginBottom: 20 }} />
-
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 24 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 24, marginTop: 32 }}>
               <span style={{ fontSize: 14, color: 'var(--white-dim)' }}>Subtotal</span>
               <span className="gold-text" style={{ fontSize: 18, fontWeight: 700 }}>{format(subtotal)}</span>
             </div>

@@ -78,9 +78,7 @@ export default function ShopDetail() {
           </a>
         )}
 
-        <div className="gold-divider" style={{ marginBottom: 28, marginTop: shop.whatsapp_number ? 0 : 16 }} />
-
-        <p style={{ fontSize: 11, color: 'var(--gold-ink)', fontFamily: 'ui-monospace, monospace', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>
+        <p style={{ fontSize: 11, color: 'var(--gold-ink)', fontFamily: 'ui-monospace, monospace', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16, marginTop: shop.whatsapp_number ? 32 : 40 }}>
           {products.length} listing{products.length !== 1 ? 's' : ''}
         </p>
 
