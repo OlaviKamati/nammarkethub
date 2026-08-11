@@ -43,7 +43,7 @@ export default function ProductCard({ product }) {
         {/* Out of stock overlay */}
         {!inStock && (
           <div style={{ position: 'absolute', inset: 0, background: 'rgba(10,10,10,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span className="tag" style={{ color: 'var(--white-dim)', border: '1px solid var(--black-border)', padding: '4px 10px', borderRadius: 99 }}>Out of stock</span>
+            <span className="tag" style={{ color: 'var(--nav-ink-dim)', border: '1px solid var(--black-border)', padding: '4px 10px', borderRadius: 99 }}>Out of stock</span>
           </div>
         )}
 
@@ -76,7 +76,7 @@ export default function ProductCard({ product }) {
         <button
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuickView(true) }}
           aria-label="Quick view"
-          style={{ position: 'absolute', top: 8, right: 44, width: 28, height: 28, borderRadius: '50%', border: 'none', cursor: 'pointer', background: 'rgba(10,10,10,0.7)', color: 'var(--white-dim)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          style={{ position: 'absolute', top: 8, right: 44, width: 28, height: 28, borderRadius: '50%', border: 'none', cursor: 'pointer', background: 'rgba(10,10,10,0.7)', color: 'var(--nav-ink-dim)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
         >
           <Eye size={13} strokeWidth={1.75} />
         </button>
@@ -97,7 +97,7 @@ export default function ProductCard({ product }) {
             {isSale && <span style={{ fontSize: 11, color: 'var(--white-dim)', textDecoration: 'line-through' }}>{format(product.original_price)}</span>}
           </span>
           {inStock && (
-            <span className="tag" style={{ color: 'var(--gold-dark)', background: 'rgba(201,168,76,0.08)', padding: '2px 7px', borderRadius: 6, border: '1px solid rgba(201,168,76,0.15)' }}>
+            <span className="tag" style={{ color: 'var(--gold-ink)', background: 'rgba(201,168,76,0.08)', padding: '2px 7px', borderRadius: 6, border: '1px solid rgba(201,168,76,0.15)' }}>
               {product.stock_count} left
             </span>
           )}

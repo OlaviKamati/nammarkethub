@@ -2,10 +2,10 @@ const INPUT = {
   width: '100%',
   padding: '9px 12px',
   fontSize: 13,
-  background: '#1A1A1A',
-  border: '1px solid #2A2A2A',
+  background: 'var(--black-card)',
+  border: '1px solid var(--black-border)',
   borderRadius: 8,
-  color: '#FAFAF8',
+  color: 'var(--white)',
   outline: 'none',
 }
 
@@ -26,7 +26,7 @@ export default function ProductOptionsEditor({ options, onChange }) {
 
   return (
     <div>
-      <label style={{ fontSize: 11, color: '#A0A09A', display: 'block', marginBottom: 6 }}>
+      <label style={{ fontSize: 11, color: 'var(--white-dim)', display: 'block', marginBottom: 6 }}>
         Options (e.g. Color, Size, Flavour) — optional
       </label>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -52,7 +52,7 @@ export default function ProductOptionsEditor({ options, onChange }) {
         ))}
       </div>
       <button type="button" onClick={addGroup}
-        style={{ fontSize: 12, color: '#C9A84C', background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginTop: 8 }}>
+        style={{ fontSize: 12, color: 'var(--gold-ink)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginTop: 8 }}>
         + Add option group
       </button>
     </div>

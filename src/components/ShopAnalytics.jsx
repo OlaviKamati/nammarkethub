@@ -24,7 +24,7 @@ export default function ShopAnalytics({ shopId }) {
       .then(({ data }) => { setOrders(data ?? []); setLoading(false) })
   }, [shopId])
 
-  if (loading) return <p style={{ fontSize: 13, color: '#A0A09A' }}>Loading…</p>
+  if (loading) return <p style={{ fontSize: 13, color: 'var(--white-dim)' }}>Loading…</p>
 
   const completed = orders.filter((o) => o.status === 'completed')
   const revenue = completed.reduce((sum, o) => sum + Number(o.products?.price ?? 0) * o.quantity, 0)
@@ -45,33 +45,33 @@ export default function ShopAnalytics({ shopId }) {
           { icon: ShoppingBag, label: 'Total requests', value: orders.length },
           { icon: Package, label: 'Resolved orders', value: completed.length },
         ].map((kpi) => (
-          <div key={kpi.label} style={{ display: 'flex', alignItems: 'center', gap: 12, background: '#111', border: '1px solid #2A2A2A', borderRadius: 14, padding: '14px 16px' }}>
+          <div key={kpi.label} style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'var(--black-soft)', border: '1px solid var(--black-border)', borderRadius: 14, padding: '14px 16px' }}>
             <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(201,168,76,0.1)', border: '1px solid rgba(201,168,76,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <kpi.icon size={17} strokeWidth={1.75} color="#C9A84C" />
+              <kpi.icon size={17} strokeWidth={1.75} color="var(--gold)" />
             </div>
             <div>
-              <p style={{ fontSize: 18, fontWeight: 700, color: '#FAFAF8', lineHeight: 1.1 }}>{kpi.value}</p>
-              <p style={{ fontSize: 11, color: '#A0A09A' }}>{kpi.label}</p>
+              <p style={{ fontSize: 18, fontWeight: 700, color: 'var(--white)', lineHeight: 1.1 }}>{kpi.value}</p>
+              <p style={{ fontSize: 11, color: 'var(--white-dim)' }}>{kpi.label}</p>
             </div>
           </div>
         ))}
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 16 }}>
-        <div style={{ background: '#111', border: '1px solid #2A2A2A', borderRadius: 14, padding: 18 }}>
-          <p style={{ fontSize: 13, fontWeight: 700, color: '#FAFAF8', marginBottom: 14 }}>Orders by status</p>
+        <div style={{ background: 'var(--black-soft)', border: '1px solid var(--black-border)', borderRadius: 14, padding: 18 }}>
+          <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--white)', marginBottom: 14 }}>Orders by status</p>
           {orders.length === 0 ? (
-            <p style={{ fontSize: 12, color: '#A0A09A' }}>No orders yet.</p>
+            <p style={{ fontSize: 12, color: 'var(--white-dim)' }}>No orders yet.</p>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {statusCounts.map(({ status, count }) => (
                 <div key={status}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, marginBottom: 4 }}>
-                    <span style={{ color: '#A0A09A' }}>{STATUS_LABEL[status]}</span>
-                    <span style={{ color: '#FAFAF8', fontWeight: 600 }}>{count}</span>
+                    <span style={{ color: 'var(--white-dim)' }}>{STATUS_LABEL[status]}</span>
+                    <span style={{ color: 'var(--white)', fontWeight: 600 }}>{count}</span>
                   </div>
-                  <div style={{ height: 5, background: '#1A1A1A', borderRadius: 99, overflow: 'hidden' }}>
-                    <div style={{ width: orders.length ? `${(count / orders.length) * 100}%` : '0%', height: '100%', background: 'linear-gradient(90deg, #9A7A2E, #C9A84C)', borderRadius: 99 }} />
+                  <div style={{ height: 5, background: 'var(--black-card)', borderRadius: 99, overflow: 'hidden' }}>
+                    <div style={{ width: orders.length ? `${(count / orders.length) * 100}%` : '0%', height: '100%', background: 'linear-gradient(90deg, var(--gold-dark), var(--gold))', borderRadius: 99 }} />
                   </div>
                 </div>
               ))}
@@ -79,18 +79,18 @@ export default function ShopAnalytics({ shopId }) {
           )}
         </div>
 
-        <div style={{ background: '#111', border: '1px solid #2A2A2A', borderRadius: 14, padding: 18 }}>
-          <p style={{ fontSize: 13, fontWeight: 700, color: '#FAFAF8', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 6 }}>
-            <TrendingUp size={14} strokeWidth={1.75} color="#C9A84C" /> Most requested products
+        <div style={{ background: 'var(--black-soft)', border: '1px solid var(--black-border)', borderRadius: 14, padding: 18 }}>
+          <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--white)', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 6 }}>
+            <TrendingUp size={14} strokeWidth={1.75} color="var(--gold)" /> Most requested products
           </p>
           {topProducts.length === 0 ? (
-            <p style={{ fontSize: 12, color: '#A0A09A' }}>No orders yet.</p>
+            <p style={{ fontSize: 12, color: 'var(--white-dim)' }}>No orders yet.</p>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {topProducts.map(([name, qty]) => (
                 <div key={name} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
-                  <span style={{ color: '#FAFAF8', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginRight: 8 }}>{name}</span>
-                  <span style={{ color: '#C9A84C', fontWeight: 600, flexShrink: 0 }}>{qty} requested</span>
+                  <span style={{ color: 'var(--white)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginRight: 8 }}>{name}</span>
+                  <span style={{ color: 'var(--gold-ink)', fontWeight: 600, flexShrink: 0 }}>{qty} requested</span>
                 </div>
               ))}
             </div>

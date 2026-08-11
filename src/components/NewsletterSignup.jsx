@@ -20,7 +20,7 @@ export default function NewsletterSignup() {
       <p style={{ fontSize: 15, fontWeight: 700, color: 'var(--white)', marginBottom: 6 }}>Stay in the loop</p>
       <p style={{ fontSize: 13, color: 'var(--white-dim)', marginBottom: 16 }}>New shops, new products, no spam.</p>
       {done ? (
-        <p style={{ fontSize: 13, color: 'var(--gold)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5 }}>You're subscribed <Check size={14} strokeWidth={2} /></p>
+        <p style={{ fontSize: 13, color: 'var(--gold-ink)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5 }}>You're subscribed <Check size={14} strokeWidth={2} /></p>
       ) : (
         <form onSubmit={handleSubmit} style={{ display: 'flex', gap: 8, maxWidth: 360, margin: '0 auto' }}>
           <input

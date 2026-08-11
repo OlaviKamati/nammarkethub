@@ -60,7 +60,7 @@ export default function ProductDetail() {
         <Navbar />
         <div style={{ maxWidth: 800, margin: '60px auto', textAlign: 'center' }}>
           <p style={{ color: '#ef4444', fontSize: 14, marginBottom: 16 }}>Product not found.</p>
-          <Link to="/" style={{ color: 'var(--gold)', fontSize: 14 }}>Back to marketplace</Link>
+          <Link to="/" style={{ color: 'var(--gold-ink)', fontSize: 14 }}>Back to marketplace</Link>
         </div>
       </>
     )
@@ -88,7 +88,7 @@ export default function ProductDetail() {
               {product.photo_url ? (
                 <img src={product.photo_url} alt={product.name} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               ) : (
-                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #111, #1A1500)' }}><Package size={48} strokeWidth={1.5} color="var(--white-dim)" /></div>
+                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #111, #1A1500)' }}><Package size={48} strokeWidth={1.5} color="var(--nav-ink-dim)" /></div>
               )}
               <WishlistButton productId={product.id} price={product.price} iconSize={17} style={{ position: 'absolute', top: 12, right: 12, width: 36, height: 36 }} />
             </div>
@@ -96,7 +96,7 @@ export default function ProductDetail() {
             {/* Shop info below image */}
             {shop && (
               <div style={{ marginTop: 16, padding: '16px 20px', background: 'var(--black-card)', borderRadius: 16, border: '1px solid var(--black-border)' }}>
-                <p style={{ fontSize: 10, color: 'var(--gold)', fontFamily: 'ui-monospace, monospace', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8 }}>Sold by</p>
+                <p style={{ fontSize: 10, color: 'var(--gold-ink)', fontFamily: 'ui-monospace, monospace', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8 }}>Sold by</p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 2, flexWrap: 'wrap' }}>
                   <Link to={`/shop/${shop.id}`} style={{ fontSize: 15, fontWeight: 600, color: 'var(--white)', textDecoration: 'none' }}>{shop.name}</Link>
                   {shop.is_verified && <VerifiedBadge />}
@@ -107,7 +107,7 @@ export default function ProductDetail() {
                     href={`https://wa.me/${shop.whatsapp_number.replace(/\D/g, '')}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--gold)', textDecoration: 'none', padding: '6px 14px', border: '1px solid rgba(201,168,76,0.3)', borderRadius: 99, background: 'rgba(201,168,76,0.08)' }}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--gold-ink)', textDecoration: 'none', padding: '6px 14px', border: '1px solid rgba(201,168,76,0.3)', borderRadius: 99, background: 'rgba(201,168,76,0.08)' }}
                   >
                     <MessageCircle size={14} strokeWidth={1.75} /> WhatsApp the shop
                   </a>
@@ -119,7 +119,7 @@ export default function ProductDetail() {
           {/* Right — info + order form */}
           <div>
             <div style={{ marginBottom: 8 }}>
-              <span className="tag" style={{ color: 'var(--gold)', background: 'rgba(201,168,76,0.1)', padding: '3px 10px', borderRadius: 99, border: '1px solid rgba(201,168,76,0.2)', display: 'inline-block', marginBottom: 12 }}>
+              <span className="tag" style={{ color: 'var(--gold-ink)', background: 'rgba(201,168,76,0.1)', padding: '3px 10px', borderRadius: 99, border: '1px solid rgba(201,168,76,0.2)', display: 'inline-block', marginBottom: 12 }}>
                 {product.category_id}
               </span>
             </div>
@@ -132,7 +132,7 @@ export default function ProductDetail() {
               {product.original_price > product.price && (
                 <span style={{ fontSize: 15, color: 'var(--white-dim)', textDecoration: 'line-through' }}>{format(product.original_price)}</span>
               )}
-              <span className="tag" style={{ color: product.stock_count > 0 ? 'var(--gold-dark)' : 'var(--white-dim)', background: product.stock_count > 0 ? 'rgba(201,168,76,0.1)' : 'rgba(255,255,255,0.05)', padding: '3px 10px', borderRadius: 6, border: `1px solid ${product.stock_count > 0 ? 'rgba(201,168,76,0.2)' : 'var(--black-border)'}` }}>
+              <span className="tag" style={{ color: product.stock_count > 0 ? 'var(--gold-ink)' : 'var(--white-dim)', background: product.stock_count > 0 ? 'rgba(201,168,76,0.1)' : 'rgba(255,255,255,0.05)', padding: '3px 10px', borderRadius: 6, border: `1px solid ${product.stock_count > 0 ? 'rgba(201,168,76,0.2)' : 'var(--black-border)'}` }}>
                 {product.stock_count > 0 ? `${product.stock_count} in stock` : 'Out of stock'}
               </span>
             </div>
@@ -193,8 +193,8 @@ export default function ProductDetail() {
                     {added ? <><Check size={15} strokeWidth={2} /> Added</> : <><ShoppingCart size={15} strokeWidth={1.75} /> Add to cart</>}
                   </button>
                   {added && (
-                    <p style={{ fontSize: 12, color: 'var(--gold)', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
-                      Added to cart · <Link to="/cart" style={{ color: 'var(--gold)', display: 'inline-flex', alignItems: 'center', gap: 3 }}>View cart <ArrowRight size={12} strokeWidth={1.75} /></Link>
+                    <p style={{ fontSize: 12, color: 'var(--gold-ink)', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
+                      Added to cart · <Link to="/cart" style={{ color: 'var(--gold-ink)', display: 'inline-flex', alignItems: 'center', gap: 3 }}>View cart <ArrowRight size={12} strokeWidth={1.75} /></Link>
                     </p>
                   )}
                   <p style={{ fontSize: 11, color: 'var(--white-dim)', textAlign: 'center' }}>

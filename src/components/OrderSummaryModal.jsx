@@ -49,7 +49,7 @@ export default function OrderSummaryModal({ order, onClose }) {
 
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 20 }}>
           <span style={{ fontSize: 13, color: 'var(--white-dim)' }}>Status</span>
-          <span style={{ fontSize: 13, color: 'var(--gold)', fontWeight: 600 }}>{STATUS_LABEL[order.status] ?? order.status}</span>
+          <span style={{ fontSize: 13, color: 'var(--gold-ink)', fontWeight: 600 }}>{STATUS_LABEL[order.status] ?? order.status}</span>
         </div>
 
         <p style={{ fontSize: 11, color: 'var(--white-dim)', lineHeight: 1.5, marginBottom: 16 }}>

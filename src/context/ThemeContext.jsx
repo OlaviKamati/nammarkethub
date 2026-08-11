@@ -6,9 +6,9 @@ const STORAGE_KEY = 'nammarkethub_theme'
 
 function loadInitial() {
   try {
-    return localStorage.getItem(STORAGE_KEY) ?? 'dark'
+    return localStorage.getItem(STORAGE_KEY) ?? 'light'
   } catch {
-    return 'dark'
+    return 'light'
   }
 }
 

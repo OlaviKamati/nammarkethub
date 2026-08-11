@@ -91,7 +91,7 @@ export default function Home() {
 
         {/* Shop type filter */}
         <div style={{ marginBottom: 28 }}>
-          <p style={{ fontSize: 11, color: 'var(--gold)', fontFamily: 'ui-monospace, monospace', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 12 }}>
+          <p style={{ fontSize: 11, color: 'var(--gold-ink)', fontFamily: 'ui-monospace, monospace', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 12 }}>
             Shop by category
           </p>
           <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 4 }}>
@@ -132,7 +132,7 @@ export default function Home() {
         {/* Shops near you */}
         <section style={{ marginBottom: 36 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', marginBottom: 12 }}>
-            <p style={{ fontSize: 11, color: 'var(--gold)', fontFamily: 'ui-monospace, monospace', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+            <p style={{ fontSize: 11, color: 'var(--gold-ink)', fontFamily: 'ui-monospace, monospace', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
               Shops near you
             </p>
             {locations.length > 1 && (
@@ -145,7 +145,7 @@ export default function Home() {
                     padding: '5px 12px', borderRadius: 99, cursor: 'pointer',
                     border: location === 'all' ? 'none' : '1px solid var(--black-border)',
                     background: location === 'all' ? 'rgba(201,168,76,0.15)' : 'transparent',
-                    color: location === 'all' ? 'var(--gold)' : 'var(--white-dim)',
+                    color: location === 'all' ? 'var(--gold-ink)' : 'var(--white-dim)',
                   }}
                 >
                   <MapPin size={11} strokeWidth={1.75} /> All areas
@@ -159,7 +159,7 @@ export default function Home() {
                       padding: '5px 12px', borderRadius: 99, cursor: 'pointer',
                       border: location === loc ? 'none' : '1px solid var(--black-border)',
                       background: location === loc ? 'rgba(201,168,76,0.15)' : 'transparent',
-                      color: location === loc ? 'var(--gold)' : 'var(--white-dim)',
+                      color: location === loc ? 'var(--gold-ink)' : 'var(--white-dim)',
                     }}
                   >
                     {loc}
@@ -211,7 +211,7 @@ export default function Home() {
 
         {/* Section label */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-          <p style={{ fontSize: 11, color: 'var(--gold)', fontFamily: 'ui-monospace, monospace', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+          <p style={{ fontSize: 11, color: 'var(--gold-ink)', fontFamily: 'ui-monospace, monospace', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
             {searchQuery ? `Results for "${searchQuery}"` : 'All products'}
           </p>
         </div>

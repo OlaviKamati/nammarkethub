@@ -66,7 +66,7 @@ export default function LegalModal({ initialTab = 'terms', onClose }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
           {section.body.map(([heading, text]) => (
             <div key={heading}>
-              <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--gold)', marginBottom: 4 }}>{heading}</p>
+              <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--gold-ink)', marginBottom: 4 }}>{heading}</p>
               <p style={{ fontSize: 13, color: 'var(--white-dim)', lineHeight: 1.6 }}>{text}</p>
             </div>
           ))}

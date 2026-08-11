@@ -21,7 +21,7 @@ export default function CompareTray() {
               {p.photo_url ? (
                 <img src={p.photo_url} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               ) : (
-                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Package size={14} strokeWidth={1.5} color="var(--white-dim)" /></div>
+                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Package size={14} strokeWidth={1.5} color="var(--nav-ink-dim)" /></div>
               )}
               <button
                 onClick={() => removeFromCompare(p.id)}

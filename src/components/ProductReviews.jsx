@@ -102,7 +102,7 @@ export default function ProductReviews({ productId }) {
           </form>
         ) : (
           <p style={{ fontSize: 13, color: 'var(--white-dim)' }}>
-            <Link to="/account" style={{ color: 'var(--gold)' }}>Log in</Link> to leave a review.
+            <Link to="/account" style={{ color: 'var(--gold-ink)' }}>Log in</Link> to leave a review.
           </p>
         )}
       </div>

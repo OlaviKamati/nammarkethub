@@ -26,7 +26,7 @@ export default function WishlistButton({ productId, price, style, iconSize = 13 
       style={{
         width: 28, height: 28, borderRadius: '50%', border: 'none', cursor: 'pointer',
         background: 'rgba(10,10,10,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center',
-        color: active ? 'var(--gold)' : 'var(--white-dim)',
+        color: active ? 'var(--gold)' : 'var(--nav-ink-dim)',
         ...style,
       }}
     >

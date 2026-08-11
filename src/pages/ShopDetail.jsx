@@ -27,7 +27,7 @@ export default function ShopDetail() {
         <Navbar />
         <div style={{ maxWidth: 800, margin: '60px auto', textAlign: 'center' }}>
           <p style={{ color: '#ef4444', fontSize: 14, marginBottom: 16 }}>Shop not found.</p>
-          <Link to="/" style={{ color: 'var(--gold)', fontSize: 14 }}>Back to marketplace</Link>
+          <Link to="/" style={{ color: 'var(--gold-ink)', fontSize: 14 }}>Back to marketplace</Link>
         </div>
       </>
     )
@@ -72,7 +72,7 @@ export default function ShopDetail() {
             href={`https://wa.me/${shop.whatsapp_number.replace(/\D/g, '')}`}
             target="_blank"
             rel="noopener noreferrer"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--gold)', textDecoration: 'none', padding: '6px 14px', border: '1px solid rgba(201,168,76,0.3)', borderRadius: 99, background: 'rgba(201,168,76,0.08)', marginBottom: 24 }}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--gold-ink)', textDecoration: 'none', padding: '6px 14px', border: '1px solid rgba(201,168,76,0.3)', borderRadius: 99, background: 'rgba(201,168,76,0.08)', marginBottom: 24 }}
           >
             <MessageCircle size={14} strokeWidth={1.75} /> WhatsApp the shop
           </a>
@@ -80,7 +80,7 @@ export default function ShopDetail() {
 
         <div className="gold-divider" style={{ marginBottom: 28, marginTop: shop.whatsapp_number ? 0 : 16 }} />
 
-        <p style={{ fontSize: 11, color: 'var(--gold)', fontFamily: 'ui-monospace, monospace', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>
+        <p style={{ fontSize: 11, color: 'var(--gold-ink)', fontFamily: 'ui-monospace, monospace', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>
           {products.length} listing{products.length !== 1 ? 's' : ''}
         </p>
 

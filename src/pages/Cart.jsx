@@ -81,7 +81,7 @@ export default function Cart() {
           <p style={{ fontSize: 14, color: 'var(--white-dim)', marginBottom: 24 }}>
             The shop{Object.keys(groups).length > 1 ? 's' : ''} will contact you shortly to arrange payment & pickup.
           </p>
-          <Link to="/" style={{ color: 'var(--gold)', fontSize: 14, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+          <Link to="/" style={{ color: 'var(--gold-ink)', fontSize: 14, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
             <ArrowLeft size={14} strokeWidth={1.75} /> Back to marketplace
           </Link>
         </div>
@@ -107,7 +107,7 @@ export default function Cart() {
           <>
             {Object.entries(groups).map(([shopId, group]) => (
               <div key={shopId} style={{ marginBottom: 24 }}>
-                <p style={{ fontSize: 11, color: 'var(--gold)', fontFamily: 'ui-monospace, monospace', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 10 }}>
+                <p style={{ fontSize: 11, color: 'var(--gold-ink)', fontFamily: 'ui-monospace, monospace', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 10 }}>
                   {group.shop?.name ?? 'Unknown shop'}
                 </p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -117,7 +117,7 @@ export default function Cart() {
                         {item.product.photo_url ? (
                           <img src={item.product.photo_url} alt={item.product.name} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         ) : (
-                          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Package size={18} strokeWidth={1.5} color="var(--white-dim)" /></div>
+                          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Package size={18} strokeWidth={1.5} color="var(--nav-ink-dim)" /></div>
                         )}
                       </div>
                       <div style={{ flex: 1, minWidth: 0 }}>
@@ -127,7 +127,7 @@ export default function Cart() {
                             {Object.entries(item.selectedOptions).map(([k, v]) => `${k}: ${v}`).join(' · ')}
                           </p>
                         )}
-                        <p style={{ fontSize: 12, color: 'var(--gold)' }}>{format(item.product.price)}</p>
+                        <p style={{ fontSize: 12, color: 'var(--gold-ink)' }}>{format(item.product.price)}</p>
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
                         <button type="button" onClick={() => updateQuantity(item.key, Math.max(1, item.quantity - 1))}

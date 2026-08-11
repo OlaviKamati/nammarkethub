@@ -77,7 +77,7 @@ function WishlistTab({ userId }) {
         return (
           <div key={p.id}>
             {droppedPrice && (
-              <p style={{ fontSize: 11, color: 'var(--gold)', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 4 }}>
+              <p style={{ fontSize: 11, color: 'var(--gold-ink)', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 4 }}>
                 <TrendingDown size={12} strokeWidth={2} /> Dropped from {format(savedAt)}
               </p>
             )}
@@ -114,7 +114,7 @@ function OrdersTab({ userId }) {
           {orders.map((o) => (
             <div key={o.id} style={{ background: 'var(--black-card)', border: '1px solid var(--black-border)', borderRadius: 12, padding: '12px 14px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                <span className="tag" style={{ color: 'var(--gold)', background: 'rgba(201,168,76,0.1)', padding: '2px 8px', borderRadius: 99, border: '1px solid rgba(201,168,76,0.2)' }}>
+                <span className="tag" style={{ color: 'var(--gold-ink)', background: 'rgba(201,168,76,0.1)', padding: '2px 8px', borderRadius: 99, border: '1px solid rgba(201,168,76,0.2)' }}>
                   {STATUS_LABEL[o.status] ?? o.status}
                 </span>
                 <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--white)' }}>{o.products?.name ?? 'Product'}</p>
@@ -134,7 +134,7 @@ function OrdersTab({ userId }) {
               )}
               <button
                 onClick={() => setSummaryOrder(o)}
-                style={{ fontSize: 11, color: 'var(--gold)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginTop: 10, display: 'flex', alignItems: 'center', gap: 4 }}
+                style={{ fontSize: 11, color: 'var(--gold-ink)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginTop: 10, display: 'flex', alignItems: 'center', gap: 4 }}
               >
                 <FileText size={11} strokeWidth={1.75} /> View order summary
               </button>
@@ -177,7 +177,7 @@ function PreferencesTab({ userId }) {
                 fontSize: 13, padding: '10px 14px', borderRadius: 10, cursor: 'pointer',
                 border: theme === val ? '1px solid var(--gold-dark)' : '1px solid var(--black-border)',
                 background: theme === val ? 'rgba(201,168,76,0.1)' : 'transparent',
-                color: theme === val ? 'var(--gold)' : 'var(--white-dim)',
+                color: theme === val ? 'var(--gold-ink)' : 'var(--white-dim)',
               }}
             >
               <Icon size={14} strokeWidth={1.75} /> {label}
@@ -201,7 +201,7 @@ function PreferencesTab({ userId }) {
                 fontSize: 13, padding: '10px 14px', borderRadius: 10, cursor: 'pointer',
                 border: currency === c.code ? '1px solid var(--gold-dark)' : '1px solid var(--black-border)',
                 background: currency === c.code ? 'rgba(201,168,76,0.1)' : 'transparent',
-                color: currency === c.code ? 'var(--gold)' : 'var(--white-dim)',
+                color: currency === c.code ? 'var(--gold-ink)' : 'var(--white-dim)',
               }}
             >
               {c.label}
@@ -264,7 +264,7 @@ export default function Account() {
           </div>
           {gate && (
             <div style={{ background: 'rgba(201,168,76,0.08)', border: '1px solid rgba(201,168,76,0.25)', borderRadius: 14, padding: '14px 16px', marginBottom: 24, textAlign: 'center' }}>
-              <p style={{ fontSize: 13, color: 'var(--gold)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+              <p style={{ fontSize: 13, color: 'var(--gold-ink)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
                 <gate.icon size={15} strokeWidth={1.75} /> {gate.text}
               </p>
             </div>

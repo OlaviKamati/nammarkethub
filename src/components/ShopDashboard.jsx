@@ -12,7 +12,7 @@ import { useOrderNotifications } from '../hooks/useOrderNotifications'
 const EMPTY_FORM = { name: '', category_id: '', price: '', original_price: '', stock_count: '', description: '', photo_url: '', options: [], feature_requested: false }
 
 const STATUS_CONFIG = {
-  pending:     { label: 'Pending',     color: '#C9A84C', bg: 'rgba(201,168,76,0.1)',  border: 'rgba(201,168,76,0.2)',  next: 'attending',   nextLabel: 'Attending',   nextIcon: Phone },
+  pending:     { label: 'Pending',     color: 'var(--gold-ink)', bg: 'rgba(201,168,76,0.1)',  border: 'rgba(201,168,76,0.2)',  next: 'attending',   nextLabel: 'Attending',   nextIcon: Phone },
   attending:   { label: 'Attending',   color: '#60a5fa', bg: 'rgba(96,165,250,0.1)',  border: 'rgba(96,165,250,0.2)', next: 'in_progress', nextLabel: 'In Progress', nextIcon: RefreshCw },
   in_progress: { label: 'In Progress', color: '#a78bfa', bg: 'rgba(167,139,250,0.1)', border: 'rgba(167,139,250,0.2)', next: 'completed',   nextLabel: 'Resolve',     nextIcon: CheckCircle2 },
   completed:   { label: 'Resolved',    color: '#22c55e', bg: 'rgba(34,197,94,0.1)',   border: 'rgba(34,197,94,0.2)',  next: null,          nextLabel: null, nextIcon: null },
@@ -91,22 +91,22 @@ function OrdersTab({ shopId, notifications, timeAgo }) {
   return (
     <div>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16, flexWrap: 'wrap', gap: 10 }}>
-        <h2 style={{ fontSize: 16, fontWeight: 700, color: '#FAFAF8' }}>
-          Orders {activeCount > 0 && <span style={{ fontSize: 12, background: '#C9A84C', color: '#0A0A0A', borderRadius: 99, padding: '2px 8px', marginLeft: 6 }}>{activeCount} active</span>}
+        <h2 style={{ fontSize: 16, fontWeight: 700, color: 'var(--white)' }}>
+          Orders {activeCount > 0 && <span style={{ fontSize: 12, background: 'var(--gold)', color: 'var(--black)', borderRadius: 99, padding: '2px 8px', marginLeft: 6 }}>{activeCount} active</span>}
         </h2>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: '#C9A84C', fontFamily: 'ui-monospace, monospace', letterSpacing: '0.08em' }}>
-          <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#C9A84C', display: 'inline-block' }} className="pulse-dot" />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: 'var(--gold-ink)', fontFamily: 'ui-monospace, monospace', letterSpacing: '0.08em' }}>
+          <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--gold)', display: 'inline-block' }} className="pulse-dot" />
           LIVE
         </div>
       </div>
 
       {/* Filter tabs */}
-      <div style={{ display: 'flex', gap: 4, background: '#161616', borderRadius: 10, padding: 3, marginBottom: 16, width: 'fit-content', border: '1px solid #2A2A2A' }}>
+      <div style={{ display: 'flex', gap: 4, background: 'var(--black-card)', borderRadius: 10, padding: 3, marginBottom: 16, width: 'fit-content', border: '1px solid var(--black-border)' }}>
         {[['active', Bell, 'Active'], ['completed', CheckCircle2, 'Resolved'], ['all', null, 'All']].map(([val, Icon, label]) => (
           <button key={val} onClick={() => setFilterStatus(val)}
             style={{ fontSize: 11, fontWeight: 600, padding: '6px 12px', borderRadius: 7, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 5,
-              background: filterStatus === val ? 'linear-gradient(135deg, #C9A84C, #9A7A2E)' : 'transparent',
-              color: filterStatus === val ? '#0A0A0A' : '#A0A09A' }}>
+              background: filterStatus === val ? 'linear-gradient(135deg, var(--gold), var(--gold-dark))' : 'transparent',
+              color: filterStatus === val ? 'var(--black)' : 'var(--white-dim)' }}>
             {Icon && <Icon size={12} strokeWidth={1.75} />} {label}
           </button>
         ))}
@@ -114,8 +114,8 @@ function OrdersTab({ shopId, notifications, timeAgo }) {
 
       {filtered.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '48px 0' }}>
-          <Inbox size={28} strokeWidth={1.5} color="#A0A09A" style={{ marginBottom: 10 }} />
-          <p style={{ fontSize: 14, color: '#A0A09A' }}>
+          <Inbox size={28} strokeWidth={1.5} color="var(--white-dim)" style={{ marginBottom: 10 }} />
+          <p style={{ fontSize: 14, color: 'var(--white-dim)' }}>
             {filterStatus === 'active' ? 'No active orders right now.' : 'No orders here yet.'}
           </p>
         </div>
@@ -127,7 +127,7 @@ function OrdersTab({ shopId, notifications, timeAgo }) {
             const isResolved = ['completed', 'cancelled'].includes(order.status)
 
             return (
-              <div key={order.id} style={{ background: '#111', border: `1px solid ${isResolved ? '#1A1A1A' : '#2A2A2A'}`, borderRadius: 14, overflow: 'hidden', opacity: isResolved ? 0.7 : 1, transition: 'opacity 0.2s' }}>
+              <div key={order.id} style={{ background: 'var(--black-soft)', border: `1px solid ${isResolved ? 'var(--black-card)' : 'var(--black-border)'}`, borderRadius: 14, overflow: 'hidden', opacity: isResolved ? 0.7 : 1, transition: 'opacity 0.2s' }}>
                 {/* Order header */}
                 <div style={{ padding: '14px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, cursor: 'pointer' }}
                   onClick={() => setExpandedId(isExpanded ? null : order.id)}>
@@ -137,11 +137,11 @@ function OrdersTab({ shopId, notifications, timeAgo }) {
                         background: cfg.bg, color: cfg.color, border: `1px solid ${cfg.border}`, flexShrink: 0 }}>
                         {cfg.label}
                       </span>
-                      <p style={{ fontSize: 13, fontWeight: 600, color: '#FAFAF8', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--white)', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                         {order.products?.name ?? 'Product'}
                       </p>
                     </div>
-                    <p style={{ fontSize: 12, color: '#A0A09A', margin: 0 }}>
+                    <p style={{ fontSize: 12, color: 'var(--white-dim)', margin: 0 }}>
                       {order.buyer_name} · {order.buyer_contact} · qty {order.quantity} · {timeAgo(order.created_at)}
                     </p>
                     {order.group_id && groupCounts[order.group_id] > 1 && (
@@ -150,12 +150,12 @@ function OrdersTab({ shopId, notifications, timeAgo }) {
                       </p>
                     )}
                     {order.selected_options && Object.keys(order.selected_options).length > 0 && (
-                      <p style={{ fontSize: 11, color: '#C9A84C', margin: '4px 0 0' }}>
+                      <p style={{ fontSize: 11, color: 'var(--gold-ink)', margin: '4px 0 0' }}>
                         {Object.entries(order.selected_options).map(([k, v]) => `${k}: ${v}`).join(' · ')}
                       </p>
                     )}
                     {order.notes && !isExpanded && (
-                      <p style={{ fontSize: 11, color: '#C9A84C', margin: '4px 0 0', fontStyle: 'italic', display: 'flex', alignItems: 'center', gap: 4 }}>
+                      <p style={{ fontSize: 11, color: 'var(--gold-ink)', margin: '4px 0 0', fontStyle: 'italic', display: 'flex', alignItems: 'center', gap: 4 }}>
                         <Pencil size={11} strokeWidth={1.75} /> {order.notes}
                       </p>
                     )}
@@ -165,12 +165,12 @@ function OrdersTab({ shopId, notifications, timeAgo }) {
                       </div>
                     )}
                   </div>
-                  <span style={{ color: '#555', flexShrink: 0, display: 'flex' }}>{isExpanded ? <ChevronUp size={16} strokeWidth={1.75} /> : <ChevronDown size={16} strokeWidth={1.75} />}</span>
+                  <span style={{ color: 'var(--white-dim)', flexShrink: 0, display: 'flex' }}>{isExpanded ? <ChevronUp size={16} strokeWidth={1.75} /> : <ChevronDown size={16} strokeWidth={1.75} />}</span>
                 </div>
 
                 {/* Expanded actions */}
                 {isExpanded && (
-                  <div style={{ padding: '0 16px 16px', borderTop: '1px solid #1A1A1A' }}>
+                  <div style={{ padding: '0 16px 16px', borderTop: '1px solid var(--black-border)' }}>
                     <div style={{ paddingTop: 12 }}>
 
                       {/* Action buttons */}
@@ -181,7 +181,7 @@ function OrdersTab({ shopId, notifications, timeAgo }) {
                               onClick={() => updateStatus(order.id, cfg.next)}
                               disabled={saving[order.id]}
                               style={{ fontSize: 12, fontWeight: 600, padding: '8px 14px', borderRadius: 99, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 5,
-                                background: 'linear-gradient(135deg, #C9A84C, #9A7A2E)', color: '#0A0A0A', opacity: saving[order.id] ? 0.6 : 1 }}>
+                                background: 'linear-gradient(135deg, var(--gold), var(--gold-dark))', color: 'var(--black)', opacity: saving[order.id] ? 0.6 : 1 }}>
                               {saving[order.id] ? '...' : <><cfg.nextIcon size={13} strokeWidth={1.75} /> {cfg.nextLabel}</>}
                             </button>
                           )}
@@ -204,9 +204,9 @@ function OrdersTab({ shopId, notifications, timeAgo }) {
                       {/* Notes */}
                       <div>
                         {order.notes && (
-                          <div style={{ background: '#161616', borderRadius: 8, padding: '8px 12px', marginBottom: 8, border: '1px solid #2A2A2A' }}>
-                            <p style={{ fontSize: 11, color: '#C9A84C', margin: '0 0 2px', fontFamily: 'ui-monospace, monospace' }}>NOTE</p>
-                            <p style={{ fontSize: 12, color: '#FAFAF8', margin: 0 }}>{order.notes}</p>
+                          <div style={{ background: 'var(--black-card)', borderRadius: 8, padding: '8px 12px', marginBottom: 8, border: '1px solid var(--black-border)' }}>
+                            <p style={{ fontSize: 11, color: 'var(--gold-ink)', margin: '0 0 2px', fontFamily: 'ui-monospace, monospace' }}>NOTE</p>
+                            <p style={{ fontSize: 12, color: 'var(--white)', margin: 0 }}>{order.notes}</p>
                           </div>
                         )}
                         <div style={{ display: 'flex', gap: 6 }}>
@@ -215,14 +215,14 @@ function OrdersTab({ shopId, notifications, timeAgo }) {
                             onChange={(e) => setNoteInputs(n => ({ ...n, [order.id]: e.target.value }))}
                             onKeyDown={(e) => e.key === 'Enter' && saveNote(order.id)}
                             placeholder="Add a note (e.g. didn't pick up, arranged pickup)…"
-                            style={{ flex: 1, background: '#161616', border: '1px solid #2A2A2A', borderRadius: 8, color: '#FAFAF8', fontSize: 12, padding: '8px 10px', outline: 'none' }}
+                            style={{ flex: 1, background: 'var(--black-card)', border: '1px solid var(--black-border)', borderRadius: 8, color: 'var(--white)', fontSize: 12, padding: '8px 10px', outline: 'none' }}
                           />
                           <button
                             onClick={() => saveNote(order.id)}
                             disabled={!noteInputs[order.id]?.trim() || saving[`note_${order.id}`]}
                             style={{ fontSize: 12, padding: '8px 12px', borderRadius: 8, border: 'none', cursor: 'pointer',
-                              background: noteInputs[order.id]?.trim() ? 'linear-gradient(135deg, #C9A84C, #9A7A2E)' : '#2A2A2A',
-                              color: noteInputs[order.id]?.trim() ? '#0A0A0A' : '#555' }}>
+                              background: noteInputs[order.id]?.trim() ? 'linear-gradient(135deg, var(--gold), var(--gold-dark))' : 'var(--black-border)',
+                              color: noteInputs[order.id]?.trim() ? 'var(--black)' : 'var(--white-dim)' }}>
                             Save
                           </button>
                         </div>
@@ -239,14 +239,14 @@ function OrdersTab({ shopId, notifications, timeAgo }) {
                               onChange={(e) => setDepositInputs(d => ({ ...d, [order.id]: e.target.value }))}
                               onKeyDown={(e) => e.key === 'Enter' && saveDeposit(order.id)}
                               placeholder={`Update amount paid (currently ${order.deposit_paid})`}
-                              style={{ flex: 1, background: '#161616', border: '1px solid #2A2A2A', borderRadius: 8, color: '#FAFAF8', fontSize: 12, padding: '8px 10px', outline: 'none' }}
+                              style={{ flex: 1, background: 'var(--black-card)', border: '1px solid var(--black-border)', borderRadius: 8, color: 'var(--white)', fontSize: 12, padding: '8px 10px', outline: 'none' }}
                             />
                             <button
                               onClick={() => saveDeposit(order.id)}
                               disabled={!depositInputs[order.id] || saving[`deposit_${order.id}`]}
                               style={{ fontSize: 12, padding: '8px 12px', borderRadius: 8, border: 'none', cursor: 'pointer',
-                                background: depositInputs[order.id] ? 'linear-gradient(135deg, #C9A84C, #9A7A2E)' : '#2A2A2A',
-                                color: depositInputs[order.id] ? '#0A0A0A' : '#555' }}>
+                                background: depositInputs[order.id] ? 'linear-gradient(135deg, var(--gold), var(--gold-dark))' : 'var(--black-border)',
+                                color: depositInputs[order.id] ? 'var(--black)' : 'var(--white-dim)' }}>
                               Save
                             </button>
                           </div>
@@ -268,14 +268,14 @@ const INPUT = {
   width: '100%',
   padding: '10px 14px',
   fontSize: 14,
-  background: '#1A1A1A',
-  border: '1px solid #2A2A2A',
+  background: 'var(--black-card)',
+  border: '1px solid var(--black-border)',
   borderRadius: 10,
-  color: '#FAFAF8',
+  color: 'var(--white)',
   outline: 'none',
 }
 
-const LABEL = { fontSize: 11, color: '#A0A09A', display: 'block', marginBottom: 6 }
+const LABEL = { fontSize: 11, color: 'var(--white-dim)', display: 'block', marginBottom: 6 }
 
 export default function ShopDashboard({ shop, onShopUpdated }) {
   const [products, setProducts] = useState([])
@@ -372,30 +372,30 @@ export default function ShopDashboard({ shop, onShopUpdated }) {
           { icon: Bell, label: 'Active orders', value: activeOrderCount },
           { icon: ShoppingBag, label: 'Recent orders', value: notifications.length },
         ].map((kpi) => (
-          <div key={kpi.label} style={{ display: 'flex', alignItems: 'center', gap: 12, background: '#111', border: '1px solid #2A2A2A', borderRadius: 14, padding: '14px 16px' }}>
+          <div key={kpi.label} style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'var(--black-soft)', border: '1px solid var(--black-border)', borderRadius: 14, padding: '14px 16px' }}>
             <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(201,168,76,0.1)', border: '1px solid rgba(201,168,76,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <kpi.icon size={17} strokeWidth={1.75} color="#C9A84C" />
+              <kpi.icon size={17} strokeWidth={1.75} color="var(--gold)" />
             </div>
             <div>
-              <p style={{ fontSize: 20, fontWeight: 700, color: '#FAFAF8', lineHeight: 1.1 }}>{kpi.value}</p>
-              <p style={{ fontSize: 11, color: '#A0A09A' }}>{kpi.label}</p>
+              <p style={{ fontSize: 20, fontWeight: 700, color: 'var(--white)', lineHeight: 1.1 }}>{kpi.value}</p>
+              <p style={{ fontSize: 11, color: 'var(--white-dim)' }}>{kpi.label}</p>
             </div>
           </div>
         ))}
       </div>
 
       {/* Tab bar */}
-      <div style={{ display: 'flex', gap: 4, background: '#161616', borderRadius: 14, padding: 4, width: 'fit-content', marginBottom: 24, border: '1px solid #2A2A2A' }}>
+      <div style={{ display: 'flex', gap: 4, background: 'var(--black-card)', borderRadius: 14, padding: 4, width: 'fit-content', marginBottom: 24, border: '1px solid var(--black-border)' }}>
         <button onClick={() => setTab('products')}
           style={{ fontSize: 13, fontWeight: 600, padding: '8px 18px', borderRadius: 10, border: 'none', cursor: 'pointer', transition: 'all 0.2s',
-            background: tab === 'products' ? 'linear-gradient(135deg, #C9A84C, #9A7A2E)' : 'transparent',
-            color: tab === 'products' ? '#0A0A0A' : '#A0A09A' }}>
+            background: tab === 'products' ? 'linear-gradient(135deg, var(--gold), var(--gold-dark))' : 'transparent',
+            color: tab === 'products' ? 'var(--black)' : 'var(--white-dim)' }}>
           Products ({products.length})
         </button>
         <button onClick={() => { setTab('orders'); clearUnread() }}
           style={{ fontSize: 13, fontWeight: 600, padding: '8px 18px', borderRadius: 10, border: 'none', cursor: 'pointer', transition: 'all 0.2s', position: 'relative',
-            background: tab === 'orders' ? 'linear-gradient(135deg, #C9A84C, #9A7A2E)' : 'transparent',
-            color: tab === 'orders' ? '#0A0A0A' : '#A0A09A' }}>
+            background: tab === 'orders' ? 'linear-gradient(135deg, var(--gold), var(--gold-dark))' : 'transparent',
+            color: tab === 'orders' ? 'var(--black)' : 'var(--white-dim)' }}>
           Orders
           {unreadCount > 0 && (
             <span style={{ position: 'absolute', top: -4, right: -4, background: '#ef4444', color: '#fff', fontSize: 10, width: 16, height: 16, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -405,14 +405,14 @@ export default function ShopDashboard({ shop, onShopUpdated }) {
         </button>
         <button onClick={() => setTab('analytics')}
           style={{ fontSize: 13, fontWeight: 600, padding: '8px 18px', borderRadius: 10, border: 'none', cursor: 'pointer', transition: 'all 0.2s',
-            background: tab === 'analytics' ? 'linear-gradient(135deg, #C9A84C, #9A7A2E)' : 'transparent',
-            color: tab === 'analytics' ? '#0A0A0A' : '#A0A09A' }}>
+            background: tab === 'analytics' ? 'linear-gradient(135deg, var(--gold), var(--gold-dark))' : 'transparent',
+            color: tab === 'analytics' ? 'var(--black)' : 'var(--white-dim)' }}>
           Analytics
         </button>
         <button onClick={() => setTab('settings')}
           style={{ fontSize: 13, fontWeight: 600, padding: '8px 18px', borderRadius: 10, border: 'none', cursor: 'pointer', transition: 'all 0.2s',
-            background: tab === 'settings' ? 'linear-gradient(135deg, #C9A84C, #9A7A2E)' : 'transparent',
-            color: tab === 'settings' ? '#0A0A0A' : '#A0A09A' }}>
+            background: tab === 'settings' ? 'linear-gradient(135deg, var(--gold), var(--gold-dark))' : 'transparent',
+            color: tab === 'settings' ? 'var(--black)' : 'var(--white-dim)' }}>
           Settings
         </button>
       </div>
@@ -428,7 +428,7 @@ export default function ShopDashboard({ shop, onShopUpdated }) {
       {tab === 'products' && (
         <div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-            <h2 style={{ fontSize: 16, fontWeight: 700, color: '#FAFAF8' }}>Your products</h2>
+            <h2 style={{ fontSize: 16, fontWeight: 700, color: 'var(--white)' }}>Your products</h2>
             {!showForm && (
               <button onClick={startAdd} className="btn-gold" style={{ fontSize: 13, padding: '8px 18px', display: 'flex', alignItems: 'center', gap: 6 }}>
                 <Plus size={15} strokeWidth={2} /> Add product
@@ -438,8 +438,8 @@ export default function ShopDashboard({ shop, onShopUpdated }) {
 
           {/* Form */}
           {showForm && (
-            <div style={{ background: '#111', border: '1px solid #2A2A2A', borderRadius: 16, padding: 20, marginBottom: 20 }}>
-              <h3 style={{ fontSize: 14, fontWeight: 700, color: '#FAFAF8', marginBottom: 16 }}>
+            <div style={{ background: 'var(--black-soft)', border: '1px solid var(--black-border)', borderRadius: 16, padding: 20, marginBottom: 20 }}>
+              <h3 style={{ fontSize: 14, fontWeight: 700, color: 'var(--white)', marginBottom: 16 }}>
                 {editingId ? 'Edit product' : 'New product'}
               </h3>
               <form onSubmit={handleSave}>
@@ -453,7 +453,7 @@ export default function ShopDashboard({ shop, onShopUpdated }) {
                     <label style={LABEL}>Category</label>
                     <select value={form.category_id} onChange={(e) => setForm({ ...form, category_id: e.target.value })}
                       style={{ ...INPUT }}>
-                      {categories.map((c) => <option key={c.id} value={c.id} style={{ background: '#1A1A1A', color: '#FAFAF8' }}>{c.label}</option>)}
+                      {categories.map((c) => <option key={c.id} value={c.id} style={{ background: 'var(--black-card)', color: 'var(--white)' }}>{c.label}</option>)}
                     </select>
                   </div>
                   <div>
@@ -486,7 +486,7 @@ export default function ShopDashboard({ shop, onShopUpdated }) {
                 </div>
 
                 <div style={{ background: 'rgba(201,168,76,0.06)', border: '1px solid rgba(201,168,76,0.25)', borderRadius: 12, padding: 14, marginBottom: 12 }}>
-                  <p style={{ fontSize: 12, fontWeight: 700, color: '#C9A84C', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <p style={{ fontSize: 12, fontWeight: 700, color: 'var(--gold-ink)', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
                     <Sparkles size={13} strokeWidth={1.75} /> Homepage slideshow (premium)
                   </p>
                   {editingId && products.find((p) => p.id === editingId)?.is_featured ? (
@@ -494,13 +494,13 @@ export default function ShopDashboard({ shop, onShopUpdated }) {
                       <CheckCircle2 size={13} strokeWidth={1.75} /> Currently featured on the homepage.
                     </p>
                   ) : editingId && products.find((p) => p.id === editingId)?.feature_requested ? (
-                    <p style={{ fontSize: 12, color: '#C9A84C', display: 'flex', alignItems: 'center', gap: 5 }}>
+                    <p style={{ fontSize: 12, color: 'var(--gold-ink)', display: 'flex', alignItems: 'center', gap: 5 }}>
                       <Clock size={13} strokeWidth={1.75} /> Request sent — we'll be in touch about pricing.
                     </p>
                   ) : (
-                    <label style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 12, color: '#A0A09A', cursor: 'pointer', lineHeight: 1.4 }}>
+                    <label style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 12, color: 'var(--white-dim)', cursor: 'pointer', lineHeight: 1.4 }}>
                       <input type="checkbox" checked={form.feature_requested} onChange={(e) => setForm({ ...form, feature_requested: e.target.checked })}
-                        style={{ marginTop: 2, accentColor: '#C9A84C' }} />
+                        style={{ marginTop: 2, accentColor: 'var(--gold)' }} />
                       Request featured placement on the homepage slideshow — more buyers see it. This is a paid placement; checking this just sends a request, we'll follow up about pricing before it goes live.
                     </label>
                   )}
@@ -523,37 +523,37 @@ export default function ShopDashboard({ shop, onShopUpdated }) {
           {/* Products list */}
           {loading ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              {[1,2,3].map((i) => <div key={i} style={{ height: 64, background: '#161616', borderRadius: 12, border: '1px solid #2A2A2A' }} />)}
+              {[1,2,3].map((i) => <div key={i} style={{ height: 64, background: 'var(--black-card)', borderRadius: 12, border: '1px solid var(--black-border)' }} />)}
             </div>
           ) : products.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '48px 0' }}>
-              <Package size={28} strokeWidth={1.5} color="#A0A09A" style={{ marginBottom: 10 }} />
-              <p style={{ fontSize: 14, color: '#A0A09A' }}>No products yet. Add your first one.</p>
+              <Package size={28} strokeWidth={1.5} color="var(--white-dim)" style={{ marginBottom: 10 }} />
+              <p style={{ fontSize: 14, color: 'var(--white-dim)' }}>No products yet. Add your first one.</p>
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {products.map((p) => (
-                <div key={p.id} style={{ display: 'flex', alignItems: 'center', gap: 12, background: '#111', border: '1px solid #2A2A2A', borderRadius: 12, padding: '12px 14px', opacity: p.is_active ? 1 : 0.5 }}>
-                  <div style={{ width: 40, height: 40, borderRadius: 10, background: '#1A1A1A', flexShrink: 0, overflow: 'hidden', border: '1px solid #2A2A2A' }}>
+                <div key={p.id} style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'var(--black-soft)', border: '1px solid var(--black-border)', borderRadius: 12, padding: '12px 14px', opacity: p.is_active ? 1 : 0.5 }}>
+                  <div style={{ width: 40, height: 40, borderRadius: 10, background: 'var(--black-card)', flexShrink: 0, overflow: 'hidden', border: '1px solid var(--black-border)' }}>
                     {p.photo_url
                       ? <img src={p.photo_url} alt={p.name} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                      : <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Package size={16} strokeWidth={1.5} color="#A0A09A" /></div>}
+                      : <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Package size={16} strokeWidth={1.5} color="var(--white-dim)" /></div>}
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ fontSize: 13, fontWeight: 600, color: '#FAFAF8', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--white)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: 6 }}>
                       {p.name}
                       {p.is_featured && (
-                        <span style={{ fontSize: 9, fontWeight: 700, color: '#0A0A0A', background: 'linear-gradient(135deg, #C9A84C, #9A7A2E)', padding: '2px 7px', borderRadius: 99, flexShrink: 0 }}>FEATURED</span>
+                        <span style={{ fontSize: 9, fontWeight: 700, color: 'var(--black)', background: 'linear-gradient(135deg, var(--gold), var(--gold-dark))', padding: '2px 7px', borderRadius: 99, flexShrink: 0 }}>FEATURED</span>
                       )}
                       {!p.is_featured && p.feature_requested && (
-                        <span style={{ fontSize: 9, fontWeight: 700, color: '#C9A84C', border: '1px solid rgba(201,168,76,0.4)', padding: '2px 7px', borderRadius: 99, flexShrink: 0 }}>REQUEST PENDING</span>
+                        <span style={{ fontSize: 9, fontWeight: 700, color: 'var(--gold-ink)', border: '1px solid rgba(201,168,76,0.4)', padding: '2px 7px', borderRadius: 99, flexShrink: 0 }}>REQUEST PENDING</span>
                       )}
                     </p>
-                    <p style={{ fontSize: 11, color: '#A0A09A' }}>N${Number(p.price).toLocaleString()} · {p.stock_count} in stock</p>
+                    <p style={{ fontSize: 11, color: 'var(--white-dim)' }}>N${Number(p.price).toLocaleString()} · {p.stock_count} in stock</p>
                   </div>
                   <div style={{ display: 'flex', gap: 12, flexShrink: 0 }}>
-                    <button onClick={() => toggleActive(p)} style={{ fontSize: 12, color: '#A0A09A', background: 'none', border: 'none', cursor: 'pointer' }}>{p.is_active ? 'Hide' : 'Show'}</button>
-                    <button onClick={() => startEdit(p)} style={{ fontSize: 12, color: '#C9A84C', background: 'none', border: 'none', cursor: 'pointer' }}>Edit</button>
+                    <button onClick={() => toggleActive(p)} style={{ fontSize: 12, color: 'var(--white-dim)', background: 'none', border: 'none', cursor: 'pointer' }}>{p.is_active ? 'Hide' : 'Show'}</button>
+                    <button onClick={() => startEdit(p)} style={{ fontSize: 12, color: 'var(--gold-ink)', background: 'none', border: 'none', cursor: 'pointer' }}>Edit</button>
                     <button onClick={() => handleDelete(p.id)} style={{ fontSize: 12, color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer' }}>Delete</button>
                   </div>
                 </div>

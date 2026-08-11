@@ -8,14 +8,14 @@ const INPUT = {
   width: '100%',
   padding: '10px 14px',
   fontSize: 14,
-  background: '#1A1A1A',
-  border: '1px solid #2A2A2A',
+  background: 'var(--black-card)',
+  border: '1px solid var(--black-border)',
   borderRadius: 10,
-  color: '#FAFAF8',
+  color: 'var(--white)',
   outline: 'none',
 }
 
-const LABEL = { fontSize: 11, color: '#A0A09A', display: 'block', marginBottom: 6 }
+const LABEL = { fontSize: 11, color: 'var(--white-dim)', display: 'block', marginBottom: 6 }
 
 export default function ShopSettingsForm({ shop, onUpdated }) {
   const [name, setName] = useState(shop.name)
@@ -56,9 +56,9 @@ export default function ShopSettingsForm({ shop, onUpdated }) {
   }
 
   return (
-    <div style={{ background: '#111', border: '1px solid #2A2A2A', borderRadius: 16, padding: 20, maxWidth: 480 }}>
-      <h3 style={{ fontSize: 14, fontWeight: 700, color: '#FAFAF8', marginBottom: 4 }}>Shop profile</h3>
-      <p style={{ fontSize: 12, color: '#A0A09A', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 6 }}>
+    <div style={{ background: 'var(--black-soft)', border: '1px solid var(--black-border)', borderRadius: 16, padding: 20, maxWidth: 480 }}>
+      <h3 style={{ fontSize: 14, fontWeight: 700, color: 'var(--white)', marginBottom: 4 }}>Shop profile</h3>
+      <p style={{ fontSize: 12, color: 'var(--white-dim)', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 6 }}>
         <type.icon size={13} strokeWidth={1.75} /> {type.label} · shop type can't be changed here
       </p>
 

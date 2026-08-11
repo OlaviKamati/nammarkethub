@@ -51,7 +51,7 @@ export default function CompareModal({ onClose }) {
                 {p.photo_url ? (
                   <img src={p.photo_url} alt={p.name} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 ) : (
-                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Package size={24} strokeWidth={1.5} color="var(--white-dim)" /></div>
+                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Package size={24} strokeWidth={1.5} color="var(--nav-ink-dim)" /></div>
                 )}
               </div>
               <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--white)', lineHeight: 1.3 }}>{p.name}</p>

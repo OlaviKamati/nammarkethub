@@ -6,10 +6,10 @@ const INPUT = {
   width: '100%',
   padding: '10px 14px',
   fontSize: 14,
-  background: '#1A1A1A',
-  border: '1px solid #2A2A2A',
+  background: 'var(--black-card)',
+  border: '1px solid var(--black-border)',
   borderRadius: 10,
-  color: '#FAFAF8',
+  color: 'var(--white)',
   outline: 'none',
 }
 
@@ -59,12 +59,12 @@ export default function ImageUpload({ value, onChange, folder = 'products' }) {
   return (
     <div>
       {/* Mode toggle */}
-      <div style={{ display: 'flex', gap: 4, background: '#111', borderRadius: 8, padding: 3, marginBottom: 10, width: 'fit-content', border: '1px solid #2A2A2A' }}>
+      <div style={{ display: 'flex', gap: 4, background: 'var(--black-soft)', borderRadius: 8, padding: 3, marginBottom: 10, width: 'fit-content', border: '1px solid var(--black-border)' }}>
         {[['url', Link2, 'URL'], ['upload', Folder, 'Upload']].map(([m, Icon, label]) => (
           <button key={m} type="button" onClick={() => setMode(m)}
             style={{ fontSize: 11, fontWeight: 600, padding: '5px 12px', borderRadius: 6, border: 'none', cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: 5,
-              background: mode === m ? 'linear-gradient(135deg, #C9A84C, #9A7A2E)' : 'transparent',
-              color: mode === m ? '#0A0A0A' : '#A0A09A' }}>
+              background: mode === m ? 'linear-gradient(135deg, var(--gold), var(--gold-dark))' : 'transparent',
+              color: mode === m ? 'var(--black)' : 'var(--white-dim)' }}>
             <Icon size={12} strokeWidth={1.75} /> {label}
           </button>
         ))}
@@ -80,17 +80,17 @@ export default function ImageUpload({ value, onChange, folder = 'products' }) {
         />
       ) : (
         <div>
-          <label style={{ display: 'block', border: '1px dashed #2A2A2A', borderRadius: 10, padding: '20px', textAlign: 'center', cursor: 'pointer', background: '#111', transition: 'border-color 0.2s' }}
-            onMouseEnter={e => e.currentTarget.style.borderColor = '#C9A84C'}
-            onMouseLeave={e => e.currentTarget.style.borderColor = '#2A2A2A'}>
+          <label style={{ display: 'block', border: '1px dashed var(--black-border)', borderRadius: 10, padding: '20px', textAlign: 'center', cursor: 'pointer', background: 'var(--black-soft)', transition: 'border-color 0.2s' }}
+            onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--gold)'}
+            onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--black-border)'}>
             <input type="file" accept="image/*" onChange={handleFileChange} style={{ display: 'none' }} />
             {uploading ? (
-              <p style={{ fontSize: 13, color: '#C9A84C' }}>Uploading…</p>
+              <p style={{ fontSize: 13, color: 'var(--gold-ink)' }}>Uploading…</p>
             ) : (
               <>
-                <Camera size={22} strokeWidth={1.5} color="#A0A09A" style={{ marginBottom: 6 }} />
-                <p style={{ fontSize: 13, color: '#A0A09A' }}>Click to select an image</p>
-                <p style={{ fontSize: 11, color: '#555', marginTop: 4 }}>JPG, PNG, WebP · Max 5MB</p>
+                <Camera size={22} strokeWidth={1.5} color="var(--white-dim)" style={{ marginBottom: 6 }} />
+                <p style={{ fontSize: 13, color: 'var(--white-dim)' }}>Click to select an image</p>
+                <p style={{ fontSize: 11, color: 'var(--white-dim)', marginTop: 4 }}>JPG, PNG, WebP · Max 5MB</p>
               </>
             )}
           </label>
@@ -101,10 +101,10 @@ export default function ImageUpload({ value, onChange, folder = 'products' }) {
       {/* Preview */}
       {value && !uploading && (
         <div style={{ marginTop: 10, display: 'flex', alignItems: 'center', gap: 10 }}>
-          <img src={value} alt="Preview" style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 8, border: '1px solid #2A2A2A' }}
+          <img src={value} alt="Preview" style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 8, border: '1px solid var(--black-border)' }}
             onError={e => e.currentTarget.style.display = 'none'} />
           <div>
-            <p style={{ fontSize: 11, color: '#C9A84C', marginBottom: 2 }}>Preview</p>
+            <p style={{ fontSize: 11, color: 'var(--gold-ink)', marginBottom: 2 }}>Preview</p>
             <button type="button" onClick={() => onChange('')}
               style={{ fontSize: 11, color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
               Remove

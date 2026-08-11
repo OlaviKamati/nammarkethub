@@ -149,7 +149,7 @@ export default function HeroCarousel() {
             {slide.shops?.is_verified && <ShieldCheck size={12} strokeWidth={2} color="var(--gold)" />}
           </div>
 
-          <h2 className="font-display" style={{ color: 'var(--white)', fontSize: 'clamp(1.4rem, 3vw, 2.2rem)', letterSpacing: '-0.02em', marginBottom: 8, maxWidth: 480, lineHeight: 1.2 }}>
+          <h2 className="font-display" style={{ color: 'var(--nav-ink)', fontSize: 'clamp(1.4rem, 3vw, 2.2rem)', letterSpacing: '-0.02em', marginBottom: 8, maxWidth: 480, lineHeight: 1.2 }}>
             {slide.name}
           </h2>
 
@@ -160,7 +160,7 @@ export default function HeroCarousel() {
           )}
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-            <span className="gold-text" style={{ fontSize: 24, fontWeight: 700 }}>{format(slide.price)}</span>
+            <span className="gold-text-fixed" style={{ fontSize: 24, fontWeight: 700 }}>{format(slide.price)}</span>
             {slide.original_price > slide.price && (
               <span style={{ fontSize: 15, color: 'rgba(250,250,248,0.5)', textDecoration: 'line-through' }}>{format(slide.original_price)}</span>
             )}

@@ -20,6 +20,12 @@
 
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
     <meta name="theme-color" content="#C9A84C" />
+    <script>
+      try {
+        var t = localStorage.getItem('nammarkethub_theme') || 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>

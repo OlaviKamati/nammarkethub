@@ -76,7 +76,7 @@ export default function QuickViewModal({ productId, onClose }) {
                 <img src={product.photo_url} alt={product.name} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
               ) : (
                 <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Package size={40} strokeWidth={1.5} color="var(--white-dim)" />
+                  <Package size={40} strokeWidth={1.5} color="var(--nav-ink-dim)" />
                 </div>
               )}
               <WishlistButton productId={product.id} price={product.price} style={{ position: 'absolute', top: 12, left: 12 }} />
@@ -87,7 +87,7 @@ export default function QuickViewModal({ productId, onClose }) {
                 style={{
                   position: 'absolute', top: 12, left: 52, width: 28, height: 28, borderRadius: '50%', border: 'none', cursor: 'pointer',
                   background: 'rgba(10,10,10,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  color: isComparing(product.id) ? 'var(--gold)' : 'var(--white-dim)',
+                  color: isComparing(product.id) ? 'var(--gold)' : 'var(--nav-ink-dim)',
                 }}
               >
                 <Scale size={13} strokeWidth={1.75} />
@@ -96,7 +96,7 @@ export default function QuickViewModal({ productId, onClose }) {
 
             <div style={{ padding: 20 }}>
               {product.shops?.name && (
-                <p style={{ fontSize: 11, color: 'var(--gold)', fontFamily: 'ui-monospace, monospace', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 5 }}>
+                <p style={{ fontSize: 11, color: 'var(--gold-ink)', fontFamily: 'ui-monospace, monospace', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 5 }}>
                   {product.shops.name}
                   {product.shops.is_verified && <ShieldCheck size={11} strokeWidth={2} />}
                 </p>
@@ -108,7 +108,7 @@ export default function QuickViewModal({ productId, onClose }) {
                 {product.original_price > product.price && (
                   <span style={{ fontSize: 13, color: 'var(--white-dim)', textDecoration: 'line-through' }}>{format(product.original_price)}</span>
                 )}
-                <span className="tag" style={{ color: product.stock_count > 0 ? 'var(--gold-dark)' : 'var(--white-dim)', background: product.stock_count > 0 ? 'rgba(201,168,76,0.1)' : 'rgba(255,255,255,0.05)', padding: '3px 10px', borderRadius: 6, border: `1px solid ${product.stock_count > 0 ? 'rgba(201,168,76,0.2)' : 'var(--black-border)'}` }}>
+                <span className="tag" style={{ color: product.stock_count > 0 ? 'var(--gold-ink)' : 'var(--white-dim)', background: product.stock_count > 0 ? 'rgba(201,168,76,0.1)' : 'rgba(255,255,255,0.05)', padding: '3px 10px', borderRadius: 6, border: `1px solid ${product.stock_count > 0 ? 'rgba(201,168,76,0.2)' : 'var(--black-border)'}` }}>
                   {product.stock_count > 0 ? `${product.stock_count} in stock` : 'Out of stock'}
                 </span>
               </div>
@@ -159,8 +159,8 @@ export default function QuickViewModal({ productId, onClose }) {
                     {added ? <><Check size={15} strokeWidth={2} /> Added</> : <><ShoppingCart size={15} strokeWidth={1.75} /> Add to cart</>}
                   </button>
                   {added && (
-                    <p style={{ fontSize: 12, color: 'var(--gold)', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
-                      Added · <Link to="/cart" onClick={onClose} style={{ color: 'var(--gold)', display: 'inline-flex', alignItems: 'center', gap: 3 }}>View cart <ArrowRight size={12} strokeWidth={1.75} /></Link>
+                    <p style={{ fontSize: 12, color: 'var(--gold-ink)', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
+                      Added · <Link to="/cart" onClick={onClose} style={{ color: 'var(--gold-ink)', display: 'inline-flex', alignItems: 'center', gap: 3 }}>View cart <ArrowRight size={12} strokeWidth={1.75} /></Link>
                     </p>
                   )}
                 </form>
