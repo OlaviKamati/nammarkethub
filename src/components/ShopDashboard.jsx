@@ -462,7 +462,7 @@ export default function ShopDashboard({ shop, onShopUpdated }) {
                       style={INPUT} placeholder="0" />
                   </div>
                   <div>
-                    <label style={LABEL}>Was price (optional — shows as a sale)</label>
+                    <label style={LABEL}>Was price (optional, shows as a sale)</label>
                     <input type="number" min={0} value={form.original_price} onChange={(e) => setForm({ ...form, original_price: e.target.value })}
                       style={INPUT} placeholder="Leave blank if not on sale" />
                   </div>
@@ -495,13 +495,13 @@ export default function ShopDashboard({ shop, onShopUpdated }) {
                     </p>
                   ) : editingId && products.find((p) => p.id === editingId)?.feature_requested ? (
                     <p style={{ fontSize: 12, color: 'var(--gold-ink)', display: 'flex', alignItems: 'center', gap: 5 }}>
-                      <Clock size={13} strokeWidth={1.75} /> Request sent — we'll be in touch about pricing.
+                      <Clock size={13} strokeWidth={1.75} /> Request sent. We'll be in touch about pricing.
                     </p>
                   ) : (
                     <label style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 12, color: 'var(--white-dim)', cursor: 'pointer', lineHeight: 1.4 }}>
                       <input type="checkbox" checked={form.feature_requested} onChange={(e) => setForm({ ...form, feature_requested: e.target.checked })}
                         style={{ marginTop: 2, accentColor: 'var(--gold)' }} />
-                      Request featured placement on the homepage slideshow — more buyers see it. This is a paid placement; checking this just sends a request, we'll follow up about pricing before it goes live.
+                      Request featured placement on the homepage slideshow, more buyers see it. This is a paid placement; checking this just sends a request, we'll follow up about pricing before it goes live.
                     </label>
                   )}
                 </div>

@@ -27,7 +27,7 @@ export default function Footer() {
               <img src="/logo.svg" alt="NamMarketHub" style={{ height: 28, display: 'block' }} />
             </div>
             <p style={{ fontSize: 12, color: 'var(--white-dim)', lineHeight: 1.6 }}>
-              A marketplace for Namibian shops to list products and connect directly with buyers — no middleman, payment and pickup arranged shop-to-buyer.
+              A marketplace for Namibian shops to list products and connect directly with buyers, no middleman, payment and pickup arranged shop-to-buyer.
             </p>
           </div>
 

@@ -15,7 +15,7 @@ export default function CompareModal({ onClose }) {
     { label: 'Price', render: (p) => format(p.price) },
     { label: 'Shop', render: (p) => (
       <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-        {p.shops?.name ?? '—'}
+        {p.shops?.name ?? '-'}
         {p.shops?.is_verified && <ShieldCheck size={12} strokeWidth={2} color="var(--gold)" />}
       </span>
     ) },

@@ -228,7 +228,7 @@ function PreferencesTab({ userId }) {
 }
 
 const GATE_MESSAGES = {
-  'cart-limit': { icon: ShoppingCart, text: "You've added 3 items to your cart — create a free account to keep going." },
+  'cart-limit': { icon: ShoppingCart, text: "You've added 3 items to your cart. Create a free account to keep going." },
   wishlist: { icon: Heart, text: 'Sign up to save products to your wishlist.' },
 }
 

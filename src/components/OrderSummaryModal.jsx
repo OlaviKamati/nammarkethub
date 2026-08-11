@@ -53,7 +53,7 @@ export default function OrderSummaryModal({ order, onClose }) {
         </div>
 
         <p style={{ fontSize: 11, color: 'var(--white-dim)', lineHeight: 1.5, marginBottom: 16 }}>
-          This is a record of your request, not a tax invoice — the shop is the seller and arranges payment and pickup directly with you.
+          This is a record of your request, not a tax invoice. The shop is the seller and arranges payment and pickup directly with you.
         </p>
 
         <button onClick={() => window.print()} className="btn-outline order-summary-hide-print" style={{ width: '100%', padding: '10px', fontSize: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>

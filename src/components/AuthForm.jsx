@@ -60,7 +60,7 @@ export default function AuthForm() {
           We sent a confirmation link to <strong style={{ color: 'var(--white)' }}>{email}</strong>.
         </p>
         <p style={{ fontSize: 13, color: 'var(--white-dim)', lineHeight: 1.6 }}>
-          Open it and confirm your account before logging in — don't forget to check your spam folder.
+          Open it and confirm your account before logging in. Don't forget to check your spam folder.
         </p>
         <button
           onClick={() => { setConfirmEmailSent(false); setMode('login'); setPassword('') }}

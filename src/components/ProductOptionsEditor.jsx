@@ -27,7 +27,7 @@ export default function ProductOptionsEditor({ options, onChange }) {
   return (
     <div>
       <label style={{ fontSize: 11, color: 'var(--white-dim)', display: 'block', marginBottom: 6 }}>
-        Options (e.g. Color, Size, Flavour) — optional
+        Options (e.g. Color, Size, Flavour) - optional
       </label>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {options.map((group, i) => (

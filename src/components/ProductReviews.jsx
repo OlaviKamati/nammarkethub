@@ -108,7 +108,7 @@ export default function ProductReviews({ productId }) {
       </div>
 
       {!loading && reviews.length === 0 && (
-        <p style={{ fontSize: 13, color: 'var(--white-dim)' }}>No reviews yet — be the first to share your experience.</p>
+        <p style={{ fontSize: 13, color: 'var(--white-dim)' }}>No reviews yet. Be the first to share your experience.</p>
       )}
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>

@@ -99,7 +99,7 @@ export default function Cart() {
           <EmptyState
             variant="cart"
             title="Your cart is empty"
-            description="Browse shops and add products — you'll arrange payment and pickup directly with the seller."
+            description="Browse shops and add products, you'll arrange payment and pickup directly with the seller."
             actionLabel="Browse products"
             actionTo="/"
           />
@@ -168,7 +168,7 @@ export default function Cart() {
               <label style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 12, color: 'var(--white-dim)', cursor: 'pointer', lineHeight: 1.4 }}>
                 <input type="checkbox" checked={wantsPaymentPlan} onChange={(e) => setWantsPaymentPlan(e.target.checked)}
                   style={{ marginTop: 2, accentColor: 'var(--gold)' }} />
-                I'd like to ask about paying in instalments — the shop will confirm and track deposits with me directly.
+                I'd like to ask about paying in instalments, the shop will confirm and track deposits with me directly.
               </label>
               {submitError && <p style={{ fontSize: 12, color: '#ef4444' }}>{submitError}</p>}
               <button type="submit" disabled={submitting} className="btn-gold" style={{ padding: '12px', fontSize: 14, marginTop: 4, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>

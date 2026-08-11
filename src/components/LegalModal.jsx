@@ -8,11 +8,11 @@ const SECTIONS = {
   terms: {
     label: 'Terms of Service',
     body: [
-      ['What NamMarketHub is', 'NamMarketHub is a directory that lets independent Namibian shops list products and connect with buyers. We are not a party to any sale — each shop is the seller and is responsible for their own listings, pricing, stock, and fulfillment.'],
+      ['What NamMarketHub is', 'NamMarketHub is a directory that lets independent Namibian shops list products and connect with buyers. We are not a party to any sale: each shop is the seller and is responsible for their own listings, pricing, stock, and fulfillment.'],
       ['Payment & delivery', "NamMarketHub doesn't process payment. When you send a request, the shop contacts you directly to arrange payment and pickup or delivery, in whatever way you both agree on."],
       ['Accounts', 'An account is optional for browsing, but is used to keep an order history, save a wishlist, and leave reviews. You can browse and place a limited number of requests without one.'],
       ['Reviews', "Reviews should reflect a genuine experience with a shop or product. We don't verify every review before it's published."],
-      ['Listings', "Shops are responsible for the accuracy of what they list — photos, prices, and stock counts. Report anything that looks wrong and we'll follow up with the shop."],
+      ['Listings', "Shops are responsible for the accuracy of what they list: photos, prices, and stock counts. Report anything that looks wrong and we'll follow up with the shop."],
       ['Changes', 'This is a plain description of how the marketplace works today, not a legal document reviewed by a lawyer. If you need formal terms for a specific purpose, get them drafted properly.'],
     ],
   },

@@ -40,7 +40,7 @@ export default function ShopStrip({ shopType, location }) {
         compact
         variant="basket"
         title="No shops here yet"
-        description={location && location !== 'all' ? `No shops listed in ${location} yet — try another area.` : 'Be the first to list a shop.'}
+        description={location && location !== 'all' ? `No shops listed in ${location} yet. Try another area.` : 'Be the first to list a shop.'}
       />
     )
   }
