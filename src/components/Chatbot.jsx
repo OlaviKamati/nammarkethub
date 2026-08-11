@@ -3,7 +3,7 @@ import { Bot, X, ArrowUp } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { useNavigate } from 'react-router-dom'
 
-const SYSTEM_PROMPT = `You are NamBot, the friendly AI assistant for NamMarketHub — Namibia's premier online marketplace. You help both buyers and shop owners.
+const SYSTEM_PROMPT = `You are Pula, the friendly AI assistant for NamMarketHub, Namibia's premier online marketplace. You help both buyers and shop owners.
 
 Your personality: helpful, energetic, knowledgeable about Namibia, and concise. You speak like a friendly Namibian — warm but professional. Never use excessive filler words.
 
@@ -77,7 +77,7 @@ export default function Chatbot() {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      content: "Hey! 👋 I'm NamBot, your NamMarketHub assistant.\n\nI can help you find products, answer questions about shops, or guide you through listing your own shop. What can I do for you?"
+      content: "Hey! 👋 I'm Pula, your NamMarketHub assistant.\n\nI can help you find products, answer questions about shops, or guide you through listing your own shop. What can I do for you?"
     }
   ])
   const [input, setInput] = useState('')
@@ -207,7 +207,7 @@ export default function Chatbot() {
                 <Bot size={19} strokeWidth={1.75} color="#0A0A0A" />
               </div>
               <div>
-                <p style={{ fontSize: 13, fontWeight: 700, color: '#FAFAF8', margin: 0 }}>NamBot</p>
+                <p style={{ fontSize: 13, fontWeight: 700, color: '#FAFAF8', margin: 0 }}>Pula</p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                   <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#22c55e', display: 'inline-block' }} className="pulse-dot" />
                   <span style={{ fontSize: 11, color: '#A0A09A' }}>Online · Powered by AI</span>
