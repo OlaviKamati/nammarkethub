@@ -263,6 +263,12 @@ select option {
 .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s var(--ease-expo), transform 0.7s var(--ease-expo); }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
+/* Gold divider */
+.gold-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-dark), transparent);
+}
+
 /* Glassmorphism nav */
 .glass-nav {
   background: rgba(var(--black-rgb), 0.85);

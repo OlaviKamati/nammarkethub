@@ -177,9 +177,11 @@ export default function ProductDetail() {
               <ShareButtons productName={product.name} url={productUrl} />
             </div>
 
+            <div className="gold-divider" style={{ marginBottom: 24 }} />
+
             {/* Add to cart */}
             {product.stock_count > 0 && (
-              <div style={{ background: 'var(--black-card)', borderRadius: 16, border: '1px solid var(--black-border)', padding: 20, marginTop: 8 }}>
+              <div style={{ background: 'var(--black-card)', borderRadius: 16, border: '1px solid var(--black-border)', padding: 20 }}>
                 <form onSubmit={handleAddToCart} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                   <div>
                     <label style={{ fontSize: 11, color: 'var(--white-dim)', display: 'block', marginBottom: 6 }}>Quantity</label>
