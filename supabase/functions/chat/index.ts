@@ -17,15 +17,17 @@ serve(async (req) => {
   try {
     const { messages, system } = await req.json()
 
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    // Routed through AgentRouter (agentrouter.org), not Anthropic directly — it proxies
+    // the Anthropic Messages API but expects a Bearer token instead of x-api-key.
+    const response = await fetch('https://agentrouter.org/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': ANTHROPIC_API_KEY,
+        'Authorization': `Bearer ${ANTHROPIC_API_KEY}`,
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-5',
+        model: 'claude-opus-4-6',
         max_tokens: 1000,
         system,
         messages,

@@ -56,5 +56,13 @@ export function useOrderNotifications(shopId) {
     setUnreadCount(0)
   }
 
-  return { notifications, unreadCount, clearUnread }
+  // Patch a single order in place — used whenever the shop owner changes an order's
+  // status/notes/deposit, so the change persists in the shared state instead of only
+  // living in a component-local copy that resets whenever that component remounts
+  // (e.g. switching away from the Orders tab and back).
+  function updateNotification(orderId, patch) {
+    setNotifications((prev) => prev.map((o) => (o.id === orderId ? { ...o, ...patch } : o)))
+  }
+
+  return { notifications, unreadCount, clearUnread, updateNotification }
 }

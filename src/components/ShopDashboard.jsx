@@ -19,20 +19,17 @@ const STATUS_CONFIG = {
   cancelled:   { label: 'Cancelled',   color: '#ef4444', bg: 'rgba(239,68,68,0.1)',   border: 'rgba(239,68,68,0.2)',  next: null,          nextLabel: null, nextIcon: null },
 }
 
-function OrdersTab({ shopId, notifications, timeAgo }) {
-  const [orders, setOrders] = useState(notifications)
+function OrdersTab({ shopId, notifications, onOrderChange, timeAgo }) {
   const [expandedId, setExpandedId] = useState(null)
   const [noteInputs, setNoteInputs] = useState({})
   const [depositInputs, setDepositInputs] = useState({})
   const [saving, setSaving] = useState({})
   const [filterStatus, setFilterStatus] = useState('active') // 'active' | 'completed' | 'all'
 
-  useEffect(() => { setOrders(notifications) }, [notifications])
-
   async function updateStatus(orderId, newStatus) {
     setSaving(s => ({ ...s, [orderId]: true }))
     await supabase.from('orders').update({ status: newStatus }).eq('id', orderId)
-    setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus } : o))
+    onOrderChange(orderId, { status: newStatus })
     setSaving(s => ({ ...s, [orderId]: false }))
   }
 
@@ -41,7 +38,7 @@ function OrdersTab({ shopId, notifications, timeAgo }) {
     if (!note) return
     setSaving(s => ({ ...s, [`note_${orderId}`]: true }))
     await supabase.from('orders').update({ notes: note }).eq('id', orderId)
-    setOrders(prev => prev.map(o => o.id === orderId ? { ...o, notes: note } : o))
+    onOrderChange(orderId, { notes: note })
     setSaving(s => ({ ...s, [`note_${orderId}`]: false }))
     setNoteInputs(n => ({ ...n, [orderId]: '' }))
   }
@@ -53,7 +50,7 @@ function OrdersTab({ shopId, notifications, timeAgo }) {
     if (Number.isNaN(amount) || amount < 0) return
     setSaving(s => ({ ...s, [`deposit_${orderId}`]: true }))
     await supabase.from('orders').update({ deposit_paid: amount }).eq('id', orderId)
-    setOrders(prev => prev.map(o => o.id === orderId ? { ...o, deposit_paid: amount } : o))
+    onOrderChange(orderId, { deposit_paid: amount })
     setSaving(s => ({ ...s, [`deposit_${orderId}`]: false }))
   }
 
@@ -63,7 +60,7 @@ function OrdersTab({ shopId, notifications, timeAgo }) {
   }
 
   // Sort: active orders on top, resolved/cancelled at bottom
-  const sorted = [...orders].sort((a, b) => {
+  const sorted = [...notifications].sort((a, b) => {
     const activeStatuses = ['pending', 'attending', 'in_progress']
     const aActive = activeStatuses.includes(a.status)
     const bActive = activeStatuses.includes(b.status)
@@ -83,7 +80,7 @@ function OrdersTab({ shopId, notifications, timeAgo }) {
   const activeCount = sorted.filter(o => ['pending', 'attending', 'in_progress'].includes(o.status)).length
 
   // Count how many of this shop's orders share the same cart group_id (multi-item cart checkout)
-  const groupCounts = orders.reduce((acc, o) => {
+  const groupCounts = notifications.reduce((acc, o) => {
     if (o.group_id) acc[o.group_id] = (acc[o.group_id] ?? 0) + 1
     return acc
   }, {})
@@ -287,7 +284,7 @@ export default function ShopDashboard({ shop, onShopUpdated }) {
   const [showForm, setShowForm] = useState(false)
   const [tab, setTab] = useState('products')
 
-  const { notifications, unreadCount, clearUnread } = useOrderNotifications(shop.id)
+  const { notifications, unreadCount, clearUnread, updateNotification } = useOrderNotifications(shop.id)
   const categories = CATEGORIES_BY_TYPE[shop.shop_type] ?? CATEGORIES_BY_TYPE['general']
 
   async function fetchProducts() {
@@ -564,7 +561,7 @@ export default function ShopDashboard({ shop, onShopUpdated }) {
       )}
 
       {tab === 'orders' && (
-        <OrdersTab shopId={shop.id} notifications={notifications} timeAgo={timeAgo} />
+        <OrdersTab shopId={shop.id} notifications={notifications} onOrderChange={updateNotification} timeAgo={timeAgo} />
       )}
     </div>
   )
