@@ -28,18 +28,20 @@ function OrdersTab({ shopId, notifications, onOrderChange, timeAgo }) {
 
   async function updateStatus(orderId, newStatus) {
     setSaving(s => ({ ...s, [orderId]: true }))
-    await supabase.from('orders').update({ status: newStatus }).eq('id', orderId)
-    onOrderChange(orderId, { status: newStatus })
+    const { error } = await supabase.from('orders').update({ status: newStatus }).eq('id', orderId)
     setSaving(s => ({ ...s, [orderId]: false }))
+    if (error) { alert('Could not update this order. Please try again.'); return }
+    onOrderChange(orderId, { status: newStatus })
   }
 
   async function saveNote(orderId) {
     const note = noteInputs[orderId]?.trim()
     if (!note) return
     setSaving(s => ({ ...s, [`note_${orderId}`]: true }))
-    await supabase.from('orders').update({ notes: note }).eq('id', orderId)
-    onOrderChange(orderId, { notes: note })
+    const { error } = await supabase.from('orders').update({ notes: note }).eq('id', orderId)
     setSaving(s => ({ ...s, [`note_${orderId}`]: false }))
+    if (error) { alert('Could not save this note. Please try again.'); return }
+    onOrderChange(orderId, { notes: note })
     setNoteInputs(n => ({ ...n, [orderId]: '' }))
   }
 
@@ -49,9 +51,10 @@ function OrdersTab({ shopId, notifications, onOrderChange, timeAgo }) {
     const amount = Number(raw)
     if (Number.isNaN(amount) || amount < 0) return
     setSaving(s => ({ ...s, [`deposit_${orderId}`]: true }))
-    await supabase.from('orders').update({ deposit_paid: amount }).eq('id', orderId)
-    onOrderChange(orderId, { deposit_paid: amount })
+    const { error } = await supabase.from('orders').update({ deposit_paid: amount }).eq('id', orderId)
     setSaving(s => ({ ...s, [`deposit_${orderId}`]: false }))
+    if (error) { alert('Could not update the deposit. Please try again.'); return }
+    onOrderChange(orderId, { deposit_paid: amount })
   }
 
   async function cancelOrder(orderId) {
