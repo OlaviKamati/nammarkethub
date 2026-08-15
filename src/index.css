@@ -389,6 +389,19 @@ html, body { overflow-x: hidden; }
   }
 }
 
+/* Respect the OS-level "reduce motion" accessibility setting — collapse every
+   animation/transition to effectively instant and show the end state directly,
+   instead of forcing motion on people who've asked for less of it. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal { opacity: 1 !important; transform: none !important; }
+}
+
 /* Printing an order summary: show only the card, in plain black-on-white */
 @media print {
   body * { visibility: hidden; }

@@ -22,7 +22,7 @@ export default function Navbar() {
   return (
     <>
       <nav className="glass-nav sticky top-0 z-50">
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 1.5rem', height: 56, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ maxWidth: 1440, margin: '0 auto', padding: '0 1.5rem', height: 56, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 
           {/* Logo */}
           <Link to="/" className="logo-glow" style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>

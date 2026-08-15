@@ -38,7 +38,7 @@ export default function ShopDetail() {
   return (
     <>
       <Navbar />
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '32px 24px' }} className="page-enter">
+      <div style={{ maxWidth: 1440, margin: '0 auto', padding: '32px 24px' }} className="page-enter">
         <button
           onClick={() => navigate(-1)}
           style={{ fontSize: 13, color: 'var(--white-dim)', background: 'none', border: 'none', cursor: 'pointer', marginBottom: 24, display: 'flex', alignItems: 'center', gap: 6 }}

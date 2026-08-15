@@ -10,6 +10,7 @@ import AnimatedCounter from '../components/AnimatedCounter'
 import TrustBadges from '../components/TrustBadges'
 import NewsletterSignup from '../components/NewsletterSignup'
 import Footer from '../components/Footer'
+import NewArrivals from '../components/NewArrivals'
 import { SHOP_TYPES } from '../lib/shopTypes'
 import { useScrollReveal } from '../hooks/useScrollReveal'
 
@@ -55,7 +56,7 @@ export default function Home() {
       <Navbar />
       <div style={{ minHeight: '100vh', background: 'var(--bg)' }} className="page-enter">
 
-      <main style={{ maxWidth: 1200, margin: '0 auto', padding: '2rem 1.5rem' }}>
+      <main style={{ maxWidth: 1440, margin: '0 auto', padding: '2rem 1.5rem' }}>
 
         {/* Hero Carousel */}
         <HeroCarousel />
@@ -208,6 +209,9 @@ export default function Home() {
         <div style={{ marginBottom: 24 }}>
           <CategoryFilter active={category} onChange={setCategory} shopType={shopType} />
         </div>
+
+        {/* New arrivals coverflow — bridges into the product grid below */}
+        <NewArrivals />
 
         {/* Section label */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
