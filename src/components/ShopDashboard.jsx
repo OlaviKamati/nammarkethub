@@ -127,7 +127,7 @@ function OrdersTab({ shopId, notifications, onOrderChange, timeAgo }) {
             const isResolved = ['completed', 'cancelled'].includes(order.status)
 
             return (
-              <div key={order.id} style={{ background: 'var(--black-soft)', border: `1px solid ${isResolved ? 'var(--black-card)' : 'var(--black-border)'}`, borderRadius: 14, overflow: 'hidden', opacity: isResolved ? 0.7 : 1, transition: 'opacity 0.2s' }}>
+              <div key={order.id} style={{ background: 'rgba(var(--black-soft-rgb), 0.6)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: `1px solid ${isResolved ? 'var(--black-card)' : 'var(--black-border)'}`, borderRadius: 14, overflow: 'hidden', opacity: isResolved ? 0.7 : 1, transition: 'opacity 0.2s' }}>
                 {/* Order header */}
                 <div style={{ padding: '14px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, cursor: 'pointer' }}
                   onClick={() => setExpandedId(isExpanded ? null : order.id)}>
@@ -204,7 +204,7 @@ function OrdersTab({ shopId, notifications, onOrderChange, timeAgo }) {
                       {/* Notes */}
                       <div>
                         {order.notes && (
-                          <div style={{ background: 'var(--black-card)', borderRadius: 8, padding: '8px 12px', marginBottom: 8, border: '1px solid var(--black-border)' }}>
+                          <div style={{ background: 'rgba(var(--black-card-rgb), 0.6)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', borderRadius: 8, padding: '8px 12px', marginBottom: 8, border: '1px solid var(--black-border)' }}>
                             <p style={{ fontSize: 11, color: 'var(--gold-ink)', margin: '0 0 2px', fontFamily: 'ui-monospace, monospace' }}>NOTE</p>
                             <p style={{ fontSize: 12, color: 'var(--white)', margin: 0 }}>{order.notes}</p>
                           </div>
@@ -372,7 +372,7 @@ export default function ShopDashboard({ shop, onShopUpdated }) {
           { icon: Bell, label: 'Active orders', value: activeOrderCount },
           { icon: ShoppingBag, label: 'Recent orders', value: notifications.length },
         ].map((kpi) => (
-          <div key={kpi.label} style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'var(--black-soft)', border: '1px solid var(--black-border)', borderRadius: 14, padding: '14px 16px' }}>
+          <div key={kpi.label} style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'rgba(var(--black-soft-rgb), 0.6)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--black-border)', borderRadius: 14, padding: '14px 16px' }}>
             <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(201,168,76,0.1)', border: '1px solid rgba(201,168,76,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <kpi.icon size={17} strokeWidth={1.75} color="var(--gold)" />
             </div>
@@ -438,7 +438,7 @@ export default function ShopDashboard({ shop, onShopUpdated }) {
 
           {/* Form */}
           {showForm && (
-            <div style={{ background: 'var(--black-soft)', border: '1px solid var(--black-border)', borderRadius: 16, padding: 20, marginBottom: 20 }}>
+            <div style={{ background: 'rgba(var(--black-soft-rgb), 0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--black-border)', borderRadius: 16, padding: 20, marginBottom: 20 }}>
               <h3 style={{ fontSize: 14, fontWeight: 700, color: 'var(--white)', marginBottom: 16 }}>
                 {editingId ? 'Edit product' : 'New product'}
               </h3>
@@ -533,7 +533,7 @@ export default function ShopDashboard({ shop, onShopUpdated }) {
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {products.map((p) => (
-                <div key={p.id} style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'var(--black-soft)', border: '1px solid var(--black-border)', borderRadius: 12, padding: '12px 14px', opacity: p.is_active ? 1 : 0.5 }}>
+                <div key={p.id} style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'rgba(var(--black-soft-rgb), 0.6)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--black-border)', borderRadius: 12, padding: '12px 14px', opacity: p.is_active ? 1 : 0.5 }}>
                   <div style={{ width: 40, height: 40, borderRadius: 10, background: 'var(--black-card)', flexShrink: 0, overflow: 'hidden', border: '1px solid var(--black-border)' }}>
                     {p.photo_url
                       ? <img src={p.photo_url} alt={p.name} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />

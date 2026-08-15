@@ -49,7 +49,7 @@ export default function ProfileSettingsForm({ userId, profile, onSaved }) {
   }
 
   return (
-    <div style={{ background: 'var(--black-card)', border: '1px solid var(--black-border)', borderRadius: 16, padding: 20, maxWidth: 440 }}>
+    <div style={{ background: 'rgba(var(--black-card-rgb), 0.65)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--black-border)', borderRadius: 16, padding: 20, maxWidth: 440 }}>
       <h3 style={{ fontSize: 14, fontWeight: 700, color: 'var(--white)', marginBottom: 16 }}>
         {profile ? 'Edit profile' : 'Set up your profile'}
       </h3>

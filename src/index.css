@@ -17,6 +17,7 @@
   /* Theme-following RGB of --black-card, for translucent/glass surfaces (unlike
      --black-rgb above, which stays fixed dark for the always-dark navbar). */
   --black-card-rgb: 22, 22, 22;
+  --black-soft-rgb: 17, 17, 17;
   --bg:          var(--black);
   --white:       #FAFAF8;
   --white-dim:   #A0A09A;
@@ -65,6 +66,7 @@
   --black-card:  #F6F4EC;
   --black-border:#CBC4AF;
   --black-card-rgb: 246, 244, 236;
+  --black-soft-rgb: 242, 240, 233;
   --bg:          #EAE7DD;
   --white:       #211F1A;
   --white-dim:   #6B6759;

@@ -56,7 +56,7 @@ export default function ShopSettingsForm({ shop, onUpdated }) {
   }
 
   return (
-    <div style={{ background: 'var(--black-soft)', border: '1px solid var(--black-border)', borderRadius: 16, padding: 20, maxWidth: 480 }}>
+    <div style={{ background: 'rgba(var(--black-soft-rgb), 0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--black-border)', borderRadius: 16, padding: 20, maxWidth: 480 }}>
       <h3 style={{ fontSize: 14, fontWeight: 700, color: 'var(--white)', marginBottom: 4 }}>Shop profile</h3>
       <p style={{ fontSize: 12, color: 'var(--white-dim)', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 6 }}>
         <type.icon size={13} strokeWidth={1.75} /> {type.label} · shop type can't be changed here

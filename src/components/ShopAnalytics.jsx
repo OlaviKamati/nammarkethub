@@ -45,7 +45,7 @@ export default function ShopAnalytics({ shopId }) {
           { icon: ShoppingBag, label: 'Total requests', value: orders.length },
           { icon: Package, label: 'Resolved orders', value: completed.length },
         ].map((kpi) => (
-          <div key={kpi.label} style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'var(--black-soft)', border: '1px solid var(--black-border)', borderRadius: 14, padding: '14px 16px' }}>
+          <div key={kpi.label} style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'rgba(var(--black-soft-rgb), 0.6)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--black-border)', borderRadius: 14, padding: '14px 16px' }}>
             <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(201,168,76,0.1)', border: '1px solid rgba(201,168,76,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <kpi.icon size={17} strokeWidth={1.75} color="var(--gold)" />
             </div>
@@ -58,7 +58,7 @@ export default function ShopAnalytics({ shopId }) {
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 16 }}>
-        <div style={{ background: 'var(--black-soft)', border: '1px solid var(--black-border)', borderRadius: 14, padding: 18 }}>
+        <div style={{ background: 'rgba(var(--black-soft-rgb), 0.6)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--black-border)', borderRadius: 14, padding: 18 }}>
           <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--white)', marginBottom: 14 }}>Orders by status</p>
           {orders.length === 0 ? (
             <p style={{ fontSize: 12, color: 'var(--white-dim)' }}>No orders yet.</p>
@@ -79,7 +79,7 @@ export default function ShopAnalytics({ shopId }) {
           )}
         </div>
 
-        <div style={{ background: 'var(--black-soft)', border: '1px solid var(--black-border)', borderRadius: 14, padding: 18 }}>
+        <div style={{ background: 'rgba(var(--black-soft-rgb), 0.6)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--black-border)', borderRadius: 14, padding: 18 }}>
           <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--white)', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 6 }}>
             <TrendingUp size={14} strokeWidth={1.75} color="var(--gold)" /> Most requested products
           </p>
