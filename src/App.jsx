@@ -7,6 +7,7 @@ import Cart from './pages/Cart'
 import Account from './pages/Account'
 import Chatbot from './components/Chatbot'
 import CompareTray from './components/CompareTray'
+import LiquidBackground from './components/LiquidBackground'
 import { CartProvider } from './context/CartContext'
 import { CurrencyProvider } from './context/CurrencyContext'
 import { CompareProvider } from './context/CompareContext'
@@ -19,6 +20,7 @@ function App() {
       <CurrencyProvider>
       <CartProvider>
       <CompareProvider>
+        <LiquidBackground />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/sell" element={<Sell />} />

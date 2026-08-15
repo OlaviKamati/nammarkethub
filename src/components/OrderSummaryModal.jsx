@@ -24,7 +24,7 @@ export default function OrderSummaryModal({ order, onClose }) {
       <div
         onClick={(e) => e.stopPropagation()}
         className="fade-up order-summary-card"
-        style={{ width: '100%', maxWidth: 420, background: 'var(--black-card)', border: '1px solid var(--black-border)', borderRadius: 20, padding: 24 }}
+        style={{ width: '100%', maxWidth: 420, background: 'rgba(var(--black-card-rgb), 0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--black-border)', borderRadius: 20, padding: 24 }}
       >
         <div className="order-summary-hide-print" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
           <h2 className="font-display" style={{ fontSize: 17, color: 'var(--white)' }}>Order summary</h2>

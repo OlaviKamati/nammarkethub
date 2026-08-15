@@ -39,7 +39,7 @@ export default function LegalModal({ initialTab = 'terms', onClose }) {
       <div
         onClick={(e) => e.stopPropagation()}
         className="fade-up"
-        style={{ width: '100%', maxWidth: 560, maxHeight: '82vh', overflowY: 'auto', background: 'var(--black-card)', border: '1px solid var(--black-border)', borderRadius: 20, padding: 24 }}
+        style={{ width: '100%', maxWidth: 560, maxHeight: '82vh', overflowY: 'auto', background: 'rgba(var(--black-card-rgb), 0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--black-border)', borderRadius: 20, padding: 24 }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
           <div style={{ display: 'flex', gap: 8 }}>

@@ -112,7 +112,7 @@ export default function Cart() {
                 </p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                   {group.lines.map((item) => (
-                    <div key={item.key} style={{ display: 'flex', gap: 12, alignItems: 'center', background: 'var(--black-card)', border: '1px solid var(--black-border)', borderRadius: 14, padding: 12 }}>
+                    <div key={item.key} style={{ display: 'flex', gap: 12, alignItems: 'center', background: 'rgba(var(--black-card-rgb), 0.62)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--black-border)', borderRadius: 14, padding: 12 }}>
                       <div style={{ width: 56, height: 56, borderRadius: 10, background: '#0D0D0D', flexShrink: 0, overflow: 'hidden' }}>
                         {item.product.photo_url ? (
                           <img src={item.product.photo_url} alt={item.product.name} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -153,7 +153,7 @@ export default function Cart() {
               <span className="gold-text" style={{ fontSize: 18, fontWeight: 700 }}>{format(subtotal)}</span>
             </div>
 
-            <form onSubmit={handleCheckout} style={{ background: 'var(--black-card)', border: '1px solid var(--black-border)', borderRadius: 16, padding: 20, display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <form onSubmit={handleCheckout} style={{ background: 'rgba(var(--black-card-rgb), 0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--black-border)', borderRadius: 16, padding: 20, display: 'flex', flexDirection: 'column', gap: 12 }}>
               <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--white)' }}>Your details</p>
               <div>
                 <label style={{ fontSize: 11, color: 'var(--white-dim)', display: 'block', marginBottom: 6 }}>Your name</label>

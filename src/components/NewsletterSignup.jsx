@@ -16,7 +16,7 @@ export default function NewsletterSignup() {
   }
 
   return (
-    <div style={{ background: 'var(--black-card)', border: '1px solid var(--black-border)', borderRadius: 16, padding: '24px', textAlign: 'center' }}>
+    <div style={{ background: 'rgba(var(--black-card-rgb), 0.62)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--black-border)', borderRadius: 16, padding: '24px', textAlign: 'center' }}>
       <p style={{ fontSize: 15, fontWeight: 700, color: 'var(--white)', marginBottom: 6 }}>Stay in the loop</p>
       <p style={{ fontSize: 13, color: 'var(--white-dim)', marginBottom: 16 }}>New shops, new products, no spam.</p>
       {done ? (

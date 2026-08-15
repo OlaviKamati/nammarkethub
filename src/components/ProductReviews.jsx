@@ -59,7 +59,7 @@ export default function ProductReviews({ productId }) {
       <h2 style={{ fontSize: 15, fontWeight: 700, color: 'var(--white)', marginBottom: 16 }}>Reviews</h2>
 
       {reviews.length > 0 && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: 24, alignItems: 'center', background: 'var(--black-card)', border: '1px solid var(--black-border)', borderRadius: 16, padding: '18px 20px', marginBottom: 20 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: 24, alignItems: 'center', background: 'rgba(var(--black-card-rgb), 0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--black-border)', borderRadius: 16, padding: '18px 20px', marginBottom: 20 }}>
           <div style={{ textAlign: 'center', paddingRight: 24, borderRight: '1px solid var(--black-border)' }}>
             <p className="gold-text" style={{ fontSize: 32, fontWeight: 700, lineHeight: 1 }}>{average.toFixed(1)}</p>
             <div style={{ margin: '6px 0' }}><StarRating value={average} size={13} /></div>
@@ -83,7 +83,7 @@ export default function ProductReviews({ productId }) {
       )}
 
       {/* Leave a review */}
-      <div style={{ background: 'var(--black-card)', border: '1px solid var(--black-border)', borderRadius: 16, padding: 16, marginBottom: 20 }}>
+      <div style={{ background: 'rgba(var(--black-card-rgb), 0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--black-border)', borderRadius: 16, padding: 16, marginBottom: 20 }}>
         {user ? (
           <form onSubmit={handleSubmit}>
             <p style={{ fontSize: 12, color: 'var(--white-dim)', marginBottom: 8 }}>Your rating</p>
@@ -113,7 +113,7 @@ export default function ProductReviews({ productId }) {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         {reviews.map((r) => (
-          <div key={r.id} style={{ background: 'var(--black-card)', border: '1px solid var(--black-border)', borderRadius: 14, padding: '14px 16px' }}>
+          <div key={r.id} style={{ background: 'rgba(var(--black-card-rgb), 0.62)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--black-border)', borderRadius: 14, padding: '14px 16px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: r.comment ? 8 : 0 }}>
               <StarRating value={r.rating} size={13} />
               <span style={{ fontSize: 11, color: 'var(--white-dim)' }}>{timeAgo(r.created_at)}</span>

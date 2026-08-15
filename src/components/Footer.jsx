@@ -18,7 +18,7 @@ export default function Footer() {
           elsewhere, instead of a hard edge-to-edge border line. */}
       <div className="gold-divider" style={{ marginBottom: 32 }} />
 
-      <div style={{ background: 'var(--black-card)', border: '1px solid var(--black-border)', borderRadius: 20, padding: '32px 28px 20px' }}>
+      <div style={{ background: 'rgba(var(--black-card-rgb), 0.65)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--black-border)', borderRadius: 20, padding: '32px 28px 20px' }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '32px 56px', marginBottom: 24 }}>
           <div style={{ flex: '1 1 240px', maxWidth: 320 }}>
             {/* Dark chip behind the logo — the wordmark's "Market" is baked into the SVG as

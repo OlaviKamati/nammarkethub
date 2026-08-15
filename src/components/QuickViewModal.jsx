@@ -57,7 +57,7 @@ export default function QuickViewModal({ productId, onClose }) {
       <div
         onClick={(e) => e.stopPropagation()}
         className="fade-up"
-        style={{ width: '100%', maxWidth: 420, maxHeight: '88vh', overflowY: 'auto', background: 'var(--black-card)', border: '1px solid var(--black-border)', borderRadius: 20, position: 'relative' }}
+        style={{ width: '100%', maxWidth: 420, maxHeight: '88vh', overflowY: 'auto', background: 'rgba(var(--black-card-rgb), 0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--black-border)', borderRadius: 20, position: 'relative' }}
       >
         <button
           onClick={onClose}

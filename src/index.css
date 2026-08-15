@@ -14,6 +14,9 @@
   --black-card:  #161616;
   --black-border:#2A2A2A;
   --black-rgb:   10, 10, 10;
+  /* Theme-following RGB of --black-card, for translucent/glass surfaces (unlike
+     --black-rgb above, which stays fixed dark for the always-dark navbar). */
+  --black-card-rgb: 22, 22, 22;
   --bg:          var(--black);
   --white:       #FAFAF8;
   --white-dim:   #A0A09A;
@@ -61,6 +64,7 @@
   --black-soft:  #F2F0E9;
   --black-card:  #F6F4EC;
   --black-border:#CBC4AF;
+  --black-card-rgb: 246, 244, 236;
   --bg:          #EAE7DD;
   --white:       #211F1A;
   --white-dim:   #6B6759;
@@ -116,6 +120,13 @@ body {
   0%   { background-position: -200% center; }
   100% { background-position:  200% center; }
 }
+
+/* ── Loading skeleton shimmer (was referenced by ProductGrid's skeleton cards
+   but never actually defined, so it silently never animated) ── */
+@keyframes shimmerBg {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
 .gold-shimmer {
   background: linear-gradient(90deg, var(--gold-dark) 0%, var(--gold-light) 40%, var(--gold) 50%, var(--gold-light) 60%, var(--gold-dark) 100%);
   background-size: 200% auto;
@@ -133,13 +144,16 @@ body {
 
 /* ── Card styles ── */
 .card {
-  background: var(--black-card);
+  background: rgba(var(--black-card-rgb), 0.62);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--black-border);
   border-radius: 16px;
-  transition: border-color 0.2s ease, transform 0.25s var(--ease-expo), box-shadow 0.25s ease;
+  transition: border-color 0.2s ease, transform 0.25s var(--ease-expo), box-shadow 0.25s ease, background-color 0.2s ease;
 }
 .card:hover {
   border-color: var(--gold-dark);
+  background: rgba(var(--black-card-rgb), 0.78);
   transform: translateY(-3px);
   box-shadow: 0 12px 40px -8px rgba(201,168,76,0.15);
 }
@@ -231,6 +245,60 @@ select option {
   to   { opacity: 1; }
 }
 .fade-in { animation: fadeIn 0.4s ease both; }
+
+/* Hero blurred backdrop — slow continuous zoom/drift ("Ken Burns") so the
+   background never sits completely still, without competing with the sharp
+   product image or caption in front of it. */
+@keyframes heroBackdropDrift {
+  0%   { transform: scale(1.15) translate(0, 0); }
+  50%  { transform: scale(1.28) translate(-1.5%, 1.5%); }
+  100% { transform: scale(1.15) translate(0, 0); }
+}
+.hero-backdrop-drift { animation: heroBackdropDrift 22s ease-in-out infinite; }
+
+/* Liquid animated background — three large blurred blobs drifting behind every
+   page, each on its own duration/path so the motion never feels synchronized
+   or mechanical. Fixed + negative z-index so it sits behind all page content
+   but above body's base color; pointer-events none so it never blocks clicks. */
+@keyframes liquidBlobA {
+  0%   { transform: translate(-10%, -10%) scale(1); }
+  33%  { transform: translate(20%, 10%) scale(1.15); }
+  66%  { transform: translate(-5%, 25%) scale(0.9); }
+  100% { transform: translate(-10%, -10%) scale(1); }
+}
+@keyframes liquidBlobB {
+  0%   { transform: translate(10%, 15%) scale(1); }
+  50%  { transform: translate(-25%, -15%) scale(1.2); }
+  100% { transform: translate(10%, 15%) scale(1); }
+}
+@keyframes liquidBlobC {
+  0%   { transform: translate(0, 0) scale(1); }
+  40%  { transform: translate(15%, -20%) scale(0.85); }
+  80%  { transform: translate(-20%, 10%) scale(1.1); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+.liquid-bg { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.liquid-blob { position: absolute; border-radius: 50%; filter: blur(90px); will-change: transform; }
+.liquid-blob-a {
+  width: 55vw; height: 55vw; top: -15%; left: -10%;
+  background: radial-gradient(circle, rgba(201,168,76,0.35) 0%, transparent 70%);
+  animation: liquidBlobA 32s ease-in-out infinite;
+}
+.liquid-blob-b {
+  width: 45vw; height: 45vw; top: 30%; right: -10%;
+  background: radial-gradient(circle, rgba(154,122,46,0.3) 0%, transparent 70%);
+  animation: liquidBlobB 26s ease-in-out infinite;
+}
+.liquid-blob-c {
+  width: 50vw; height: 50vw; bottom: -15%; left: 20%;
+  background: radial-gradient(circle, rgba(232,201,106,0.25) 0%, transparent 70%);
+  animation: liquidBlobC 38s ease-in-out infinite;
+}
+/* The same low opacity that reads as a warm glow on near-black is nearly
+   invisible on the light theme's pale cream page — boost it for contrast. */
+:root[data-theme="light"] .liquid-blob-a { background: radial-gradient(circle, rgba(201,168,76,0.55) 0%, transparent 70%); }
+:root[data-theme="light"] .liquid-blob-b { background: radial-gradient(circle, rgba(154,122,46,0.45) 0%, transparent 70%); }
+:root[data-theme="light"] .liquid-blob-c { background: radial-gradient(circle, rgba(232,201,106,0.5) 0%, transparent 70%); }
 
 /* Scale in */
 @keyframes scaleIn {

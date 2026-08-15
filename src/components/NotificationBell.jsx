@@ -42,7 +42,7 @@ export default function NotificationBell({ orders, unreadCount, markAllSeen }) {
       </button>
 
       {open && (
-        <div style={{ position: 'absolute', top: 'calc(100% + 10px)', right: 0, width: 320, maxHeight: 400, overflowY: 'auto', background: 'var(--black-card)', border: '1px solid var(--black-border)', borderRadius: 14, boxShadow: '0 12px 32px rgba(0,0,0,0.5)', zIndex: 80 }}>
+        <div style={{ position: 'absolute', top: 'calc(100% + 10px)', right: 0, width: 320, maxHeight: 400, overflowY: 'auto', background: 'rgba(var(--black-card-rgb), 0.75)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--black-border)', borderRadius: 14, boxShadow: '0 12px 32px rgba(0,0,0,0.5)', zIndex: 80 }}>
           <p style={{ fontSize: 11, color: 'var(--gold-ink)', fontFamily: 'ui-monospace, monospace', letterSpacing: '0.08em', textTransform: 'uppercase', padding: '14px 16px 10px' }}>
             Your order updates
           </p>

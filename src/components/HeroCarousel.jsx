@@ -8,6 +8,7 @@ export default function HeroCarousel() {
   const { format } = useCurrency()
   const [allProducts, setAllProducts] = useState([])
   const [featuredProducts, setFeaturedProducts] = useState([])
+  const [loading, setLoading] = useState(true)
   const [tab, setTab] = useState('latest')
   const [current, setCurrent] = useState(0)
   const [paused, setPaused] = useState(false)
@@ -24,7 +25,7 @@ export default function HeroCarousel() {
       .not('photo_url', 'is', null)
       .order('created_at', { ascending: false })
       .limit(24)
-      .then(({ data }) => setAllProducts(data ?? []))
+      .then(({ data }) => { setAllProducts(data ?? []); setLoading(false) })
 
     // Featured listings are paid placements, so fetched separately — a featured
     // product may be older than the 24 most-recent and would otherwise be cut off.
@@ -71,6 +72,18 @@ export default function HeroCarousel() {
 
   const heroHeight = 'clamp(420px, 62vh, 680px)'
 
+  if (loading) {
+    return (
+      <div
+        style={{
+          height: heroHeight, borderRadius: 20, marginBottom: 32, border: '1px solid var(--black-border)',
+          background: 'linear-gradient(90deg, var(--black-card) 25%, var(--black-soft) 50%, var(--black-card) 75%)',
+          backgroundSize: '200% 100%', animation: 'shimmerBg 1.6s ease-in-out infinite',
+        }}
+      />
+    )
+  }
+
   if (allProducts.length === 0) {
     return (
       <div style={{ height: heroHeight, background: 'var(--black-card)', borderRadius: 20, border: '1px solid var(--black-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 32 }}>
@@ -92,12 +105,14 @@ export default function HeroCarousel() {
     >
       {/* BG Image — contain so the full product is always visible, never cropped */}
       <div style={{ position: 'absolute', inset: 0, opacity: transitioning ? 0 : 1, transition: 'opacity 0.3s ease' }}>
-        {/* Blurred, zoomed backdrop fills the frame so contain-mode doesn't leave flat empty bars */}
+        {/* Blurred, zoomed backdrop fills the frame so contain-mode doesn't leave flat empty bars.
+            Slowly drifts/zooms via the hero-backdrop-drift keyframe so the background isn't static. */}
         <img
           src={slide.photo_url}
           alt=""
           aria-hidden="true"
-          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: 'blur(40px) brightness(0.9) saturate(1.05)', transform: 'scale(1.15)' }}
+          className="hero-backdrop-drift"
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: 'blur(40px) brightness(0.9) saturate(1.05)' }}
         />
         {/* Sharp product image, always fully visible */}
         <img

@@ -13,7 +13,7 @@ export default function CompareTray() {
     <>
       <div
         className="compare-tray fade-up"
-        style={{ position: 'fixed', bottom: 20, left: 20, zIndex: 60, background: 'var(--black-card)', border: '1px solid var(--gold-dark)', borderRadius: 14, padding: '10px 12px', display: 'flex', alignItems: 'center', gap: 10, boxShadow: '0 8px 24px rgba(0,0,0,0.4)' }}
+        style={{ position: 'fixed', bottom: 20, left: 20, zIndex: 60, background: 'rgba(var(--black-card-rgb), 0.8)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--gold-dark)', borderRadius: 14, padding: '10px 12px', display: 'flex', alignItems: 'center', gap: 10, boxShadow: '0 8px 24px rgba(0,0,0,0.4)' }}
       >
         <div style={{ display: 'flex', gap: 6 }}>
           {items.map((p) => (

@@ -54,7 +54,7 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <div style={{ minHeight: '100vh', background: 'var(--bg)' }} className="page-enter">
+      <div style={{ minHeight: '100vh' }} className="page-enter">
 
       <main style={{ maxWidth: 1440, margin: '0 auto', padding: '2rem 1.5rem' }}>
 
@@ -75,7 +75,7 @@ export default function Home() {
             <div
               key={stat.label}
               className="reveal"
-              style={{ background: 'var(--black-card)', padding: '20px 24px', textAlign: 'center', transitionDelay: `${i * 100}ms` }}
+              style={{ background: 'rgba(var(--black-card-rgb), 0.55)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', padding: '20px 24px', textAlign: 'center', transitionDelay: `${i * 100}ms` }}
             >
               <div className="gold-text" style={{ fontSize: 28, fontWeight: 700, marginBottom: 4 }}>
                 <AnimatedCounter target={stat.value} suffix={stat.suffix} />
