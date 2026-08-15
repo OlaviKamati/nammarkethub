@@ -95,7 +95,7 @@ export default function ProductDetail() {
 
             {/* Shop info below image */}
             {shop && (
-              <div style={{ marginTop: 16, padding: '16px 20px', background: 'var(--black-card)', borderRadius: 16, border: '1px solid var(--black-border)' }}>
+              <div style={{ marginTop: 16, padding: '16px 20px', background: 'rgba(var(--black-card-rgb), 0.62)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', borderRadius: 16, border: '1px solid var(--black-border)' }}>
                 <p style={{ fontSize: 10, color: 'var(--gold-ink)', fontFamily: 'ui-monospace, monospace', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8 }}>Sold by</p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 2, flexWrap: 'wrap' }}>
                   <Link to={`/shop/${shop.id}`} style={{ fontSize: 15, fontWeight: 600, color: 'var(--white)', textDecoration: 'none' }}>{shop.name}</Link>
@@ -181,7 +181,7 @@ export default function ProductDetail() {
 
             {/* Add to cart */}
             {product.stock_count > 0 && (
-              <div style={{ background: 'var(--black-card)', borderRadius: 16, border: '1px solid var(--black-border)', padding: 20 }}>
+              <div style={{ background: 'rgba(var(--black-card-rgb), 0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', borderRadius: 16, border: '1px solid var(--black-border)', padding: 20 }}>
                 <form onSubmit={handleAddToCart} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                   <div>
                     <label style={{ fontSize: 11, color: 'var(--white-dim)', display: 'block', marginBottom: 6 }}>Quantity</label>

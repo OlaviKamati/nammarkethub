@@ -52,7 +52,7 @@ export default function AuthForm() {
   if (confirmEmailSent) {
     return (
       <div
-        style={{ background: 'var(--black-card)', border: '1px solid var(--black-border)', borderRadius: 16, padding: '32px 24px', textAlign: 'center' }}
+        style={{ background: 'rgba(var(--black-card-rgb), 0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--black-border)', borderRadius: 16, padding: '32px 24px', textAlign: 'center' }}
       >
         <Mail size={32} strokeWidth={1.5} color="var(--gold)" style={{ marginBottom: 12 }} />
         <p style={{ fontSize: 16, fontWeight: 600, color: 'var(--white)', marginBottom: 8 }}>Check your email</p>

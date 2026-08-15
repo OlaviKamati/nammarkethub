@@ -112,7 +112,7 @@ function OrdersTab({ userId }) {
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {orders.map((o) => (
-            <div key={o.id} style={{ background: 'var(--black-card)', border: '1px solid var(--black-border)', borderRadius: 12, padding: '12px 14px' }}>
+            <div key={o.id} style={{ background: 'rgba(var(--black-card-rgb), 0.62)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--black-border)', borderRadius: 12, padding: '12px 14px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
                 <span className="tag" style={{ color: 'var(--gold-ink)', background: 'rgba(201,168,76,0.1)', padding: '2px 8px', borderRadius: 99, border: '1px solid rgba(201,168,76,0.2)' }}>
                   {STATUS_LABEL[o.status] ?? o.status}
@@ -162,7 +162,7 @@ function PreferencesTab({ userId }) {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-      <div style={{ background: 'var(--black-card)', border: '1px solid var(--black-border)', borderRadius: 16, padding: 20, maxWidth: 420 }}>
+      <div style={{ background: 'rgba(var(--black-card-rgb), 0.65)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--black-border)', borderRadius: 16, padding: 20, maxWidth: 420 }}>
         <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--white)', marginBottom: 4 }}>Appearance</p>
         <p style={{ fontSize: 12, color: 'var(--white-dim)', marginBottom: 14, lineHeight: 1.5 }}>
           Switch between dark and light.
@@ -186,7 +186,7 @@ function PreferencesTab({ userId }) {
         </div>
       </div>
 
-      <div style={{ background: 'var(--black-card)', border: '1px solid var(--black-border)', borderRadius: 16, padding: 20, maxWidth: 420 }}>
+      <div style={{ background: 'rgba(var(--black-card-rgb), 0.65)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--black-border)', borderRadius: 16, padding: 20, maxWidth: 420 }}>
         <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--white)', marginBottom: 4 }}>Display currency</p>
         <p style={{ fontSize: 12, color: 'var(--white-dim)', marginBottom: 14, lineHeight: 1.5 }}>
           Changes how prices are shown while browsing. Shops still arrange payment directly with you in N$ or R.
@@ -211,7 +211,7 @@ function PreferencesTab({ userId }) {
         </div>
       </div>
 
-      <div style={{ background: 'var(--black-card)', border: '1px solid var(--black-border)', borderRadius: 16, padding: 20, maxWidth: 420 }}>
+      <div style={{ background: 'rgba(var(--black-card-rgb), 0.65)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--black-border)', borderRadius: 16, padding: 20, maxWidth: 420 }}>
         <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--white)', marginBottom: 4 }}>Invite a friend</p>
         <p style={{ fontSize: 12, color: 'var(--white-dim)', marginBottom: 14, lineHeight: 1.5 }}>
           Share NamMarketHub with someone who'd like it.
