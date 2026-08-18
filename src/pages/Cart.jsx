@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import confetti from 'canvas-confetti'
-import { CheckCircle2, ArrowLeft, ArrowRight, Package, Minus, Plus } from 'lucide-react'
+import { CheckCircle2, ArrowLeft, ArrowRight, Package, Minus, Plus, MessageCircle, CreditCard, Clock } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { useCart } from '../hooks/useCart'
 import { useAuth } from '../hooks/useAuth'
@@ -18,6 +18,7 @@ export default function Cart() {
   const [buyerName, setBuyerName] = useState(user?.user_metadata?.full_name ?? '')
   const [buyerContact, setBuyerContact] = useState(user?.user_metadata?.phone ?? '')
   const [wantsPaymentPlan, setWantsPaymentPlan] = useState(false)
+  const [paymentMethod, setPaymentMethod] = useState('direct') // 'direct' | 'paytoday'
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState(null)
   const [done, setDone] = useState(false)
@@ -164,6 +165,48 @@ export default function Cart() {
                 <label style={{ fontSize: 11, color: 'var(--white-dim)', display: 'block', marginBottom: 6 }}>Phone or email</label>
                 <input required value={buyerContact} onChange={(e) => setBuyerContact(e.target.value)}
                   className="input-dark" style={{ width: '100%', padding: '10px 14px', fontSize: 14 }} placeholder="081 234 5678" />
+              </div>
+              <div>
+                <label style={{ fontSize: 11, color: 'var(--white-dim)', display: 'block', marginBottom: 6 }}>Payment method</label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                  <button
+                    type="button"
+                    onClick={() => setPaymentMethod('direct')}
+                    style={{
+                      display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 4, textAlign: 'left',
+                      padding: '10px 12px', borderRadius: 10, cursor: 'pointer',
+                      border: paymentMethod === 'direct' ? '1px solid var(--gold-dark)' : '1px solid var(--black-border)',
+                      background: paymentMethod === 'direct' ? 'rgba(201,168,76,0.1)' : 'transparent',
+                    }}
+                  >
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 600, color: paymentMethod === 'direct' ? 'var(--gold-ink)' : 'var(--white)' }}>
+                      <MessageCircle size={13} strokeWidth={1.75} /> Arrange with shop
+                    </span>
+                    <span style={{ fontSize: 11, color: 'var(--white-dim)', lineHeight: 1.3 }}>WhatsApp, cash or EFT, direct with the seller</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPaymentMethod('paytoday')}
+                    style={{
+                      display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 4, textAlign: 'left',
+                      padding: '10px 12px', borderRadius: 10, cursor: 'pointer',
+                      border: paymentMethod === 'paytoday' ? '1px solid var(--gold-dark)' : '1px solid var(--black-border)',
+                      background: paymentMethod === 'paytoday' ? 'rgba(201,168,76,0.1)' : 'transparent',
+                    }}
+                  >
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 600, color: paymentMethod === 'paytoday' ? 'var(--gold-ink)' : 'var(--white)' }}>
+                      <CreditCard size={13} strokeWidth={1.75} /> Pay Today
+                    </span>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, fontSize: 10, fontWeight: 700, color: 'var(--gold-ink)', background: 'rgba(201,168,76,0.15)', padding: '1px 6px', borderRadius: 99, width: 'fit-content' }}>
+                      <Clock size={9} strokeWidth={2} /> Coming soon
+                    </span>
+                  </button>
+                </div>
+                {paymentMethod === 'paytoday' && (
+                  <p style={{ fontSize: 11, color: 'var(--white-dim)', marginTop: 8, lineHeight: 1.4 }}>
+                    Pay Today isn't connected yet — we're working on it. Your request below will still go to the shop to arrange payment directly for now.
+                  </p>
+                )}
               </div>
               <label style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 12, color: 'var(--white-dim)', cursor: 'pointer', lineHeight: 1.4 }}>
                 <input type="checkbox" checked={wantsPaymentPlan} onChange={(e) => setWantsPaymentPlan(e.target.checked)}

@@ -453,7 +453,18 @@ export default function ShopDashboard({ shop, onShopUpdated }) {
                     <label style={LABEL}>Category</label>
                     <select value={form.category_id} onChange={(e) => setForm({ ...form, category_id: e.target.value })}
                       style={{ ...INPUT }}>
-                      {categories.map((c) => <option key={c.id} value={c.id} style={{ background: 'var(--black-card)', color: 'var(--white)' }}>{c.label}</option>)}
+                      {Object.entries(
+                        categories.reduce((acc, c) => {
+                          const group = c.group ?? 'Other'
+                          acc[group] = acc[group] ?? []
+                          acc[group].push(c)
+                          return acc
+                        }, {})
+                      ).map(([group, items]) => (
+                        <optgroup key={group} label={group} style={{ background: 'var(--black-card)', color: 'var(--white)' }}>
+                          {items.map((c) => <option key={c.id} value={c.id} style={{ background: 'var(--black-card)', color: 'var(--white)' }}>{c.label}</option>)}
+                        </optgroup>
+                      ))}
                     </select>
                   </div>
                   <div>
