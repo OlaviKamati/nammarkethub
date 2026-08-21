@@ -1,14 +1,22 @@
-import { Smartphone, Shirt, UtensilsCrossed, Sofa, Store } from 'lucide-react'
+import { Smartphone, Shirt, UtensilsCrossed, Sofa, Store, Car, Sparkles, Dumbbell, Baby, BookOpen, PawPrint, Hammer, Sprout } from 'lucide-react'
 
 // Central config for shop types and their product categories.
 // Used in signup forms, product forms, and category filters.
 
 export const SHOP_TYPES = [
-  { id: 'electronics', label: 'Electronics',  icon: Smartphone,      color: 'bg-blue-50 text-blue-800' },
-  { id: 'fashion',     label: 'Fashion',       icon: Shirt,           color: 'bg-pink-50 text-pink-800' },
-  { id: 'food',        label: 'Food & Drink',  icon: UtensilsCrossed, color: 'bg-green-50 text-green-800' },
-  { id: 'furniture',   label: 'Furniture',     icon: Sofa,            color: 'bg-amber-50 text-amber-800' },
-  { id: 'general',     label: 'General',       icon: Store,           color: 'bg-stone-100 text-stone-700' },
+  { id: 'electronics',      label: 'Electronics',         icon: Smartphone,      color: 'bg-blue-50 text-blue-800' },
+  { id: 'fashion',          label: 'Fashion',             icon: Shirt,           color: 'bg-pink-50 text-pink-800' },
+  { id: 'food',             label: 'Food & Drink',        icon: UtensilsCrossed, color: 'bg-green-50 text-green-800' },
+  { id: 'furniture',        label: 'Furniture',           icon: Sofa,            color: 'bg-amber-50 text-amber-800' },
+  { id: 'automotive',       label: 'Automotive',          icon: Car,             color: 'bg-slate-100 text-slate-800' },
+  { id: 'beauty',           label: 'Beauty & Personal Care', icon: Sparkles,     color: 'bg-rose-50 text-rose-800' },
+  { id: 'sports',           label: 'Sports & Outdoors',   icon: Dumbbell,        color: 'bg-lime-50 text-lime-800' },
+  { id: 'baby_kids',        label: 'Baby & Kids',         icon: Baby,            color: 'bg-sky-50 text-sky-800' },
+  { id: 'books_stationery', label: 'Books & Stationery',  icon: BookOpen,        color: 'bg-indigo-50 text-indigo-800' },
+  { id: 'pets',             label: 'Pet Supplies',        icon: PawPrint,        color: 'bg-orange-50 text-orange-800' },
+  { id: 'hardware',         label: 'Tools & Hardware',    icon: Hammer,          color: 'bg-zinc-100 text-zinc-800' },
+  { id: 'agriculture',      label: 'Agriculture & Farming', icon: Sprout,        color: 'bg-emerald-50 text-emerald-800' },
+  { id: 'general',          label: 'General',             icon: Store,           color: 'bg-stone-100 text-stone-700' },
 ]
 
 // Each category has a `group` — used to render shop owners' category picker
@@ -73,6 +81,69 @@ export const CATEGORIES_BY_TYPE = {
     { id: 'decor',            label: 'Home Decor',                group: 'Decor & Lighting' },
     { id: 'lighting',         label: 'Lighting',                  group: 'Decor & Lighting' },
     { id: 'storage_shelving', label: 'Storage & Shelving',        group: 'Storage' },
+  ],
+  // Vehicle type (sedan/SUV/bakkie/etc.) is the category — make and model
+  // (e.g. "Volkswagen Polo") belong in the product name/description, the
+  // same way a phone's brand isn't a separate Electronics category either.
+  automotive: [
+    { id: 'cars_sedans',        label: 'Sedans',                    group: 'Cars' },
+    { id: 'cars_suvs',          label: 'SUVs & 4x4s',               group: 'Cars' },
+    { id: 'cars_bakkies',       label: 'Bakkies & Pickups',         group: 'Cars' },
+    { id: 'cars_hatchbacks',    label: 'Hatchbacks',                group: 'Cars' },
+    { id: 'commercial_vehicles',label: 'Commercial Vehicles & Trucks', group: 'Cars' },
+    { id: 'motorbikes',         label: 'Motorbikes & Scooters',     group: 'Motorbikes' },
+    { id: 'auto_parts',         label: 'Auto Parts & Accessories',  group: 'Parts & Accessories' },
+    { id: 'tyres_rims',         label: 'Tyres & Rims',              group: 'Parts & Accessories' },
+    { id: 'car_audio',          label: 'Car Audio & Electronics',   group: 'Parts & Accessories' },
+    { id: 'car_care',           label: 'Car Care & Detailing',      group: 'Parts & Accessories' },
+  ],
+  beauty: [
+    { id: 'skincare',      label: 'Skincare',                 group: 'Face & Skin' },
+    { id: 'makeup',        label: 'Makeup & Cosmetics',       group: 'Face & Skin' },
+    { id: 'haircare',      label: 'Haircare',                 group: 'Hair' },
+    { id: 'hair_extensions',label: 'Wigs & Extensions',       group: 'Hair' },
+    { id: 'fragrances',    label: 'Perfumes & Fragrances',    group: 'Fragrance' },
+    { id: 'personal_care', label: 'Personal Care & Hygiene',  group: 'Personal Care' },
+    { id: 'beauty_tools',  label: 'Beauty Tools & Accessories', group: 'Personal Care' },
+  ],
+  sports: [
+    { id: 'fitness_equipment', label: 'Fitness Equipment', group: 'Fitness' },
+    { id: 'sportswear',        label: 'Sportswear',        group: 'Fitness' },
+    { id: 'team_sports',       label: 'Team Sports Gear',  group: 'Sports Gear' },
+    { id: 'cycling',           label: 'Cycling',           group: 'Sports Gear' },
+    { id: 'camping_hiking',    label: 'Camping & Hiking',  group: 'Outdoors' },
+    { id: 'fishing_hunting',   label: 'Fishing & Hunting', group: 'Outdoors' },
+  ],
+  baby_kids: [
+    { id: 'baby_gear',      label: 'Prams, Car Seats & Carriers', group: 'Baby Gear' },
+    { id: 'baby_feeding',   label: 'Feeding & Nursing',          group: 'Baby Gear' },
+    { id: 'nappies_care',   label: 'Nappies & Baby Care',        group: 'Baby Gear' },
+    { id: 'toys',           label: 'Toys & Games',               group: 'Toys' },
+    { id: 'kids_furniture', label: "Kids' Furniture",            group: 'Kids Room' },
+  ],
+  books_stationery: [
+    { id: 'books',        label: 'Books',                          group: 'Books' },
+    { id: 'textbooks',    label: 'Textbooks & Study Guides',       group: 'Books' },
+    { id: 'stationery',   label: 'Stationery & Office Supplies',   group: 'Stationery' },
+    { id: 'art_supplies', label: 'Art & Craft Supplies',           group: 'Stationery' },
+  ],
+  pets: [
+    { id: 'pet_food',        label: 'Pet Food',              group: 'Pet Care' },
+    { id: 'pet_accessories', label: 'Pet Accessories',       group: 'Pet Care' },
+    { id: 'pet_health',      label: 'Pet Health & Grooming', group: 'Pet Care' },
+  ],
+  hardware: [
+    { id: 'hand_tools',          label: 'Hand Tools',                    group: 'Tools' },
+    { id: 'power_tools',         label: 'Power Tools',                   group: 'Tools' },
+    { id: 'building_materials',  label: 'Building Materials',            group: 'Building Materials' },
+    { id: 'plumbing_electrical', label: 'Plumbing & Electrical Supplies',group: 'Building Materials' },
+    { id: 'paint_hardware',      label: 'Paint & Hardware',              group: 'Building Materials' },
+  ],
+  agriculture: [
+    { id: 'livestock_feed',    label: 'Livestock & Animal Feed',        group: 'Livestock' },
+    { id: 'farming_equipment', label: 'Farming Equipment & Machinery',  group: 'Equipment' },
+    { id: 'seeds_fertilizer',  label: 'Seeds & Fertilizer',             group: 'Crops' },
+    { id: 'irrigation',        label: 'Irrigation & Water Supply',      group: 'Equipment' },
   ],
   general: [
     { id: 'general',     label: 'General', group: 'General' },
