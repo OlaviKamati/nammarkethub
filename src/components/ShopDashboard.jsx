@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Phone, RefreshCw, CheckCircle2, Bell, Inbox, Receipt, Pencil, ChevronUp, ChevronDown, X, MessageCircle, Package, Plus, ShoppingBag, Sparkles, Clock } from 'lucide-react'
 import { supabase } from '../lib/supabase'
-import { CATEGORIES_BY_TYPE } from '../lib/shopTypes'
+import { CATEGORIES_BY_TYPE, CATEGORY_SHOP_TYPE, SHOP_TYPES, getShopType } from '../lib/shopTypes'
 import ImageUpload from './ImageUpload'
 import ShopSettingsForm from './ShopSettingsForm'
 import ProductOptionsEditor from './ProductOptionsEditor'
@@ -288,7 +288,13 @@ export default function ShopDashboard({ shop, onShopUpdated }) {
   const [tab, setTab] = useState('products')
 
   const { notifications, unreadCount, clearUnread, updateNotification } = useOrderNotifications(shop.id)
-  const categories = CATEGORIES_BY_TYPE[shop.shop_type] ?? CATEGORIES_BY_TYPE['general']
+  // A shop isn't limited to categories from its own registered shop type —
+  // e.g. a Fashion shop can still list a phone case. Its own type's
+  // categories come first (used as the default selection), then every other
+  // type's categories are appended so they're still reachable.
+  const ownCategories = CATEGORIES_BY_TYPE[shop.shop_type] ?? CATEGORIES_BY_TYPE['general']
+  const otherCategories = SHOP_TYPES.filter((t) => t.id !== shop.shop_type).flatMap((t) => CATEGORIES_BY_TYPE[t.id] ?? [])
+  const categories = [...ownCategories, ...otherCategories]
 
   async function fetchProducts() {
     setLoading(true)
@@ -455,7 +461,10 @@ export default function ShopDashboard({ shop, onShopUpdated }) {
                       style={{ ...INPUT }}>
                       {Object.entries(
                         categories.reduce((acc, c) => {
-                          const group = c.group ?? 'Other'
+                          const ownerType = CATEGORY_SHOP_TYPE[c.id]
+                          const group = ownerType && ownerType !== shop.shop_type
+                            ? `${getShopType(ownerType).label} - ${c.group ?? 'Other'}`
+                            : (c.group ?? 'Other')
                           acc[group] = acc[group] ?? []
                           acc[group].push(c)
                           return acc

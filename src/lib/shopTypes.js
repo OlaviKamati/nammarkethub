@@ -82,6 +82,14 @@ export const CATEGORIES_BY_TYPE = {
 // All categories flat, for the browse page "All" view
 export const ALL_CATEGORIES = Object.values(CATEGORIES_BY_TYPE).flat()
 
+// Reverse lookup: category id -> the shop type it's listed under. Used so a
+// shop can pick a category that isn't from their own registered shop type
+// (e.g. a Fashion shop also listing a phone case) while still labeling where
+// that category normally lives.
+export const CATEGORY_SHOP_TYPE = Object.fromEntries(
+  Object.entries(CATEGORIES_BY_TYPE).flatMap(([typeId, cats]) => cats.map((c) => [c.id, typeId]))
+)
+
 export function getShopType(id) {
   return SHOP_TYPES.find((s) => s.id === id) ?? SHOP_TYPES[0]
 }
